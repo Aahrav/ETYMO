@@ -1,0 +1,10 @@
+scikit-learn
+pandas
+numpy
+# gensim
+nltk
+# manim
+matplotlib
+scipy
+flask
+tqdm
