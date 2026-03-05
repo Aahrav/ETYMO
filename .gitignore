@@ -25,6 +25,7 @@ models/*.pkl
 models/*.model
 
 # Large data files
+data/raw/
 data/etymwn.tsv
 corpora/raw/
 corpora/processed/

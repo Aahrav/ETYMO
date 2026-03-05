@@ -55,6 +55,77 @@ ORIGIN_MAPPING = {
     "Chinese": "Other",
 }
 
+# ISO 639-3 language codes → coarse origin class
+# (Used to parse etymwn.tsv which stores 3-letter codes)
+ISO_TO_ORIGIN = {
+    # Germanic
+    "ang": "Germanic",   # Old English
+    "enm": "Germanic",   # Middle English
+    "non": "Germanic",   # Old Norse
+    "nld": "Germanic",   # Dutch
+    "deu": "Germanic",   # German
+    "gml": "Germanic",   # Middle Low German
+    "gmh": "Germanic",   # Middle High German
+    "odt": "Germanic",   # Old Dutch
+    "goh": "Germanic",   # Old High German
+    "osx": "Germanic",   # Old Saxon
+    "frk": "Germanic",   # Frankish
+    "sco": "Germanic",   # Scots
+    "isl": "Germanic",   # Icelandic
+    "swe": "Germanic",   # Swedish
+    "dan": "Germanic",   # Danish
+    "nor": "Germanic",   # Norwegian
+    # Latin
+    "lat": "Latin",      # Latin
+    "fra": "Latin",      # French
+    "fro": "Latin",      # Old French
+    "xno": "Latin",      # Anglo-Norman
+    "ita": "Latin",      # Italian
+    "spa": "Latin",      # Spanish
+    "por": "Latin",      # Portuguese
+    "ron": "Latin",      # Romanian
+    "cat": "Latin",      # Catalan
+    "oci": "Latin",      # Occitan
+    "pro": "Latin",      # Old Provençal
+    "roa": "Latin",      # Romance (generic)
+    "frm": "Latin",      # Middle French
+    "nrf": "Latin",      # Norman French
+    "glg": "Latin",      # Galician
+    # Greek
+    "grc": "Greek",      # Ancient Greek
+    "ell": "Greek",      # Modern Greek
+    # Other
+    "ara": "Other",      # Arabic
+    "san": "Other",      # Sanskrit
+    "hin": "Other",      # Hindi
+    "jpn": "Other",      # Japanese
+    "fas": "Other",      # Persian
+    "tur": "Other",      # Turkish
+    "zho": "Other",      # Chinese
+    "rus": "Other",      # Russian
+    "heb": "Other",      # Hebrew
+    "kor": "Other",      # Korean
+    "mal": "Other",      # Malay
+    "tgl": "Other",      # Tagalog
+    "swa": "Other",      # Swahili
+    "urd": "Other",      # Urdu
+    "tam": "Other",      # Tamil
+    "nah": "Other",      # Nahuatl
+    "que": "Other",      # Quechua
+    "yid": "Other",      # Yiddish
+}
+
+# ──────────────────────────────────────────────
+# Dataset Paths
+# ──────────────────────────────────────────────
+RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
+ETYMWN_URL = "https://archive.org/download/etymwn-20130208/etymwn-20130208.zip"
+ETYMWN_FILE = RAW_DATA_DIR / "etymwn.tsv"
+ORIGIN_DATASET = DATA_DIR / "origin_dataset.csv"
+TRAIN_DATASET = DATA_DIR / "train.csv"
+TEST_DATASET = DATA_DIR / "test.csv"
+DATASET_STATS = DATA_DIR / "dataset_stats.txt"
+
 # ──────────────────────────────────────────────
 # Scope — Time Periods
 # ──────────────────────────────────────────────
