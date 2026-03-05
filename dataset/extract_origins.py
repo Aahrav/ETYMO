@@ -2,8 +2,8 @@ import csv
 import collections
 import os
 
-INPUT_FILE = r'd:\dataset\etymwn.tsv'
-OUTPUT_FILE = r'd:\dataset\origin_dataset.csv'
+INPUT_FILE = os.path.join(os.path.dirname(__file__), 'etymwn.tsv')
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), 'origin_dataset.csv')
 
 # Mappings based on ISO 639 codes common in Wiktionary/EtymWN
 # Categories: Germanic, Latin, Greek, French

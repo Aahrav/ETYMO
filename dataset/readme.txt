@@ -19,6 +19,7 @@ The most relevant relation is "rel:etymology". To see only etymological relation
   grep "rel:etymology" etymwn.tsv | less
 on UNIX-based systems.
 
+iip uninstall -y tensorflow tensorflow-intel tensorflow-gpu tensorflow-estimator keras
 
 == CREDITS AND LICENSE ==
 
