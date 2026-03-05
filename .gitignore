@@ -1,4 +1,34 @@
-/E/ETYMO/dataset/venv/
-/E/ETYMO/dataset/etymwn.tsv
-/dataset/etymwn.tsv
-ETYMO_NEW/phases.md
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Models (large binaries)
+models/*.pkl
+models/*.model
+
+# Large data files
+data/etymwn.tsv
+corpora/raw/
+corpora/processed/
+
+# OS
+Thumbs.db
+.DS_Store
