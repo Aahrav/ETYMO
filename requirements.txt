@@ -11,10 +11,10 @@ matplotlib>=3.7.0
 seaborn>=0.12.0
 
 # Optional: animation
-# manim>=0.17.0
+manim>=0.17.0
 
 # Optional: demo app
-# flask>=3.0.0
+flask>=3.0.0
 
 # Optional: exploration
 # jupyter>=1.0.0
