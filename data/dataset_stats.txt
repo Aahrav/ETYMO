@@ -1,0 +1,36 @@
+==================================================
+  Etymology Dataset Statistics
+==================================================
+
+Total words:  4,800
+Train split:  3,840 (80.0%)
+Test split:   960 (20.0%)
+
+Class Distribution (Full Dataset):
+----------------------------------------
+  Germanic    1200  ( 25.0%) ████████████
+  Latin       1200  ( 25.0%) ████████████
+  Greek       1200  ( 25.0%) ████████████
+  Other       1200  ( 25.0%) ████████████
+
+Sample words per class:
+----------------------------------------
+  Germanic: spurn, psychopath, mawk, breathe, bloom, corner, clover, minish, stone, headlong
+  Latin: insist, remain, inaugurate, carry, leprous, motion, opinative, private, venture, current
+  Greek: erotic, cycle, œniadæ, euterpe, ascetic, galilee, noematic, chthonic, halicarnassus, hera
+  Other: narasimha, kobashigawa, shiloh, jordan, bosh, kara, barbecue, mamzer, halant, senpai
+
+Spot-check (known origins):
+----------------------------------------
+  house           expected=Germanic   ✓
+  mother          expected=Germanic   ✓
+  water           expected=Germanic   ✓
+  government      expected=Latin      ✓
+  culture         expected=Latin      ✓
+  justice         expected=Latin      ✓
+  biology         expected=Greek      ✓
+  philosophy      expected=Greek      ✓
+  democracy       expected=Greek      ✓
+  algebra         expected=Other      ✓
+  coffee          expected=Other      ✓
+  tsunami         expected=Other      ✓
