@@ -8,6 +8,11 @@ Semantic Shift Analysis project. All magic numbers live here.
 from pathlib import Path
 
 # ──────────────────────────────────────────────
+# Reproducibility
+# ──────────────────────────────────────────────
+RANDOM_SEED = 42
+
+# ──────────────────────────────────────────────
 # Paths
 # ──────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -145,6 +150,15 @@ CLASSIFIER_CONFIDENCE_THRESHOLD = 0.8
 NGRAM_RANGE = (2, 5)          # Character n-gram range
 TRAIN_TEST_SPLIT = 0.8        # 80% train, 20% test
 CLASSIFIER_TYPE = "LogisticRegression"
+CV_FOLDS = 5                  # Stratified K-Fold cross-validation
+
+# Classifier output paths
+CLASSIFIER_MODEL = MODELS_DIR / "etymology_classifier.pkl"
+TFIDF_VECTORIZER = MODELS_DIR / "tfidf_vectorizer.pkl"
+CLASSIFIER_REPORT = RESULTS_DIR / "classifier_report.txt"
+CONFUSION_MATRIX_PNG = RESULTS_DIR / "confusion_matrix.png"
+MISCLASSIFIED_CSV = RESULTS_DIR / "misclassified_words.csv"
+MODEL_COMPARISON_JSON = RESULTS_DIR / "model_comparison.json"
 
 # ──────────────────────────────────────────────
 # Word2Vec Parameters (Phase 5)
