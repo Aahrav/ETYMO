@@ -91,5 +91,5 @@ Where `vec_old` and `vec_new` are aligned embeddings from Period A and Period B 
 2. Aligned diachronic word embeddings (2 models)
 3. Semantic drift scores for ~100 words
 4. Origin-wise drift comparison (mean, variance per class)
-5. Visualizations (bar charts, PCA/t-SNE plots)
+5. Visualizations (static bar/box charts, UMAP 2D plots, Manim animated drift)
 6. Final report following the structure in `phases.md` (Phase 11)
