@@ -239,16 +239,48 @@ Which is most stable?
 
 This is your main result.
 
-🔹 PHASE 9 — Visualization (Optional but Powerful)
-9.1 Drift bar chart
+🔹 PHASE 9 — Visualization (UMAP + Manim)
+9.1 Static plots (matplotlib/seaborn)
 
-Origin vs average drift
+Drift bar chart: Origin vs average drift
 
-9.2 PCA / t-SNE plots
+Box plot: Drift distribution per origin class
 
-Show movement of selected words
+9.2 UMAP dimensionality reduction
 
-Use anchor words as reference
+Use UMAP to reduce aligned embeddings to 2D
+
+Plot both Period A and Period B embeddings in same 2D space
+
+Color-code by origin class
+
+Use anchor words as reference points (stable landmarks)
+
+Why UMAP over PCA/t-SNE?
+
+Preserves global structure better than t-SNE
+
+Faster than t-SNE on larger vocabularies
+
+Produces more interpretable 2D layouts
+
+9.3 Manim animated visualizations
+
+Animate semantic drift: words moving across the 2D UMAP plane
+from Period A positions to Period B positions
+
+Show arrows indicating direction and magnitude of drift
+
+Clusters forming/dissolving between epochs
+
+Color-code arrows by origin class to show origin-wise patterns
+
+Incremental reveals: build up the visualization layer by layer
+
+Recommended approach: Run UMAP first to get 2D coordinates,
+then use Manim to animate the results — words drifting across
+the plane between epochs, clusters forming, arrows showing
+semantic movement.
 
 🔹 PHASE 10 — Demo (Lightweight)
 

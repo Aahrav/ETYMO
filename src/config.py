@@ -161,6 +161,68 @@ MISCLASSIFIED_CSV = RESULTS_DIR / "misclassified_words.csv"
 MODEL_COMPARISON_JSON = RESULTS_DIR / "model_comparison.json"
 
 # ──────────────────────────────────────────────
+# Word Selection Parameters (Phase 3)
+# ──────────────────────────────────────────────
+SELECTED_WORDS_CSV = DATA_DIR / "selected_words.csv"
+SELECTION_REPORT = RESULTS_DIR / "selection_report.txt"
+MIN_WORD_LENGTH = 3          # Skip very short words (less reliable origins)
+MAX_WORD_LENGTH = 20         # Skip very long/compound words
+
+# Curated seed words with KNOWN interesting semantic histories.
+# These are included regardless of classifier confidence to ensure
+# we capture words with documented meaning changes.
+SEED_WORDS = {
+    "Germanic": [
+        "mouse",    # vermin → computer device
+        "web",      # spider web → internet
+        "stream",   # water flow → data streaming
+        "bug",      # insect → software error
+        "cloud",    # sky → computing
+        "ship",     # vessel → to send/deliver
+        "broadcast",# scatter seed → radio/TV
+        "board",    # plank → committee
+        "craft",    # skill → vessel
+        "barn",     # barley-house → farm building
+    ],
+    "Latin": [
+        "virus",    # poison/slime → microbe → malware
+        "computer", # one who computes → machine
+        "cell",     # small room → biology → phone
+        "text",     # woven thing → writing → SMS
+        "monitor",  # one who warns → screen
+        "server",   # one who serves → machine
+        "tablet",   # writing slab → device
+        "journal",  # daily → newspaper/diary
+        "cabinet",  # small room → government body
+        "culture",  # farming → arts/civilization
+    ],
+    "Greek": [
+        "atom",     # indivisible → smallest particle
+        "phone",    # voice → telephone → smartphone
+        "organ",    # tool/instrument → body part → music
+        "plasma",   # something molded → blood → TV type
+        "energy",   # activity → physics concept
+        "antenna",  # yard-arm → insect feeler → radio
+        "icon",     # image → religious art → UI element
+        "program",  # public notice → plan → software
+        "cycle",    # circle → recurring sequence
+        "meter",    # measure → unit → device
+    ],
+    "Other": [
+        "algebra",  # Arabic: reunion of broken parts → math
+        "algorithm",# from 'al-Khwarizmi' → sequence of steps
+        "magazine", # Arabic: storehouse → periodical
+        "coffee",   # Arabic: qahwa → beverage
+        "sugar",    # Sanskrit: sharkara → sweetener
+        "candy",    # Arabic: qandi → sweets
+        "jungle",   # Hindi: jangal → wild forest
+        "avatar",   # Sanskrit: descent of god → digital representation
+        "guru",     # Sanskrit: teacher → expert
+        "tsunami",  # Japanese: harbor wave → disaster
+    ],
+}
+
+# ──────────────────────────────────────────────
 # Word2Vec Parameters (Phase 5)
 # ──────────────────────────────────────────────
 W2V_VECTOR_SIZE = 100
