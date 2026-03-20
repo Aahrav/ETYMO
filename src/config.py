@@ -223,6 +223,28 @@ SEED_WORDS = {
 }
 
 # ──────────────────────────────────────────────
+# Corpus Parameters (Phase 4)
+# ──────────────────────────────────────────────
+TARGET_TOKENS = 7_000_000        # Target ~7M tokens per corpus (middle of 5-10M range)
+TOKEN_TOLERANCE = 0.15           # ±15% acceptable deviation
+MIN_SENTENCE_TOKENS = 5          # Remove sentences with fewer tokens
+MIN_TOKEN_LENGTH = 2             # Remove single-character tokens
+
+# Gutenberg Historical Corpus (1800-1900)
+GUTENBERG_BOOKS_TARGET = 150     # Download ~150 books
+GUTENBERG_RAW = CORPORA_RAW_DIR / "gutenberg"
+GUTENBERG_CATALOG_CACHE = CORPORA_RAW_DIR / "gutenberg_catalog.json"
+
+# Wikipedia Modern Corpus (2000-2020)
+WIKI_ARTICLES_TARGET = 50_000    # Process ~50K articles (more than enough)
+WIKI_RAW = CORPORA_RAW_DIR / "wikipedia"
+
+# Processed output paths
+CORPUS_OLD = CORPORA_PROCESSED_DIR / "corpus_old.txt"
+CORPUS_NEW = CORPORA_PROCESSED_DIR / "corpus_new.txt"
+CORPUS_STATS = RESULTS_DIR / "corpus_stats.txt"
+
+# ──────────────────────────────────────────────
 # Word2Vec Parameters (Phase 5)
 # ──────────────────────────────────────────────
 W2V_VECTOR_SIZE = 100

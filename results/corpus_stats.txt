@@ -1,0 +1,19 @@
+======================================================================
+  Phase 4: Corpus Comparison Report
+======================================================================
+
+Metric                                   Historical          Modern
+──────────────────────────────────────────────────────────────────────
+  Raw characters                         40,235,626      44,326,078
+  Raw sentences                             293,491         285,183
+  Clean sentences                           262,961         274,508
+  Clean tokens                            6,606,070       6,418,945
+  Removed tokens                          1,983,435       1,704,062
+  Avg sentence length                          25.1            23.4
+  Vocabulary (total)                         53,267         154,294
+  Vocabulary (min_count≥10)                  19,345          29,107
+  Output file size (MB)                        34.2            38.3
+
+──────────────────────────────────────────────────────────────────────
+  Token ratio (modern/historical): 0.972
+  Balance: ✓ GOOD (target: 1.0 ± 0.15)
