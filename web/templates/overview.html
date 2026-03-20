@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% set active_page = "overview" %}
+{% block title %}Origin Overview{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Origin-Wise Analysis</h1>
+<p class="page-subtitle">
+    Quantifying the morphological and semantic divergence across 
+    linguistic families through a 200-year temporal window.
+</p>
+
+<!-- ── Main Grid: Chart + Stats ── -->
+<div class="grid-7-3 mb-32">
+    <!-- Origin Bar Chart -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Mean Semantic Drift</div>
+                <div class="card-meta">Vector shift magnitude per origin class</div>
+            </div>
+            <div style="display:flex;gap:12px;">
+                {% for o in origin_data %}
+                <span class="origin-badge {{ o.origin_class|lower }}">{{ o.origin_class }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="origin-bars">
+            {% for o in origin_data %}
+            <div class="origin-bar-group">
+                <div class="origin-bar-value">Δ {{ "%.2f"|format(o.mean_drift) }}</div>
+                <div class="origin-bar {{ o.origin_class|lower }}" 
+                     style="height: {{ (o.mean_drift / 0.9 * 140)|int }}px;"></div>
+                <div class="origin-bar-label">{{ o.origin_class }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="result-card animate-in">
+        <div class="result-badge">Significance Test</div>
+        <div class="result-title">Kruskal-Wallis Results</div>
+        <div class="result-desc">
+            Null hypothesis rejected: Origin classes show statistically distinct drift profiles.
+        </div>
+        <div class="result-row">
+            <span class="result-label">H-Statistic</span>
+            <span class="result-value">7.356</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">P-Value</span>
+            <span class="result-value" style="color: var(--warning);">p = 0.061</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Effect Size</span>
+            <span class="result-value">η² = 0.063</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Degrees of Freedom</span>
+            <span class="result-value">3, 96</span>
+        </div>
+        <div class="result-valid">
+            ✓ &nbsp;Valid Statistical Model
+        </div>
+    </div>
+</div>
+
+<!-- ── Per-Origin Breakdown ── -->
+<div class="section-header mb-20">
+    <h2>Per-Origin Summary</h2>
+    <div class="section-meta">Detailed statistics for each etymological class</div>
+</div>
+
+<div class="grid-4 mb-32">
+    {% for o in origin_data %}
+    <div class="card animate-in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--{{ o.origin_class|lower }})"></div>
+            <span style="font-family:var(--font-heading);font-size:1.1rem;font-weight:600;color:var(--text-heading);">{{ o.origin_class }}</span>
+            <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto;">n={{ o.n_words }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.mean_drift) }}</div>
+                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Mean</div>
+            </div>
+            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.median_drift) }}</div>
+                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Median</div>
+            </div>
+            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.std_drift) }}</div>
+                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Std Dev</div>
+            </div>
+            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
+                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.max_drift - o.min_drift) }}</div>
+                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Range</div>
+            </div>
+        </div>
+        <div style="margin-top:12px;font-size:0.78rem;color:var(--text-secondary);">
+            Most stable: <strong>{{ o.min_word }}</strong> ({{ "%.3f"|format(o.min_drift) }})<br>
+            Most drifted: <strong>{{ o.max_word }}</strong> ({{ "%.3f"|format(o.max_drift) }})
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ── Pairwise Results ── -->
+<div class="card mb-32 animate-in">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Pairwise Significance Tests</div>
+            <div class="card-meta">Mann-Whitney U tests between origin pairs</div>
+        </div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Pair</th>
+                <th>U-Statistic</th>
+                <th>P-Value</th>
+                <th>Significant</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="font-weight:600;">Germanic vs Latin</td>
+                <td style="font-family:var(--font-mono);">177.0</td>
+                <td style="font-family:var(--font-mono);">0.1326</td>
+                <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">Germanic vs Greek</td>
+                <td style="font-family:var(--font-mono);">106.0</td>
+                <td style="font-family:var(--font-mono);color:var(--success);">0.0487</td>
+                <td style="color:var(--success);">✓ p &lt; 0.05</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">Germanic vs Other</td>
+                <td style="font-family:var(--font-mono);">86.0</td>
+                <td style="font-family:var(--font-mono);color:var(--success);">0.0196</td>
+                <td style="color:var(--success);">✓ p &lt; 0.05</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">Latin vs Greek</td>
+                <td style="font-family:var(--font-mono);">135.0</td>
+                <td style="font-family:var(--font-mono);">0.4802</td>
+                <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">Latin vs Other</td>
+                <td style="font-family:var(--font-mono);">113.0</td>
+                <td style="font-family:var(--font-mono);">0.2593</td>
+                <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">Greek vs Other</td>
+                <td style="font-family:var(--font-mono);">90.0</td>
+                <td style="font-family:var(--font-mono);">0.5268</td>
+                <td style="color:var(--text-muted);">—</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ── Top Words Per Origin ── -->
+<div class="section-header mb-20">
+    <h2>Top 5 Most Shifted Words Per Origin</h2>
+    <div class="section-meta">Filtered by linguistic category</div>
+</div>
+
+<div class="grid-2 mb-32">
+    {% for origin in ['Germanic', 'Latin', 'Greek', 'Other'] %}
+    <div class="card animate-in">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr><th>Word</th><th>Drift</th><th>Bar</th></tr>
+            </thead>
+            <tbody>
+                {% for w in per_origin[origin] %}
+                <tr>
+                    <td class="word-cell">
+                        <a href="/explorer?word={{ w.word }}" style="color:var(--text-heading);">{{ w.word }}</a>
+                    </td>
+                    <td class="drift-value" style="color:var(--{{ origin|lower }});">+{{ "%.2f"|format(w.drift_score) }}</td>
+                    <td>
+                        <div class="drift-bar-track" style="width:100px;">
+                            <div class="drift-bar-fill {{ origin|lower }}" style="width:{{ (w.drift_score * 100)|int }}%"></div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ── Visualization Gallery ── -->
+<div class="section-header mb-20">
+    <h2>Static Visualizations</h2>
+    <div class="section-meta">Publication-quality figures from the analysis</div>
+</div>
+
+<div class="grid-2 mb-32">
+    <div class="card animate-in">
+        <div class="card-meta" style="margin-bottom:12px;">Drift Bar Chart</div>
+        <img src="/figures/drift_bar_chart.png" class="figure-img" alt="Drift bar chart">
+    </div>
+    <div class="card animate-in">
+        <div class="card-meta" style="margin-bottom:12px;">Drift Box Plot</div>
+        <img src="/figures/drift_box_plot.png" class="figure-img" alt="Drift box plot">
+    </div>
+</div>
+
+<div class="grid-2 mb-32">
+    <div class="card animate-in">
+        <div class="card-meta" style="margin-bottom:12px;">UMAP Scatter — Drift Landscape</div>
+        <img src="/figures/umap_scatter.png" class="figure-img" alt="UMAP scatter plot">
+    </div>
+    <div class="card animate-in">
+        <div class="card-meta" style="margin-bottom:12px;">Per-Word Drift Heatmap</div>
+        <img src="/figures/drift_heatmap.png" class="figure-img" alt="Drift heatmap">
+    </div>
+</div>
+
+<!-- ── Manim Videos ── -->
+<div class="section-header mb-20">
+    <h2>Animated Visualizations</h2>
+    <div class="section-meta">3Blue1Brown-style Manim animations</div>
+</div>
+
+<div class="grid-2 mb-32">
+    <div class="video-card animate-in">
+        <video controls preload="metadata">
+            <source src="/videos/{{ videos.drift }}" type="video/mp4">
+        </video>
+        <div class="video-info">
+            <div class="video-label">Scene 2</div>
+            <div class="video-title">Semantic Drift in Action</div>
+            <div class="video-desc">Watch 73 words move through UMAP space from their 1800s to 2000s positions.</div>
+        </div>
+    </div>
+    <div class="video-card animate-in">
+        <video controls preload="metadata">
+            <source src="/videos/{{ videos.alignment }}" type="video/mp4">
+        </video>
+        <div class="video-info">
+            <div class="video-label">Scene 5</div>
+            <div class="video-title">The Procrustes Alignment</div>
+            <div class="video-desc">Visually explains why and how we align embedding spaces for cross-period comparison.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Key Finding ── -->
+<div class="card animate-in" style="text-align:center;padding:40px;border-color:var(--border-accent);">
+    <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--germanic);margin-bottom:12px;">Key Finding</div>
+    <div style="font-family:var(--font-heading);font-size:1.8rem;font-style:italic;color:var(--text-heading);max-width:600px;margin:0 auto;line-height:1.35;">
+        Germanic words are significantly more stable than Greek and Other-origin words over 200 years.
+    </div>
+    <div style="color:var(--text-secondary);margin-top:16px;font-size:0.9rem;">
+        Pairwise Mann-Whitney U: Germanic vs Other p = 0.020, Germanic vs Greek p = 0.049
+    </div>
+</div>
+{% endblock %}

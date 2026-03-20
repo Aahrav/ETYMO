@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ETYMO{% endblock %} — Semantic Shift Analysis</title>
+    <meta name="description" content="Etymology-Aware Semantic Shift Analysis: Tracking how word meanings evolve across centuries, powered by diachronic word embeddings.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="app-layout">
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h1>Etymo</h1>
+                <div class="subtitle">Semantic Shift Analysis</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Analysis</div>
+                <a href="/" class="nav-item {{ 'active' if active_page == 'dashboard' }}">
+                    <span class="nav-icon">◈</span> Dashboard
+                </a>
+                <a href="/explorer" class="nav-item {{ 'active' if active_page == 'explorer' }}">
+                    <span class="nav-icon">⬡</span> Explorer
+                </a>
+                <a href="/compare" class="nav-item {{ 'active' if active_page == 'compare' }}">
+                    <span class="nav-icon">⇌</span> Compare
+                </a>
+                <a href="/overview" class="nav-item {{ 'active' if active_page == 'overview' }}">
+                    <span class="nav-icon">▣</span> Overview
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                Etymology-Aware Semantic Shift Analysis<br>
+                Phase 10 — Final Project
+            </div>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <nav class="header-nav">
+                    <a href="/" class="{{ 'active' if active_page == 'dashboard' }}">Dashboard</a>
+                    <a href="/explorer" class="{{ 'active' if active_page == 'explorer' }}">Explorer</a>
+                    <a href="/compare" class="{{ 'active' if active_page == 'compare' }}">Compare</a>
+                    <a href="/overview" class="{{ 'active' if active_page == 'overview' }}">Overview</a>
+                </nav>
+                <div class="header-search">
+                    <input type="text" id="global-search" placeholder="Search etymologies..." autocomplete="off">
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

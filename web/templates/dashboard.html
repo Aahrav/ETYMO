@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% set active_page = "dashboard" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- ── Page Header ── -->
+<h1 class="page-title">Semantic Shift Analysis</h1>
+<p class="page-subtitle">
+    Quantifying how word meanings evolve across centuries, 
+    through the lens of etymological origins.
+</p>
+
+<!-- ── Stat Cards ── -->
+<div class="grid-4 mb-32">
+    <div class="card stat-card animate-in">
+        <div class="stat-value">{{ stats.total_words }}</div>
+        <div class="stat-label">Tracked Words</div>
+    </div>
+    <div class="card stat-card animate-in">
+        <div class="stat-value" style="color: var(--accent);">Δ {{ "%.3f"|format(stats.mean_drift) }}</div>
+        <div class="stat-label">Mean Drift</div>
+    </div>
+    <div class="card stat-card animate-in">
+        <div class="stat-value" style="color: var(--germanic);">{{ "{:,}".format(stats.total_vocab_old) }}</div>
+        <div class="stat-label">Historical Vocab</div>
+    </div>
+    <div class="card stat-card animate-in">
+        <div class="stat-value" style="color: var(--latin);">{{ "{:,}".format(stats.total_vocab_new) }}</div>
+        <div class="stat-label">Modern Vocab</div>
+    </div>
+</div>
+
+<!-- ── Main Grid: Chart + ANOVA ── -->
+<div class="grid-7-3 mb-32">
+    <!-- Origin Bar Chart -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Mean Semantic Drift</div>
+                <div class="card-meta">Vector shift magnitude per origin class</div>
+            </div>
+            <div style="display:flex;gap:12px;">
+                {% for o in origin_data %}
+                <span class="origin-badge {{ o.origin_class|lower }}">{{ o.origin_class }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="origin-bars" id="origin-chart">
+            {% for o in origin_data %}
+            <div class="origin-bar-group">
+                <div class="origin-bar-value">Δ {{ "%.2f"|format(o.mean_drift) }}</div>
+                <div class="origin-bar {{ o.origin_class|lower }}" 
+                     style="height: {{ (o.mean_drift / 0.9 * 140)|int }}px;" 
+                     data-height="{{ (o.mean_drift / 0.9 * 140)|int }}"></div>
+                <div class="origin-bar-label">{{ o.origin_class }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ANOVA Results Card -->
+    <div class="result-card animate-in">
+        <div class="result-badge">Significance Test</div>
+        <div class="result-title">Kruskal-Wallis</div>
+        <div class="result-desc">
+            Origin classes show borderline distinct drift profiles.
+        </div>
+        <div class="result-row">
+            <span class="result-label">H-Statistic</span>
+            <span class="result-value">7.356</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">P-Value</span>
+            <span class="result-value" style="color: var(--warning);">p = 0.061</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Effect Size</span>
+            <span class="result-value">η² = 0.063</span>
+        </div>
+        <div class="result-valid">
+            ✓ &nbsp;Pairwise: Germanic vs Other p &lt; 0.02
+        </div>
+    </div>
+</div>
+
+<!-- ── Dot Distribution + Video ── -->
+<div class="grid-7-3 mb-32">
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Distribution of Tracked Words</div>
+                <div class="card-meta">Individual word drift scores across 100 samples</div>
+            </div>
+        </div>
+        <div class="dot-distribution" id="dot-dist">
+            {% for w in top_drifted[:0] %}{% endfor %}
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;">
+            <span>Low Drift (Stable)</span>
+            <span>High Drift (Dynamic)</span>
+        </div>
+    </div>
+    <div class="video-card animate-in">
+        <video controls preload="metadata" poster="">
+            <source src="/videos/{{ videos.origin_bars }}" type="video/mp4">
+        </video>
+        <div class="video-info">
+            <div class="video-label">Manim Scene — Which Origins Drift Most?</div>
+            <div class="video-title">Computational Visualizer</div>
+            <div class="video-desc">A geometric walkthrough of the vector space transitions for origin class clusters.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Top 5 Most Shifted Words ── -->
+<div class="card mb-32 animate-in">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Top 5 Most Shifted Words</div>
+            <div class="card-meta">Filtered by linguistic category</div>
+        </div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Word</th>
+                <th>Primary Drift</th>
+                <th>Drift Score</th>
+                <th>Neighbors Changed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in top_drifted %}
+            <tr>
+                <td><span class="origin-badge {{ w.origin_class|lower }}">{{ w.origin_class }}</span></td>
+                <td class="word-cell">{{ w.word }}</td>
+                <td>
+                    <div class="drift-bar-container">
+                        <div class="drift-bar-track">
+                            <div class="drift-bar-fill {{ w.origin_class|lower }}" 
+                                 style="width: {{ (w.drift_score * 100)|int }}%"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="drift-value" style="color: var(--danger);">+{{ "%.2f"|format(w.drift_score) }}</td>
+                <td style="color: var(--text-secondary); font-size: 0.85rem;">
+                    Complete context change
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- ── Most Stable Words ── -->
+<div class="card animate-in">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Top 5 Most Stable Words</div>
+            <div class="card-meta">Words whose meanings endured across centuries</div>
+        </div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Word</th>
+                <th>Stability</th>
+                <th>Drift Score</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in most_stable %}
+            <tr>
+                <td><span class="origin-badge {{ w.origin_class|lower }}">{{ w.origin_class }}</span></td>
+                <td class="word-cell">{{ w.word }}</td>
+                <td>
+                    <div class="drift-bar-container">
+                        <div class="drift-bar-track">
+                            <div class="drift-bar-fill" style="width: {{ (w.drift_score * 100)|int }}%; background: var(--success);"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="drift-value" style="color: var(--success);">+{{ "%.2f"|format(w.drift_score) }}</td>
+                <td style="color: var(--success); font-size: 0.85rem;">✓ Semantically stable</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Populate dot distribution
+document.addEventListener('DOMContentLoaded', function() {
+    const driftData = {{ top_drifted | tojson }};
+    const stableData = {{ most_stable | tojson }};
+    
+    // Get ALL drift data from the page context
+    fetch('/api/search?q=')
+      .then(r => r.json())
+      .then(words => {
+        // We'll build dots from the table data we have
+        const allWords = [...stableData.reverse(), ...driftData];
+        // Sort by drift score
+        allWords.sort((a, b) => a.drift_score - b.drift_score);
+        
+        const container = document.getElementById('dot-dist');
+        allWords.forEach(w => {
+            const dot = document.createElement('div');
+            dot.className = `drift-dot ${w.origin_class.toLowerCase()}`;
+            dot.setAttribute('data-tooltip', `${w.word}: ${w.drift_score.toFixed(3)}`);
+            container.appendChild(dot);
+        });
+    });
+});
+</script>
+{% endblock %}
