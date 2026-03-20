@@ -1,0 +1,39 @@
+======================================================================
+  Phase 5: Word Embedding Report
+======================================================================
+
+  Hyperparameters (identical for both models):
+    Algorithm:    Skip-gram (sg=1)
+    Dimensions:   100
+    Window:       5
+    Min count:    10
+    Epochs:       15
+    Neg samples:  10
+
+──────────────────────────────────────────────────────────────────────
+  Metric                                   Historical          Modern
+──────────────────────────────────────────────────────────────────────
+  Vocabulary size                              19,345          29,107
+  Mean vector norm                              3.158           3.580
+  Std vector norm                               0.403           0.474
+  Analogy (king-man+woman)                      queen           queen
+
+──────────────────────────────────────────────────────────────────────
+  Vocabulary Overlap
+──────────────────────────────────────────────────────────────────────
+  Shared words:     11,532
+  Only historical:   7,813
+  Only modern:      17,575
+  Overlap ratio:   0.3124
+
+──────────────────────────────────────────────────────────────────────
+  Selected Word Coverage
+──────────────────────────────────────────────────────────────────────
+  Words in both models: 73/100
+  Missing words: algebra, algorithm, anode, antenna, avatar, broadcast, bug, cannot, computer, cycle, democratic, electronic, guru, icon, jazz, jungle, meter, michigan, phone, plasma, program, radar, server, suburban, tsunami, urban, virus
+
+──────────────────────────────────────────────────────────────────────
+  Anchor Words (Phase 6 Alignment)
+──────────────────────────────────────────────────────────────────────
+  Configured: 172
+  Usable:     172

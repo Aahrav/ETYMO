@@ -251,17 +251,56 @@ W2V_VECTOR_SIZE = 100
 W2V_WINDOW = 5
 W2V_MIN_COUNT = 10
 W2V_SG = 1                    # 1 = Skip-gram, 0 = CBOW
+W2V_EPOCHS = 15               # More than default 5 to compensate for smaller corpus
+W2V_NEGATIVE = 10             # Negative sampling (higher = better for small corpora)
+W2V_WORKERS = 4               # Parallel training threads
+
+# Embedding output paths
+EMBEDDINGS_DIR = MODELS_DIR / "embeddings"
+W2V_MODEL_OLD = EMBEDDINGS_DIR / "w2v_old.model"
+W2V_MODEL_NEW = EMBEDDINGS_DIR / "w2v_new.model"
+W2V_ALIGNED_OLD = EMBEDDINGS_DIR / "w2v_old_aligned.npy"
+EMBEDDING_REPORT = RESULTS_DIR / "embedding_report.txt"
 
 # ──────────────────────────────────────────────
 # Alignment (Phase 6)
 # ──────────────────────────────────────────────
+# Anchor words: frequent, semantically STABLE words assumed to
+# NOT have changed meaning between 1800-1900 and 2000-2020.
+# More anchors = better Procrustes alignment quality.
 ANCHOR_WORDS = [
-    "the", "and", "of", "is", "in", "to", "a",
-    "man", "water", "sun", "time", "day", "hand",
-    "house", "king", "land", "world", "god", "life",
+    # Function words (extremely stable)
+    "the", "and", "of", "is", "in", "to", "for", "with", "that", "this",
+    "was", "are", "but", "not", "all", "can", "had", "her", "one", "our",
+    "will", "each", "make", "how", "like", "been", "has", "may",
+    # Nature / physical world
+    "man", "water", "sun", "time", "day", "hand", "house", "king", "land",
+    "world", "god", "life", "earth", "fire", "stone", "tree", "river",
+    "mountain", "sea", "wind", "rain", "sky", "star", "moon", "night",
+    "morning", "summer", "winter", "snow", "field",
+    # Body / human
+    "head", "eye", "heart", "blood", "body", "face", "foot", "hair",
+    "mouth", "name", "father", "mother", "brother", "sister", "son",
+    "daughter", "child", "woman", "girl", "boy",
+    # Abstract / common nouns
+    "word", "thing", "place", "year", "work", "part", "way", "end",
+    "number", "side", "mind", "power", "form", "point", "fact", "matter",
+    "home", "room", "door", "table", "bed", "food", "bread", "horse",
+    "dog", "book", "war", "death", "friend", "love", "truth", "law",
+    "money", "gold", "silver", "iron", "wood", "road", "town", "church",
+    # Common verbs
+    "said", "come", "give", "take", "know", "think", "want", "look",
+    "tell", "turn", "keep", "leave", "begin", "seem", "help", "talk",
+    "stand", "hold", "move", "live", "believe", "bring", "happen",
+    # Common adjectives
+    "good", "great", "little", "old", "young", "long", "small", "large",
+    "white", "black", "red", "dark", "high", "low", "full", "strong",
+    "poor", "rich", "true", "free", "whole", "deep", "dead", "cold",
+    "hard", "open", "close", "right", "wrong", "real", "sure",
 ]
 
 # ──────────────────────────────────────────────
 # Drift (Phase 7)
 # ──────────────────────────────────────────────
 TOP_N_NEIGHBORS = 5           # Nearest neighbors for qualitative comparison
+
