@@ -130,7 +130,7 @@ def normalize_origins(word_origins: dict[str, list[str]]) -> dict[str, str]:
     """
     print("\n[Step 2] Normalizing origins...")
 
-    priority = {"Latin": 0, "Germanic": 1, "Greek": 2, "Other": 3}
+    priority = {"PIE": 0, "Sanskrit": 1, "Latin": 2, "Germanic": 3, "Greek": 4, "Other": 5}
     word_to_class: dict[str, str] = {}
     conflicts = 0
 
@@ -477,26 +477,43 @@ CURATED_OTHER = [
     "sequin", "sherbet", "sofa", "spinach", "sugar", "sultan",
     "sumac", "syrup", "taboo", "talisman", "tambourine", "tariff",
     "zenith", "zero",
-    # Sanskrit / Hindi
-    "avatar", "bandana", "bangle", "bazaar", "bungalow", "cashmere",
-    "catamaran", "cheetah", "chintz", "chit", "cot", "cowrie",
-    "crimson", "dinghy", "dungaree", "guru", "jungle", "juggernaut",
-    "karma", "khaki", "lacquer", "loot", "mandarin", "mantra",
-    "mogul", "musk", "nirvana", "pajama", "pariah", "pepper",
-    "punch", "rajah", "rupee", "sandal", "sapphire", "shampoo",
+    "pariah", "pepper", "punch", "rajah", "rupee", "sandal", "sapphire", "shampoo",
     "shawl", "sugar", "thug", "toddy", "typhoon", "veranda", "yoga",
-    "zen", "swastika",
-    # Persian
-    "bazaar", "caravan", "chess", "dervish", "khaki", "kiosk",
-    "lemon", "lilac", "magic", "mummy", "pajama", "paradise",
-    "peach", "pistachio", "scarlet", "shawl", "spinach", "tapestry",
-    "tiger", "tulip", "turquoise",
-    # Japanese
-    "anime", "bonsai", "dojo", "emoji", "futon", "geisha", "haiku",
-    "judo", "karate", "kimono", "manga", "origami", "ramen",
-    "rickshaw", "sake", "samurai", "sensei", "shogun", "soy",
-    "sumo", "sushi", "tofu", "tsunami", "tycoon", "umami", "wasabi",
-    # Other languages
+    "zen", "swastika", "loot", "mandarin", "mantra", "mogul", "musk",
+    "nirvana", "pajama", "avatar", "bandana", "bangle", "bazaar",
+    "bungalow", "cashmere", "catamaran", "cheetah", "chintz", "chit",
+    "cot", "cowrie", "crimson", "dinghy", "dungaree", "guru", "jungle",
+    "juggernaut", "karma", "khaki", "lacquer",
+]
+
+CURATED_SANSKRIT = [
+    "avatar", "guru", "karma", "yoga", "nirvana", "jungle", "bandit", "shampoo",
+    "pajama", "punch", "bandana", "bangle", "bazaar", "bungalow", "cashmere",
+    "catamaran", "cheetah", "chintz", "chit", "cot", "cowrie", "dinghy", 
+    "dungaree", "juggernaut", "khaki", "lacquer", "loot", "mandarin", "mantra",
+    "mogul", "musk", "pariah", "pepper", "rajah", "rupee", "sandal", "sapphire",
+    "shawl", "sugar", "thug", "toddy", "typhoon", "veranda", "swastika",
+    "pali", "sutra", "dharma", "veda", "pundit", "loot", "thug", "cot",
+    "buck", "chutney", "cot", "cushion", "dinghy", "dungaree", "ghat",
+    "gymkhana", "juggernaut", "jute", "khaki", "mulligatawny", "nawab",
+    "pukka", "pyjamas", "sahib", "seapoy", "shampoo", "thug", "toddy",
+    "verandah", "yoga", "zenana",
+]
+
+CURATED_PIE = [
+    "father", "mother", "brother", "sister", "son", "daughter", "water",
+    "new", "three", "two", "one", "night", "day", "eye", "ear", "nose",
+    "mouth", "tooth", "bone", "heart", "blood", "hand", "foot", "knee",
+    "name", "star", "sun", "moon", "fire", "wind", "snow", "tree", "seed",
+    "cow", "horse", "dog", "wolf", "bear", "honey", "mead", "ax", "door",
+    "road", "town", "word", "god", "life", "death", "red", "white", "black",
+    "long", "short", "wide", "deep", "hot", "cold", "sweet", "bitter",
+    "full", "thin", "heavy", "light", "old", "young", "good", "bad",
+    "man", "woman", "child", "king", "slave", "war", "peace", "fear",
+]
+
+CURATED_OTHER = [
+    # Arabic
     "banana", "barbecue", "canoe", "chocolate", "cigar", "cocoa",
     "condor", "hammock", "hurricane", "igloo", "kayak", "ketchup",
     "cookie", "landscape", "maize", "moose", "penguin", "potato",
@@ -508,6 +525,8 @@ CURATED_LISTS = {
     "Germanic": CURATED_GERMANIC,
     "Latin": CURATED_LATIN,
     "Greek": CURATED_GREEK,
+    "Sanskrit": CURATED_SANSKRIT,
+    "PIE": CURATED_PIE,
     "Other": CURATED_OTHER,
 }
 

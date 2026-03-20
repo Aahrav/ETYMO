@@ -45,19 +45,19 @@
         </div>
         <div class="result-row">
             <span class="result-label">H-Statistic</span>
-            <span class="result-value">7.356</span>
+            <span class="result-value">43.698</span>
         </div>
         <div class="result-row">
             <span class="result-label">P-Value</span>
-            <span class="result-value" style="color: var(--warning);">p = 0.061</span>
+            <span class="result-value" style="color: var(--success);">p < 0.001</span>
         </div>
         <div class="result-row">
             <span class="result-label">Effect Size</span>
-            <span class="result-value">η² = 0.063</span>
+            <span class="result-value">η² = 0.466</span>
         </div>
         <div class="result-row">
             <span class="result-label">Degrees of Freedom</span>
-            <span class="result-value">3, 96</span>
+            <span class="result-value">5, 144</span>
         </div>
         <div class="result-valid">
             ✓ &nbsp;Valid Statistical Model
@@ -124,39 +124,27 @@
         </thead>
         <tbody>
             <tr>
+                <td style="font-weight:600;">PIE vs Germanic</td>
+                <td style="font-family:var(--font-mono);">499.0</td>
+                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
+                <td style="color:var(--success);">✓ p < 0.001</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">PIE vs Latin</td>
+                <td style="font-family:var(--font-mono);">487.0</td>
+                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
+                <td style="color:var(--success);">✓ p < 0.001</td>
+            </tr>
+            <tr>
+                <td style="font-weight:600;">PIE vs Greek</td>
+                <td style="font-family:var(--font-mono);">316.0</td>
+                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
+                <td style="color:var(--success);">✓ p < 0.001</td>
+            </tr>
+            <tr>
                 <td style="font-weight:600;">Germanic vs Latin</td>
-                <td style="font-family:var(--font-mono);">177.0</td>
-                <td style="font-family:var(--font-mono);">0.1326</td>
-                <td style="color:var(--text-muted);">—</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Germanic vs Greek</td>
-                <td style="font-family:var(--font-mono);">106.0</td>
-                <td style="font-family:var(--font-mono);color:var(--success);">0.0487</td>
-                <td style="color:var(--success);">✓ p &lt; 0.05</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Germanic vs Other</td>
-                <td style="font-family:var(--font-mono);">86.0</td>
-                <td style="font-family:var(--font-mono);color:var(--success);">0.0196</td>
-                <td style="color:var(--success);">✓ p &lt; 0.05</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Latin vs Greek</td>
-                <td style="font-family:var(--font-mono);">135.0</td>
-                <td style="font-family:var(--font-mono);">0.4802</td>
-                <td style="color:var(--text-muted);">—</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Latin vs Other</td>
-                <td style="font-family:var(--font-mono);">113.0</td>
-                <td style="font-family:var(--font-mono);">0.2593</td>
-                <td style="color:var(--text-muted);">—</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Greek vs Other</td>
-                <td style="font-family:var(--font-mono);">90.0</td>
-                <td style="font-family:var(--font-mono);">0.5268</td>
+                <td style="font-family:var(--font-mono);">182.0</td>
+                <td style="font-family:var(--font-mono);">0.1656</td>
                 <td style="color:var(--text-muted);">—</td>
             </tr>
         </tbody>
@@ -170,7 +158,7 @@
 </div>
 
 <div class="grid-2 mb-32">
-    {% for origin in ['Germanic', 'Latin', 'Greek', 'Other'] %}
+    {% for origin in ['PIE', 'Germanic', 'Latin', 'Greek', 'Sanskrit', 'Other'] %}
     <div class="card animate-in">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
@@ -260,10 +248,10 @@
 <div class="card animate-in" style="text-align:center;padding:40px;border-color:var(--border-accent);">
     <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--germanic);margin-bottom:12px;">Key Finding</div>
     <div style="font-family:var(--font-heading);font-size:1.8rem;font-style:italic;color:var(--text-heading);max-width:600px;margin:0 auto;line-height:1.35;">
-        Germanic words are significantly more stable than Greek and Other-origin words over 200 years.
+        Ancient Proto-Indo-European roots (PIE) are significantly more stable than all later origin groups.
     </div>
     <div style="color:var(--text-secondary);margin-top:16px;font-size:0.9rem;">
-        Pairwise Mann-Whitney U: Germanic vs Other p = 0.020, Germanic vs Greek p = 0.049
+        Kruskal-Wallis p < 0.001 | PIE vs Germanic p < 0.0001
     </div>
 </div>
 {% endblock %}

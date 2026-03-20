@@ -139,14 +139,24 @@
 </div>
 
 <!-- ── Manim Video ── -->
-<div class="video-card animate-in" style="max-width:720px;">
-    <video controls preload="metadata">
+<div class="video-card animate-in" style="max-width:720px; margin-top:32px;">
+    <video id="explorer-video" controls preload="metadata" key="{{ word_data.video_path or 'generic' }}">
+        {% if word_data.video_path %}
+        <source src="/videos/{{ word_data.video_path }}" type="video/mp4">
+        {% else %}
         <source src="/videos/embeddings_intro_scene/720p30/EmbeddingsIntroScene.mp4" type="video/mp4">
+        {% endif %}
     </video>
     <div class="video-info">
+        {% if word_data.video_path %}
+        <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
+        <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
+        <div class="video-desc">A parametric visualization of how this specific word's neighbor constellation shifted from 1800 to 2000.</div>
+        {% else %}
         <div class="video-label">Manim Animation — What Are Word Embeddings?</div>
         <div class="video-title">Understanding Semantic Space</div>
-        <div class="video-desc">Learn how words are represented as vectors and how they shift meaning over time.</div>
+        <div class="video-desc">Watch how words move through vector space in this core conceptual animation.</div>
+        {% endif %}
     </div>
 </div>
 

@@ -26,16 +26,20 @@ DEEP_BG = "#1a1a2e"
 GERMANIC_BLUE = "#4FC3F7"
 LATIN_RED = "#EF5350"
 GREEK_GREEN = "#66BB6A"
-OTHER_AMBER = "#FFA726"
+SANSKRIT_GOLD = "#FFD54F"
+PIE_LAVENDER = "#CE93D8"
+OTHER_GRAY = "#90A4AE"
 SOFT_WHITE = "#e0e0e0"
 ACCENT_PURPLE = "#BB86FC"
-GRID_DIM = "#2a2a4e"
+GRID_DIM = "#202040"
 
 ORIGIN_COLORS = {
     "Germanic": GERMANIC_BLUE,
     "Latin": LATIN_RED,
     "Greek": GREEK_GREEN,
-    "Other": OTHER_AMBER,
+    "Sanskrit": SANSKRIT_GOLD,
+    "PIE": PIE_LAVENDER,
+    "Other": OTHER_GRAY,
 }
 
 
@@ -128,7 +132,7 @@ class ComparisonScene(Scene):
         self.play(FadeIn(label_a), FadeIn(label_b))
 
         # ── Shot 3: 1800s neighbor constellations ──
-        era_old = Text("1800s", font_size=22, color=OTHER_AMBER).to_edge(UP, buff=0.2)
+        era_old = Text("1800s", font_size=22, color=SANSKRIT_GOLD).to_edge(UP, buff=0.2)
         self.play(FadeIn(era_old))
 
         # Left panel: word_a neighbors
@@ -140,7 +144,8 @@ class ComparisonScene(Scene):
         old_nbrs_a = get_old_neighbors(self.word_a)
         nbr_dots_a = VGroup()
         nbr_lines_a = VGroup()
-        angles_a = np.linspace(0, 2 * np.pi, len(old_nbrs_a), endpoint=False)
+        num_a = len(old_nbrs_a)
+        angles_a = np.linspace(0, 2 * np.pi, max(num_a, 5), endpoint=False)
 
         for i, (w, s) in enumerate(old_nbrs_a):
             offset = np.array([np.cos(angles_a[i]) * 1.3, np.sin(angles_a[i]) * 1.3, 0])
@@ -161,7 +166,8 @@ class ComparisonScene(Scene):
         old_nbrs_b = get_old_neighbors(self.word_b)
         nbr_dots_b = VGroup()
         nbr_lines_b = VGroup()
-        angles_b = np.linspace(0, 2 * np.pi, len(old_nbrs_b), endpoint=False)
+        num_b = len(old_nbrs_b)
+        angles_b = np.linspace(0, 2 * np.pi, max(num_b, 5), endpoint=False)
 
         for i, (w, s) in enumerate(old_nbrs_b):
             offset = np.array([np.cos(angles_b[i]) * 1.3, np.sin(angles_b[i]) * 1.3, 0])
@@ -215,7 +221,8 @@ class ComparisonScene(Scene):
         new_center_a = center_a + np.array([0.3, -0.5, 0])
 
         for i, (w, s) in enumerate(new_nbrs_a):
-            offset = np.array([np.cos(angles_a[i] + 0.3) * 1.3, np.sin(angles_a[i] + 0.3) * 1.3, 0])
+            idx = i % len(angles_a)
+            offset = np.array([np.cos(angles_a[idx] + 0.3) * 1.3, np.sin(angles_a[idx] + 0.3) * 1.3, 0])
             pos = new_center_a + offset
             ndot = Dot(pos, radius=0.05, color=color_a).set_opacity(0.8)
             nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, UR, buff=0.05).set_opacity(0.9)
@@ -228,7 +235,8 @@ class ComparisonScene(Scene):
         new_center_b = center_b + np.array([-0.1, -0.1, 0])
 
         for i, (w, s) in enumerate(new_nbrs_b):
-            offset = np.array([np.cos(angles_b[i] + 0.1) * 1.3, np.sin(angles_b[i] + 0.1) * 1.3, 0])
+            idx = i % len(angles_b)
+            offset = np.array([np.cos(angles_b[idx] + 0.1) * 1.3, np.sin(angles_b[idx] + 0.1) * 1.3, 0])
             pos = new_center_b + offset
             ndot = Dot(pos, radius=0.05, color=color_b).set_opacity(0.8)
             nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, UR, buff=0.05).set_opacity(0.9)
