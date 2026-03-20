@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% set active_page = "compare" %}
+{% block title %}Compare Words{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Word Comparison</h1>
+<p class="page-subtitle">
+    Compare two words side-by-side — their etymology, drift scores, 
+    and how their meanings diverged across centuries.
+</p>
+
+<!-- ── Search Form ── -->
+<form class="search-form" action="/compare" method="GET">
+    <div style="position:relative;flex:1;">
+        <input type="text" name="a" class="form-input" 
+               placeholder="First word (e.g. craft)" 
+               value="{{ query_a or '' }}" list="word-suggestions">
+    </div>
+    <div style="display:flex;align-items:center;color:var(--text-muted);font-size:1.2rem;padding:0 4px;">⇌</div>
+    <div style="position:relative;flex:1;">
+        <input type="text" name="b" class="form-input" 
+               placeholder="Second word (e.g. room)" 
+               value="{{ query_b or '' }}" list="word-suggestions">
+    </div>
+    <button type="submit" class="btn btn-primary">Compare</button>
+    <datalist id="word-suggestions">
+        {% for w in all_words %}
+        <option value="{{ w }}">
+        {% endfor %}
+    </datalist>
+</form>
+
+{% if data_a and data_b and data_a.found and data_b.found %}
+<!-- ── Side-by-Side Comparison ── -->
+<div class="compare-grid mb-32">
+    <!-- Word A Panel -->
+    <div class="compare-panel">
+        <div class="panel-header">
+            <span class="origin-badge {{ data_a.origin|lower }}">{{ data_a.origin }}</span>
+            <div class="panel-word">{{ data_a.word }}</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+            <div style="text-align:center;">
+                <div class="drift-gauge" style="width:120px;height:120px;--gauge-pct:{{ (data_a.drift_score * 100)|int }};--gauge-color:{% if data_a.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">
+                    <div class="gauge-value" style="font-size:1.3rem;">{{ "%.3f"|format(data_a.drift_score) }}</div>
+                    <div class="gauge-label">drift</div>
+                </div>
+                <div style="margin-top:12px;font-size:0.85rem;font-weight:600;color:{% if data_a.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">{{ data_a.drift_level }}</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+            <div class="card-meta" style="margin-bottom:12px;">1800s Neighbors</div>
+            <div class="neighbor-list">
+                {% for w, s in data_a.old_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in data_a.shared_neighbors }}">{{ w }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-meta" style="margin-bottom:12px;">2000s Neighbors</div>
+            <div class="neighbor-list">
+                {% for w, s in data_a.new_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in data_a.shared_neighbors }}">{{ w }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="compare-divider"></div>
+
+    <!-- Word B Panel -->
+    <div class="compare-panel">
+        <div class="panel-header">
+            <span class="origin-badge {{ data_b.origin|lower }}">{{ data_b.origin }}</span>
+            <div class="panel-word">{{ data_b.word }}</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+            <div style="text-align:center;">
+                <div class="drift-gauge" style="width:120px;height:120px;--gauge-pct:{{ (data_b.drift_score * 100)|int }};--gauge-color:{% if data_b.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">
+                    <div class="gauge-value" style="font-size:1.3rem;">{{ "%.3f"|format(data_b.drift_score) }}</div>
+                    <div class="gauge-label">drift</div>
+                </div>
+                <div style="margin-top:12px;font-size:0.85rem;font-weight:600;color:{% if data_b.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">{{ data_b.drift_level }}</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+            <div class="card-meta" style="margin-bottom:12px;">1800s Neighbors</div>
+            <div class="neighbor-list">
+                {% for w, s in data_b.old_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in data_b.shared_neighbors }}">{{ w }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-meta" style="margin-bottom:12px;">2000s Neighbors</div>
+            <div class="neighbor-list">
+                {% for w, s in data_b.new_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in data_b.shared_neighbors }}">{{ w }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Cross-Word Metrics ── -->
+{% if cross_sim %}
+<div class="card mb-32 animate-in">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Cross-Word Analysis</div>
+            <div class="card-meta">How the relationship between these words changed over time</div>
+        </div>
+    </div>
+    <div class="grid-3">
+        <div style="text-align:center;padding:20px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+            <div style="font-family:var(--font-mono);font-size:1.5rem;color:var(--text-heading);">
+                {% if cross_sim.sim_old is not none %}{{ "%.4f"|format(cross_sim.sim_old) }}{% else %}—{% endif %}
+            </div>
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:6px;">1800s Similarity</div>
+        </div>
+        <div style="text-align:center;padding:20px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+            <div style="font-family:var(--font-mono);font-size:1.5rem;color:var(--text-heading);">
+                {% if cross_sim.sim_new is not none %}{{ "%.4f"|format(cross_sim.sim_new) }}{% else %}—{% endif %}
+            </div>
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:6px;">2000s Similarity</div>
+        </div>
+        <div style="text-align:center;padding:20px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+            {% if cross_sim.sim_old is not none and cross_sim.sim_new is not none %}
+            {% set delta = cross_sim.sim_new - cross_sim.sim_old %}
+            <div style="font-family:var(--font-mono);font-size:1.5rem;color:{% if delta > 0 %}var(--success){% else %}var(--danger){% endif %};">
+                {{ "%+.4f"|format(delta) }}
+            </div>
+            {% else %}
+            <div style="font-family:var(--font-mono);font-size:1.5rem;color:var(--text-muted);">—</div>
+            {% endif %}
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:6px;">Change</div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ── Summary Table ── -->
+<div class="card mb-32 animate-in">
+    <div class="card-title" style="margin-bottom:16px;">Summary Comparison</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>{{ data_a.word }}</th>
+                <th>{{ data_b.word }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="color:var(--text-muted);">Origin Class</td>
+                <td><span class="origin-badge {{ data_a.origin|lower }}">{{ data_a.origin }}</span></td>
+                <td><span class="origin-badge {{ data_b.origin|lower }}">{{ data_b.origin }}</span></td>
+            </tr>
+            <tr>
+                <td style="color:var(--text-muted);">Confidence</td>
+                <td>{{ "%.1f"|format(data_a.confidence * 100) }}%</td>
+                <td>{{ "%.1f"|format(data_b.confidence * 100) }}%</td>
+            </tr>
+            <tr>
+                <td style="color:var(--text-muted);">Drift Score</td>
+                <td style="color:{% if data_a.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};font-weight:600;">{{ "%.4f"|format(data_a.drift_score) }}</td>
+                <td style="color:{% if data_b.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};font-weight:600;">{{ "%.4f"|format(data_b.drift_score) }}</td>
+            </tr>
+            <tr>
+                <td style="color:var(--text-muted);">Drift Category</td>
+                <td>{{ data_a.drift_level }}</td>
+                <td>{{ data_b.drift_level }}</td>
+            </tr>
+            <tr>
+                <td style="color:var(--text-muted);">Similarity</td>
+                <td>{{ "%.4f"|format(data_a.similarity) }}</td>
+                <td>{{ "%.4f"|format(data_b.similarity) }}</td>
+            </tr>
+            <tr>
+                <td style="color:var(--text-muted);">Shared Neighbors</td>
+                <td>{{ data_a.shared_neighbors|length }} of 5</td>
+                <td>{{ data_b.shared_neighbors|length }} of 5</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Verdict -->
+<div class="card animate-in" style="text-align:center;padding:32px;">
+    <div style="font-family:var(--font-heading);font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:8px;">
+        {% if data_a.drift_score > data_b.drift_score %}
+            "{{ data_a.word }}" transformed. "{{ data_b.word }}" endured.
+        {% else %}
+            "{{ data_b.word }}" transformed. "{{ data_a.word }}" endured.
+        {% endif %}
+    </div>
+    <div style="color:var(--text-secondary);font-size:0.9rem;">
+        Drift difference: {{ "%.4f"|format((data_a.drift_score - data_b.drift_score)|abs) }}
+    </div>
+</div>
+
+{% elif data_a or data_b %}
+<!-- One word not found -->
+<div class="card animate-in" style="text-align:center;padding:48px;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">⇌</div>
+    <div style="font-family:var(--font-heading);font-size:1.3rem;color:var(--text-heading);margin-bottom:8px;">
+        {% if data_a and not data_a.found %}
+            "{{ query_a }}" not found in tracked vocabulary
+        {% elif data_b and not data_b.found %}
+            "{{ query_b }}" not found in tracked vocabulary
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<!-- ── No words selected — show suggestions ── -->
+<div class="section-header mb-20">
+    <h2>Try These Pairs</h2>
+    <div class="section-meta">Click a pair to see their comparison</div>
+</div>
+<div class="grid-3 mb-32">
+    {% for pair in [('craft', 'room'), ('monitor', 'look'), ('sketch', 'great')] %}
+    <a href="/compare?a={{ pair[0] }}&b={{ pair[1] }}" class="card animate-in" style="cursor:pointer;text-align:center;padding:28px;">
+        <div style="font-family:var(--font-heading);font-size:1.4rem;font-style:italic;color:var(--text-heading);">
+            {{ pair[0] }} <span style="color:var(--text-muted);font-style:normal;">vs</span> {{ pair[1] }}
+        </div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:8px;">Click to compare</div>
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Video -->
+<div class="video-card animate-in" style="max-width:720px;">
+    <video controls preload="metadata">
+        <source src="/videos/{{ videos.comparison }}" type="video/mp4">
+    </video>
+    <div class="video-info">
+        <div class="video-label">Manim Animation — Two Words, Two Stories</div>
+        <div class="video-title">Side-by-Side Semantic Analysis</div>
+        <div class="video-desc">Watch how two words' neighbor constellations transform between centuries.</div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

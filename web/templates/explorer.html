@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% set active_page = "explorer" %}
+{% block title %}Word Explorer{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Word Explorer</h1>
+<p class="page-subtitle">
+    Enter a word to discover its etymological origin, semantic drift score, 
+    and how its meaning has shifted across centuries.
+</p>
+
+<!-- ── Search Form ── -->
+<form class="search-form" action="/explorer" method="GET">
+    <div style="position:relative;flex:1;">
+        <input type="text" name="word" class="form-input" 
+               placeholder="Type a word... (e.g. craft, monitor, room)" 
+               value="{{ query or '' }}" autocomplete="off" id="word-search"
+               list="word-suggestions">
+        <datalist id="word-suggestions">
+            {% for w in all_words %}
+            <option value="{{ w }}">
+            {% endfor %}
+        </datalist>
+    </div>
+    <button type="submit" class="btn btn-primary">Analyze</button>
+</form>
+
+{% if word_data %}
+{% if word_data.found %}
+<!-- ── Word Analysis Result ── -->
+<div class="grid-7-3 mb-32">
+    <!-- Main Info Card -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+                    <span class="origin-badge {{ word_data.origin|lower }}">{{ word_data.origin }}</span>
+                    <span style="font-size:0.78rem;color:var(--text-muted);">Confidence: {{ "%.1f"|format(word_data.confidence * 100) }}%</span>
+                </div>
+                <h2 style="font-family:var(--font-heading);font-size:2.5rem;font-style:italic;color:var(--text-heading);">
+                    {{ word_data.word }}
+                </h2>
+            </div>
+        </div>
+
+        <!-- Drift Bar -->
+        <div style="margin: 24px 0;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                <span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);">Semantic Drift</span>
+                <span class="drift-value" style="color: {% if word_data.drift_score > 0.7 %}var(--danger){% elif word_data.drift_score > 0.5 %}var(--warning){% elif word_data.drift_score > 0.3 %}var(--germanic){% else %}var(--success){% endif %};">
+                    {{ "%.4f"|format(word_data.drift_score) }}
+                </span>
+            </div>
+            <div class="drift-bar-track" style="height:10px;">
+                <div class="drift-bar-fill {{ word_data.origin|lower }}" 
+                     style="width: {{ (word_data.drift_score * 100)|int }}%;height:100%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem;color:var(--text-muted);">
+                <span>Stable</span>
+                <span>High Shift</span>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid-3" style="margin-top:20px;">
+            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ "%.4f"|format(word_data.similarity) }}</div>
+                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Cosine Similarity</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                <div style="font-family:var(--font-mono);font-size:1.4rem;color: {% if word_data.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">
+                    {{ word_data.drift_level }}
+                </div>
+                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Classification</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ word_data.shared_neighbors|length }}</div>
+                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Shared Neighbors</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drift Gauge -->
+    <div class="card animate-in" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div class="drift-gauge" 
+             style="--gauge-pct: {{ (word_data.drift_score * 100)|int }}; 
+                    --gauge-color: {% if word_data.drift_score > 0.7 %}var(--danger){% elif word_data.drift_score > 0.5 %}var(--warning){% elif word_data.drift_score > 0.3 %}var(--germanic){% else %}var(--success){% endif %};">
+            <div class="gauge-value">{{ "%.2f"|format(word_data.drift_score) }}</div>
+            <div class="gauge-label">Drift Score</div>
+        </div>
+        <div style="margin-top:24px;text-align:center;">
+            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:6px;">Source</div>
+            <div style="font-size:0.88rem;color:var(--text-secondary);">{{ word_data.source }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Neighbor Comparison ── -->
+<div class="grid-2 mb-32">
+    <!-- 1800s Neighbors -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">1800s Context</div>
+                <div class="card-meta">Historical nearest neighbors (Gutenberg)</div>
+            </div>
+        </div>
+        <div class="neighbor-list">
+            {% for w, s in word_data.old_neighbors %}
+            <a href="/explorer?word={{ w }}" class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">
+                {{ w }} <span style="opacity:0.5;font-size:0.72rem;">{{ "%.3f"|format(s) }}</span>
+            </a>
+            {% endfor %}
+            {% if not word_data.old_neighbors %}
+            <span style="color:var(--text-muted);font-size:0.85rem;">Not in historical vocabulary</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 2000s Neighbors -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">2000s Context</div>
+                <div class="card-meta">Modern nearest neighbors (Wikipedia)</div>
+            </div>
+        </div>
+        <div class="neighbor-list">
+            {% for w, s in word_data.new_neighbors %}
+            <a href="/explorer?word={{ w }}" class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">
+                {{ w }} <span style="opacity:0.5;font-size:0.72rem;">{{ "%.3f"|format(s) }}</span>
+            </a>
+            {% endfor %}
+            {% if not word_data.new_neighbors %}
+            <span style="color:var(--text-muted);font-size:0.85rem;">Not in modern vocabulary</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- ── Manim Video ── -->
+<div class="video-card animate-in" style="max-width:720px;">
+    <video controls preload="metadata">
+        <source src="/videos/embeddings_intro_scene/720p30/EmbeddingsIntroScene.mp4" type="video/mp4">
+    </video>
+    <div class="video-info">
+        <div class="video-label">Manim Animation — What Are Word Embeddings?</div>
+        <div class="video-title">Understanding Semantic Space</div>
+        <div class="video-desc">Learn how words are represented as vectors and how they shift meaning over time.</div>
+    </div>
+</div>
+
+{% else %}
+<!-- Word not found -->
+<div class="card animate-in" style="text-align:center;padding:48px;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">⬡</div>
+    <div style="font-family:var(--font-heading);font-size:1.5rem;color:var(--text-heading);margin-bottom:8px;">
+        "{{ word_data.word }}" not found
+    </div>
+    <div style="color:var(--text-secondary);max-width:400px;margin:0 auto;">
+        This word is not in our tracked vocabulary. It may be absent from either 
+        the historical or modern corpus, or may not meet the minimum frequency threshold.
+    </div>
+</div>
+{% endif %}
+{% else %}
+<!-- ── No word selected — show suggestions ── -->
+<div class="grid-4 mb-32">
+    {% for w in ['craft', 'monitor', 'sketch', 'room'] %}
+    <a href="/explorer?word={{ w }}" class="card stat-card animate-in" style="cursor:pointer;text-decoration:none;">
+        <div class="stat-value" style="font-family:var(--font-heading);font-style:italic;font-size:1.6rem;">{{ w }}</div>
+        <div class="stat-label">Try this word</div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="card animate-in">
+    <div class="card-title" style="margin-bottom:16px;">All Tracked Words</div>
+    <div class="neighbor-list">
+        {% for w in all_words %}
+        <a href="/explorer?word={{ w }}" class="neighbor-tag">{{ w }}</a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
