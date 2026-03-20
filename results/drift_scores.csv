@@ -1,0 +1,101 @@
+word,origin_class,drift_score,similarity,confidence,source,status
+stream,Germanic,0.548484,0.451516,0.9965,curated_seed,OK
+web,Germanic,0.770459,0.229541,0.9887,curated_seed,OK
+cloud,Germanic,0.643149,0.356851,0.9256,curated_seed,OK
+board,Germanic,0.73159,0.26841,0.8926,curated_seed,OK
+ship,Germanic,0.532427,0.467573,0.8787,curated_seed,OK
+craft,Germanic,0.820716,0.179284,0.8728,curated_seed,OK
+bug,Germanic,,,0.5616,curated_seed,MISSING (no historical)
+barn,Germanic,0.440936,0.559064,0.5529,curated_seed,OK
+mouse,Germanic,0.687218,0.312782,0.5503,curated_seed,OK
+broadcast,Germanic,,,0.5405,curated_seed,MISSING (no historical)
+without,Germanic,0.499989,0.500011,0.9993,classifier_nltk,OK
+knew,Germanic,0.47342,0.52658,0.9938,classifier_nltk,OK
+early,Germanic,0.554186,0.445814,0.9932,classifier_nltk,OK
+room,Germanic,0.160338,0.839662,0.9927,classifier_nltk,OK
+toward,Germanic,0.546424,0.453576,0.985,classifier_nltk,OK
+great,Germanic,0.160639,0.839361,0.9834,classifier_nltk,OK
+felt,Germanic,0.464344,0.535656,0.9737,classifier_nltk,OK
+going,Germanic,0.473046,0.526954,0.959,classifier_nltk,OK
+enough,Germanic,0.397294,0.602706,0.9523,classifier_nltk,OK
+look,Germanic,0.153974,0.846026,0.9385,classifier_nltk,OK
+told,Germanic,0.377792,0.622208,0.9311,classifier_nltk,OK
+took,Germanic,0.566065,0.433935,0.9009,classifier_nltk,OK
+always,Germanic,0.608072,0.391928,0.8308,classifier_nltk,OK
+find,Germanic,0.3928,0.6072,0.8228,classifier_nltk,OK
+left,Germanic,0.34202,0.65798,0.8045,classifier_nltk,OK
+energy,Greek,0.776608,0.223392,0.9956,curated_seed,OK
+plasma,Greek,,,0.9928,curated_seed,MISSING (no historical)
+cycle,Greek,,,0.9908,curated_seed,MISSING (no historical)
+phone,Greek,,,0.989,curated_seed,MISSING (no historical)
+program,Greek,,,0.9798,curated_seed,MISSING (no historical)
+meter,Greek,,,0.96,curated_seed,MISSING (no historical)
+atom,Greek,0.701348,0.298652,0.9455,curated_seed,OK
+organ,Greek,0.697715,0.302285,0.8578,curated_seed,OK
+icon,Greek,,,0.7498,curated_seed,MISSING (no historical)
+antenna,Greek,,,0.5566,curated_seed,MISSING (no historical)
+democratic,Greek,,,0.9963,classifier_nltk,MISSING (no historical)
+electronic,Greek,,,0.9955,classifier_nltk,MISSING (no historical)
+political,Greek,0.740683,0.259317,0.9879,classifier_nltk,OK
+practical,Greek,0.546064,0.453936,0.9796,classifier_nltk,OK
+historical,Greek,0.61996,0.38004,0.9666,classifier_nltk,OK
+poetry,Greek,0.50076,0.49924,0.9593,classifier_nltk,OK
+musical,Greek,0.803189,0.196811,0.9578,classifier_nltk,OK
+clothes,Greek,0.418048,0.581952,0.9313,classifier_nltk,OK
+anode,Greek,,,0.9224,classifier_nltk,MISSING (no historical)
+month,Greek,0.334699,0.665301,0.8894,classifier_nltk,OK
+corps,Greek,0.654409,0.345591,0.8858,classifier_nltk,OK
+across,Greek,0.51502,0.48498,0.8702,classifier_nltk,OK
+authority,Greek,0.501411,0.498589,0.863,classifier_nltk,OK
+type,Greek,0.710315,0.289685,0.8518,classifier_nltk,OK
+poet,Greek,0.635359,0.364641,0.8483,classifier_nltk,OK
+culture,Latin,0.593324,0.406676,0.9967,curated_seed,OK
+server,Latin,,,0.9942,curated_seed,MISSING (no historical)
+computer,Latin,,,0.9454,curated_seed,MISSING (no historical)
+cabinet,Latin,0.833229,0.166771,0.9189,curated_seed,OK
+cell,Latin,0.630956,0.369044,0.8981,curated_seed,OK
+journal,Latin,0.680818,0.319182,0.8084,curated_seed,OK
+text,Latin,0.545833,0.454167,0.7539,curated_seed,OK
+monitor,Latin,0.848478,0.151522,0.7135,curated_seed,OK
+virus,Latin,,,0.7022,curated_seed,MISSING (no historical)
+tablet,Latin,0.556261,0.443739,0.6685,curated_seed,OK
+information,Latin,0.491198,0.508802,0.9996,classifier_nltk,OK
+important,Latin,0.536081,0.463919,0.9983,classifier_nltk,OK
+president,Latin,0.81192,0.18808,0.9962,classifier_nltk,OK
+several,Latin,0.482582,0.517418,0.9955,classifier_nltk,OK
+development,Latin,0.645754,0.354246,0.9929,classifier_nltk,OK
+national,Latin,0.764361,0.235639,0.9924,classifier_nltk,OK
+different,Latin,0.563217,0.436783,0.9825,classifier_nltk,OK
+department,Latin,0.637848,0.362152,0.9709,classifier_nltk,OK
+since,Latin,0.464238,0.535762,0.9611,classifier_nltk,OK
+city,Latin,0.348221,0.651779,0.9521,classifier_nltk,OK
+every,Latin,0.428533,0.571467,0.9463,classifier_nltk,OK
+ever,Latin,0.515133,0.484867,0.9456,classifier_nltk,OK
+change,Latin,0.489696,0.510304,0.9365,classifier_nltk,OK
+cannot,Latin,,,0.8555,classifier_nltk,MISSING (no historical) (no modern)
+never,Latin,0.367734,0.632266,0.8295,classifier_nltk,OK
+tsunami,Other,,,0.9969,curated_seed,MISSING (no historical)
+magazine,Other,0.790692,0.209308,0.9866,curated_seed,OK
+sugar,Other,0.585444,0.414556,0.981,curated_seed,OK
+avatar,Other,,,0.9648,curated_seed,MISSING (no historical)
+algebra,Other,,,0.96,curated_seed,MISSING (no historical)
+algorithm,Other,,,0.9469,curated_seed,MISSING (no historical)
+guru,Other,,,0.9464,curated_seed,MISSING (no historical)
+coffee,Other,0.538487,0.461513,0.942,curated_seed,OK
+candy,Other,0.76109,0.23891,0.8571,curated_seed,OK
+jungle,Other,,,0.5354,curated_seed,MISSING (no historical)
+jazz,Other,,,0.9854,classifier_nltk,MISSING (no historical)
+take,Other,0.182595,0.817405,0.9487,classifier_nltk,OK
+cash,Other,0.550823,0.449177,0.9384,classifier_nltk,OK
+ashamed,Other,0.545134,0.454866,0.9345,classifier_nltk,OK
+michigan,Other,,,0.9259,classifier_nltk,MISSING (no historical)
+marshal,Other,0.733276,0.266724,0.909,classifier_nltk,OK
+suburban,Other,,,0.9077,classifier_nltk,MISSING (no historical)
+radar,Other,,,0.8948,classifier_nltk,MISSING (no historical)
+safe,Other,0.609676,0.390324,0.8538,classifier_nltk,OK
+china,Other,0.71267,0.28733,0.8426,classifier_nltk,OK
+amazing,Other,0.77567,0.22433,0.8382,classifier_nltk,OK
+taken,Other,0.455563,0.544437,0.832,classifier_nltk,OK
+sketch,Other,0.866009,0.133991,0.8285,classifier_nltk,OK
+urban,Other,,,0.8165,classifier_nltk,MISSING (no historical)
+sang,Other,0.709159,0.290841,0.8134,classifier_nltk,OK
