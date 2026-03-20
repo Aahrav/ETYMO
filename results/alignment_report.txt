@@ -1,0 +1,21 @@
+======================================================================
+  Phase 6: Embedding Alignment Report
+======================================================================
+
+  Method: Orthogonal Procrustes (scipy.linalg.orthogonal_procrustes)
+  Direction: Historical → Modern embedding space
+
+  "We rotate the historical embedding space to match the modern
+   space using Orthogonal Procrustes, preserving internal distances
+   while making cross-period comparisons valid."
+
+──────────────────────────────────────────────────────────────────────
+  Shared vocabulary:        11,532 words
+  Anchor words used:        172
+  Mean anchor drift:        0.1749
+  Std anchor drift:         0.0436
+  Max anchor drift:         0.2949
+  Selected words available: 73/100
+
+  Alignment quality: GOOD
+──────────────────────────────────────────────────────────────────────
