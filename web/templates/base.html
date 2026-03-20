@@ -30,6 +30,9 @@
                 <a href="/overview" class="nav-item {{ 'active' if active_page == 'overview' }}">
                     <span class="nav-icon">▣</span> Overview
                 </a>
+                <a href="/predict" class="nav-item {{ 'active' if active_page == 'predict' }}">
+                    <span class="nav-icon">⚛</span> Predict
+                </a>
             </nav>
             <div class="sidebar-footer">
                 Etymology-Aware Semantic Shift Analysis<br>
@@ -46,6 +49,7 @@
                     <a href="/explorer" class="{{ 'active' if active_page == 'explorer' }}">Explorer</a>
                     <a href="/compare" class="{{ 'active' if active_page == 'compare' }}">Compare</a>
                     <a href="/overview" class="{{ 'active' if active_page == 'overview' }}">Overview</a>
+                    <a href="/predict" class="{{ 'active' if active_page == 'predict' }}">Predict</a>
                 </nav>
                 <div class="header-search">
                     <input type="text" id="global-search" placeholder="Search etymologies..." autocomplete="off">

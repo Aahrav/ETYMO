@@ -73,7 +73,7 @@ def load_data():
     DATA["old_w2i"] = {w: i for i, w in enumerate(old_words)}
 
     # Classifier (if available)
-    classifier_path = MODELS_DIR / "best_pipeline.pkl"
+    classifier_path = MODELS_DIR / "etymology_classifier.pkl"
     if classifier_path.exists():
         import joblib
         DATA["classifier"] = joblib.load(classifier_path)
@@ -285,6 +285,75 @@ def overview():
         umap_data=json.dumps(umap_data),
         stats=DATA["stats"],
         videos=VIDEO_MAP,
+    )
+
+
+@app.route("/predict")
+def predict():
+    """Etymology Predictor page."""
+    word = request.args.get("word", "").strip()
+    result = None
+
+    if word and DATA["classifier"] is not None:
+        anchored = anchor(word)
+        proba = DATA["classifier"].predict_proba([anchored])[0]
+        classes = DATA["classifier"].classes_
+        prob_dict = {c: round(float(p), 4) for c, p in zip(classes, proba)}
+        predicted = classes[proba.argmax()]
+
+        # Sort probabilities descending for the bar chart
+        sorted_probs = sorted(prob_dict.items(), key=lambda x: x[1], reverse=True)
+
+        # Extract sample n-grams for educational display
+        sample_ngrams = []
+        anch = f"^{word}$"
+        for n in range(2, 6):
+            for i in range(len(anch) - n + 1):
+                ng = anch[i:i + n]
+                if len(sample_ngrams) < 12:
+                    sample_ngrams.append(ng)
+
+        # Vocabulary size from the vectorizer
+        try:
+            vocab_size = len(DATA["classifier"].named_steps["tfidf"].vocabulary_)
+        except Exception:
+            vocab_size = "18,000+"
+
+        result = {
+            "word": word,
+            "predicted": predicted,
+            "probabilities": prob_dict,
+            "sorted_probs": sorted_probs,
+            "sample_ngrams": sample_ngrams,
+        }
+
+    # Example words for the landing state
+    examples = [
+        ("algorithm", "Other", "Arabic al-Khwārizmī → math"),
+        ("shampoo", "Sanskrit", "Hindi chāmpo → hair wash"),
+        ("father", "PIE", "*pater → ancestor"),
+        ("telephone", "Greek", "tele + phone → far voice"),
+        ("virus", "Latin", "poison → microbe → malware"),
+        ("stream", "Germanic", "water flow → data streaming"),
+    ]
+
+    # Suggestion words for the result state
+    suggestions = ["democracy", "jungle", "algebra", "yoga",
+                    "mother", "craft", "tsunami", "monitor",
+                    "nirvana", "culture", "atom", "magazine"]
+
+    # Vocab size for display
+    try:
+        vocab_size = len(DATA["classifier"].named_steps["tfidf"].vocabulary_)
+    except Exception:
+        vocab_size = "18,000+"
+
+    return render_template("predict.html",
+        result=result,
+        query=word,
+        examples=examples,
+        suggestions=suggestions,
+        stats={"vocab_size": vocab_size},
     )
 
 
