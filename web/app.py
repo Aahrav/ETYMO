@@ -32,6 +32,7 @@ from src.config import (
     RESULTS_DIR, ORIGIN_CLASSES, MODELS_DIR,
     SELECTED_WORDS_CSV,
 )
+from src.classifier import anchor
 
 # ── Flask App ──
 app = Flask(__name__,
@@ -86,7 +87,7 @@ def load_data():
         "total_vocab_old": len(DATA["model_old"].wv),
         "total_vocab_new": len(DATA["model_new"].wv),
         "mean_drift": round(float(DATA["valid_drift"]["drift_score"].mean()), 4),
-        "kruskal_p": 0.061,
+        "kruskal_p": 0.000,
     }
 
     # Neighbor analysis text
@@ -119,6 +120,7 @@ def get_old_neighbors(word, topn=5):
 
 def get_word_data(word):
     """Get comprehensive data for a single word."""
+    word = word.lower().strip()
     drift_row = DATA["valid_drift"][DATA["valid_drift"]["word"] == word]
     result = {"word": word, "found": False}
 
@@ -158,6 +160,14 @@ def get_word_data(word):
     old_set = {w for w, _ in result["old_neighbors"]}
     new_set = {w for w, _ in result["new_neighbors"]}
     result["shared_neighbors"] = list(old_set & new_set)
+
+    # Word-specific video
+    # We use ROOT / "results" directly to ensure absolute path consistency
+    word_video = ROOT / "results" / "videos" / "videos" / "words" / f"{word}.mp4"
+    if word_video.exists():
+        result["video_path"] = f"words/{word}.mp4"
+    else:
+        result["video_path"] = None
 
     return result
 
@@ -300,7 +310,8 @@ def api_classify(word):
     """Classify a word's etymology."""
     if DATA["classifier"] is None:
         return jsonify({"error": "Classifier not loaded"})
-    proba = DATA["classifier"].predict_proba([word])[0]
+    anchored = anchor(word)
+    proba = DATA["classifier"].predict_proba([anchored])[0]
     classes = DATA["classifier"].classes_
     result = {c: round(float(p), 4) for c, p in zip(classes, proba)}
     predicted = classes[proba.argmax()]
@@ -311,7 +322,8 @@ def api_classify(word):
 @app.route("/videos/<path:filename>")
 def serve_video(filename):
     """Serve Manim video files."""
-    return send_from_directory(str(RESULTS_DIR / "videos"), filename)
+    # Manim nests a 'videos' dir inside its media_dir
+    return send_from_directory(str(RESULTS_DIR / "videos" / "videos"), filename)
 
 
 # ── Serve static figures ──

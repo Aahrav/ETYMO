@@ -4,10 +4,10 @@
 ======================================================================
 
 ──────────────────────────────────────────────────────────────────────
-  "sketch" (Other)  │  drift = 0.8660
+  "recent" (Latin)  │  drift = 0.8791
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: copy, portrait, portfolio, charade, memorandum
-    2000s neighbors: gysin, sculpting, stocqueler, trager, caricature
+    1800s neighbors: bereavement, detention, protracted, allayed, personal
+    2000s neighbors: recently, cenozoic, modern, controversial, contentious
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -32,24 +32,38 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "president" (Latin)  │  drift = 0.8119
+  "diplomatic" (Greek)  │  drift = 0.8065
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: sheriffs, parliament, hustings, presiding, congress
-    2000s neighbors: chairman, mogae, presidency, vice, rousseff
+    1800s neighbors: deficient, thoroughness, satirical, unqualified, indubitable
+    2000s neighbors: relations, cordial, csto, bilateral, ties
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "musical" (Greek)  │  drift = 0.8032
+  "poetic" (Greek)  │  drift = 0.7959
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: bass, songs, music, song, ballads
-    2000s neighbors: music, jazz, orchestrations, ballet, broadway
-    Shared neighbors: music
+    1800s neighbors: dauntless, distinguishing, subtlety, transcendent, displays
+    2000s neighbors: prose, edda, stanzas, eddic, poems
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "equipment" (Latin)  │  drift = 0.7941
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: fineness, statesman, drill, dignitary, nationality
+    2000s neighbors: gauges, plumbing, ammunition, radars, hangar
+    Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
   "magazine" (Other)  │  drift = 0.7907
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: pamphlet, quarto, published, translation, version
     2000s neighbors: newspaper, insider, weekly, journal, editor
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "musk" (Sanskrit)  │  drift = 0.7897
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: rending, opal, cabbage, myriads, fragrance
+    2000s neighbors: caterpillars, cartilaginous, scavenge, cuticle, mites
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -60,10 +74,10 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "amazing" (Other)  │  drift = 0.7757
+  "sympathetic" (Greek)  │  drift = 0.7718
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: marvellous, extraordinary, wonderful, marvelous, uncommon
-    2000s neighbors: marvel, masterworks, comics, grace, remixes
+    1800s neighbors: guileless, commiseration, childish, prettiness, fervour
+    2000s neighbors: stereotyped, nervous, irritating, nationalistic, overtly
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -71,6 +85,13 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: thread, canopy, shreds, tissue, twined
     2000s neighbors: browser, google, downloadable, internet, online
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "punch" (Sanskrit)  │  drift = 0.7681
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: bumper, bowl, wine, mouthful, collation
+    2000s neighbors: jab, punched, punches, throw, opponent
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -88,17 +109,10 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "political" (Greek)  │  drift = 0.7407
+  "magnetic" (Greek)  │  drift = 0.7414
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: economy, culture, financial, sciences, tory
-    2000s neighbors: social, politics, liberal, economic, upheavals
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "marshal" (Other)  │  drift = 0.7333
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: constantinople, crespo, specialty, infested, danish
-    2000s neighbors: duc, overkirk, commander, manstein, gerd
+    1800s neighbors: unaided, virtue, mechanism, elusive, transcended
+    2000s neighbors: resonance, deflection, pulsed, tunneling, compressing
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -106,27 +120,6 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: ship, yacht, carnatic, poop, vessel
     2000s neighbors: trustees, boards, committee, advisory, committees
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "china" (Other)  │  drift = 0.7127
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: plate, shawls, wardrobes, silver, sandwiches
-    2000s neighbors: japan, korea, india, taiwan, iran
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "type" (Greek)  │  drift = 0.7103
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: embodiment, heroines, character, masterpiece, resembles
-    2000s neighbors: types, ia, subtype, variant, class
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "sang" (Other)  │  drift = 0.7092
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: blithely, sung, guitar, songs, psalm
-    2000s neighbors: sings, roeser, singing, sing, tonight
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -151,6 +144,13 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "secretary" (Latin)  │  drift = 0.6861
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: traddles, bella, evasively, crisparkle, schoolmaster
+    2000s neighbors: minister, deputy, chairman, president, postmaster
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
   "journal" (Latin)  │  drift = 0.6808
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: diary, murray, shorthand, xliv, harker
@@ -158,10 +158,31 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "corps" (Greek)  │  drift = 0.6544
+  "following" (Germanic)  │  drift = 0.6677
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: coles, solicit, tory, stipendiary, militia
-    2000s neighbors: army, lobau, regiment, brigade, battalion
+    1800s neighbors: transcribe, hyphen, postscript, followed, dated
+    2000s neighbors: after, subsequent, followed, before, final
+    Shared neighbors: followed
+
+──────────────────────────────────────────────────────────────────────
+  "looking" (Germanic)  │  drift = 0.6667
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: glancing, looked, gazing, staring, peering
+    2000s neighbors: looked, look, moving, looks, seeing
+    Shared neighbors: looked
+
+──────────────────────────────────────────────────────────────────────
+  "psychological" (Greek)  │  drift = 0.6654
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: involves, purely, anomalous, feasible, immoral
+    2000s neighbors: psychic, mental, sociological, physiological, hallucinations
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "axis" (Greek)  │  drift = 0.6537
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: eddies, obliquely, alternating, radiating, spiral
+    2000s neighbors: tangent, axes, apices, optic, hpa
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -179,6 +200,20 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "evidence" (Latin)  │  drift = 0.6412
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: proof, facts, valid, circumstantial, statement
+    2000s neighbors: circumstantial, conclusive, suggest, archeological, suggests
+    Shared neighbors: circumstantial
+
+──────────────────────────────────────────────────────────────────────
+  "historian" (Greek)  │  drift = 0.6387
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: biography, chronicler, experimental, attaches, quote
+    2000s neighbors: scholar, author, geographer, satirist, poet
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
   "department" (Latin)  │  drift = 0.6378
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: parochial, retail, officials, regulations, treasurer
@@ -186,11 +221,11 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "poet" (Greek)  │  drift = 0.6354
+  "stood" (Germanic)  │  drift = 0.6331
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: chant, commencing, poem, philosophers, psalm
-    2000s neighbors: author, playwright, satirist, essayist, writer
-    Shared neighbors: none (complete context change)
+    1800s neighbors: sat, remained, standing, gazed, abstractedly
+    2000s neighbors: fell, slipped, stands, looked, remained
+    Shared neighbors: remained
 
 ──────────────────────────────────────────────────────────────────────
   "cell" (Latin)  │  drift = 0.6310
@@ -200,6 +235,13 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "hundred" (Germanic)  │  drift = 0.6287
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: fifty, thousand, twenty, five, thirty
+    2000s neighbors: thousand, twenty, sixty, thirty, eighty
+    Shared neighbors: thirty, thousand, twenty
+
+──────────────────────────────────────────────────────────────────────
   "historical" (Greek)  │  drift = 0.6200
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: historic, scientific, chronicler, extant, purporting
@@ -207,17 +249,24 @@
     Shared neighbors: historic
 
 ──────────────────────────────────────────────────────────────────────
-  "safe" (Other)  │  drift = 0.6097
+  "chop" (Sanskrit)  │  drift = 0.6150
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: free, sure, satisfied, allahabad, comfortable
-    2000s neighbors: unfit, safer, convenient, suitable, dangerous
+    1800s neighbors: tuck, loin, slice, swaller, vittles
+    2000s neighbors: suey, grilled, chow, dessert, stews
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "always" (Germanic)  │  drift = 0.6081
+  "best" (Germanic)  │  drift = 0.6063
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: often, generally, constantly, wingfield, because
-    2000s neighbors: if, not, so, actually, therefore
+    1800s neighbors: worst, wisest, better, well, easiest
+    2000s neighbors: award, bafta, filmfare, awards, outstanding
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "ear" (PIE)  │  drift = 0.6063
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: knuckles, voice, ears, whispered, click
+    2000s neighbors: parietal, puncture, skin, clitoris, spinal
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -228,6 +277,13 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "hot" (PIE)  │  drift = 0.5899
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: cold, warm, collation, heated, grilled
+    2000s neighbors: cool, warm, dry, summertime, humid
+    Shared neighbors: warm
+
+──────────────────────────────────────────────────────────────────────
   "sugar" (Other)  │  drift = 0.5854
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: whisky, butter, spoonful, milk, bacon
@@ -235,18 +291,25 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "took" (Germanic)  │  drift = 0.5661
+  "new" (PIE)  │  drift = 0.5716
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: taking, takes, take, gave, taken
-    2000s neighbors: taking, takes, gave, came, take
-    Shared neighbors: gave, taking, take, takes
+    1800s neighbors: orleans, bedford, fresh, york, mirrored
+    2000s neighbors: york, knickerbocker, bestseller, auckland, jersey
+    Shared neighbors: york
+
+──────────────────────────────────────────────────────────────────────
+  "within" (Germanic)  │  drift = 0.5708
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: beyond, inner, limits, near, beneath
+    2000s neighbors: outside, separate, inside, surrounding, across
+    Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
   "different" (Latin)  │  drift = 0.5632
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: differently, differ, foretell, distinct, dissimilar
     2000s neighbors: differently, distinct, differing, varying, various
-    Shared neighbors: differently, distinct
+    Shared neighbors: distinct, differently
 
 ──────────────────────────────────────────────────────────────────────
   "tablet" (Latin)  │  drift = 0.5563
@@ -263,31 +326,10 @@
     Shared neighbors: late
 
 ──────────────────────────────────────────────────────────────────────
-  "cash" (Other)  │  drift = 0.5508
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: arrears, pounds, supplies, premium, annum
-    2000s neighbors: payment, remittances, discount, payments, profits
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
   "stream" (Germanic)  │  drift = 0.5485
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: current, river, water, turbid, limpid
     2000s neighbors: flowing, flows, kattegat, downstream, streams
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "toward" (Germanic)  │  drift = 0.5464
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: towards, around, along, across, upward
-    2000s neighbors: towards, inwards, outwards, through, pessimistic
-    Shared neighbors: towards
-
-──────────────────────────────────────────────────────────────────────
-  "practical" (Greek)  │  drift = 0.5461
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: chemistry, professional, figurative, ignoring, general
-    2000s neighbors: theoretical, lubricant, utilitarian, shortcomings, deduction
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
@@ -296,13 +338,6 @@
     1800s neighbors: epistle, virgil, paragraph, pamphlet, hymn
     2000s neighbors: commentary, masoretic, bible, manuscripts, tiberian
     Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "ashamed" (Other)  │  drift = 0.5451
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: afraid, proud, sorry, sure, conscious
-    2000s neighbors: sexy, sorry, anybody, please, myself
-    Shared neighbors: sorry
 
 ──────────────────────────────────────────────────────────────────────
   "coffee" (Other)  │  drift = 0.5385
@@ -319,6 +354,13 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "cow" (PIE)  │  drift = 0.5351
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: cat, turnip, sheep, rat, goats
+    2000s neighbors: goat, mango, rooster, beetle, cashew
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
   "ship" (Germanic)  │  drift = 0.5324
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: vessel, boat, pequod, schooner, sea
@@ -326,32 +368,39 @@
     Shared neighbors: vessel
 
 ──────────────────────────────────────────────────────────────────────
-  "ever" (Latin)  │  drift = 0.5151
+  "feeling" (Germanic)  │  drift = 0.5309
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: never, iver, mayhap, hav, kinder
-    2000s neighbors: grossing, never, convincingly, downloaded, one
-    Shared neighbors: never
+    1800s neighbors: felt, uneasiness, resentment, resentful, affection
+    2000s neighbors: feelings, felt, feel, sensations, disbelief
+    Shared neighbors: felt
 
 ──────────────────────────────────────────────────────────────────────
-  "across" (Greek)  │  drift = 0.5150
+  "county" (Latin)  │  drift = 0.5208
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: along, crossed, crossing, into, through
-    2000s neighbors: throughout, through, spread, around, over
-    Shared neighbors: through
-
-──────────────────────────────────────────────────────────────────────
-  "authority" (Greek)  │  drift = 0.5014
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: opinion, authorities, opinions, courtesy, counsel
-    2000s neighbors: jurisdiction, jurisdictional, primacy, oversight, empowered
+    1800s neighbors: urbervilles, essex, connecticut, salem, town
+    2000s neighbors: township, washtenaw, district, courthouse, borough
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "poetry" (Greek)  │  drift = 0.5008
+  "religious" (Latin)  │  drift = 0.5098
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: latin, read, romance, dictionary, milton
-    2000s neighbors: poems, poem, literature, riddles, courtly
-    Shared neighbors: none (complete context change)
+    1800s neighbors: moral, principles, religion, commonwealth, precepts
+    2000s neighbors: secular, religion, christian, pluralism, political
+    Shared neighbors: religion
+
+──────────────────────────────────────────────────────────────────────
+  "basis" (Greek)  │  drift = 0.5087
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: based, claim, recommendations, preservation, organization
+    2000s neighbors: rationale, based, implications, gaap, principles
+    Shared neighbors: based
+
+──────────────────────────────────────────────────────────────────────
+  "group" (Germanic)  │  drift = 0.5058
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: cluster, groups, semicircle, promontory, assembled
+    2000s neighbors: groups, subgroup, splinter, carboxyl, duo
+    Shared neighbors: groups
 
 ──────────────────────────────────────────────────────────────────────
   "without" (Germanic)  │  drift = 0.5000
@@ -361,6 +410,13 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
+  "three" (PIE)  │  drift = 0.4928
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: four, two, six, five, ten
+    2000s neighbors: four, two, five, six, eight
+    Shared neighbors: two, five, four, six
+
+──────────────────────────────────────────────────────────────────────
   "information" (Latin)  │  drift = 0.4912
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: intelligence, message, communications, preferment, instructions
@@ -368,25 +424,18 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "change" (Latin)  │  drift = 0.4897
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: changes, alteration, changed, variation, alter
-    2000s neighbors: changes, changing, shift, mitigate, shrinking
-    Shared neighbors: changes
-
-──────────────────────────────────────────────────────────────────────
   "several" (Latin)  │  drift = 0.4826
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: many, few, various, three, sundry
     2000s neighbors: numerous, many, various, three, two
-    Shared neighbors: many, three, various
+    Shared neighbors: many, various, three
 
 ──────────────────────────────────────────────────────────────────────
-  "knew" (Germanic)  │  drift = 0.4734
+  "goes" (Greek)  │  drift = 0.4814
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: know, remembered, thought, understood, cared
-    2000s neighbors: know, replied, knows, sure, felt
-    Shared neighbors: know
+    1800s neighbors: comes, gets, takes, went, runs
+    2000s neighbors: went, looks, going, comes, go
+    Shared neighbors: comes, went
 
 ──────────────────────────────────────────────────────────────────────
   "going" (Germanic)  │  drift = 0.4730
@@ -396,25 +445,11 @@
     Shared neighbors: coming, go
 
 ──────────────────────────────────────────────────────────────────────
-  "felt" (Germanic)  │  drift = 0.4643
+  "wide" (PIE)  │  drift = 0.4675
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: feel, feeling, thought, conscious, quailed
-    2000s neighbors: assured, said, embarrassed, feel, remarked
-    Shared neighbors: feel
-
-──────────────────────────────────────────────────────────────────────
-  "since" (Latin)  │  drift = 0.4642
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: before, ago, hows, weeks, yesterday
-    2000s neighbors: until, recently, already, although, wnba
-    Shared neighbors: none (complete context change)
-
-──────────────────────────────────────────────────────────────────────
-  "taken" (Other)  │  drift = 0.4556
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: took, take, given, taking, thrown
-    2000s neighbors: taking, turned, take, brought, given
-    Shared neighbors: given, taking, take
+    1800s neighbors: circumference, broad, traversing, open, hilly
+    2000s neighbors: variety, broad, range, wider, large
+    Shared neighbors: broad
 
 ──────────────────────────────────────────────────────────────────────
   "barn" (Germanic)  │  drift = 0.4409
@@ -424,32 +459,18 @@
     Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "every" (Latin)  │  drift = 0.4285
+  "brought" (Germanic)  │  drift = 0.4230
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: each, another, single, one, darkest
-    2000s neighbors: each, any, all, linearly, baire
-    Shared neighbors: each
+    1800s neighbors: sent, bring, bringing, come, came
+    2000s neighbors: bringing, put, came, turned, pushed
+    Shared neighbors: bringing, came
 
 ──────────────────────────────────────────────────────────────────────
-  "clothes" (Greek)  │  drift = 0.4180
+  "bad" (PIE)  │  drift = 0.3786
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: dress, clothing, shoes, shirts, straw
-    2000s neighbors: garments, clothing, belongings, tunic, tearing
-    Shared neighbors: clothing
-
-──────────────────────────────────────────────────────────────────────
-  "enough" (Germanic)  │  drift = 0.3973
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: too, sufficient, so, pretty, very
-    2000s neighbors: too, sufficiently, needed, able, unable
-    Shared neighbors: too
-
-──────────────────────────────────────────────────────────────────────
-  "find" (Germanic)  │  drift = 0.3928
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: found, prove, see, discover, finding
-    2000s neighbors: get, prove, try, obtain, make
-    Shared neighbors: prove
+    1800s neighbors: good, ill, lucky, wicked, luck
+    2000s neighbors: good, awful, guys, luck, dire
+    Shared neighbors: good, luck
 
 ──────────────────────────────────────────────────────────────────────
   "told" (Germanic)  │  drift = 0.3778
@@ -459,13 +480,6 @@
     Shared neighbors: telling
 
 ──────────────────────────────────────────────────────────────────────
-  "never" (Latin)  │  drift = 0.3677
-──────────────────────────────────────────────────────────────────────
-    1800s neighbors: seldom, ever, not, hardly, hav
-    2000s neighbors: already, not, previously, nothing, once
-    Shared neighbors: not
-
-──────────────────────────────────────────────────────────────────────
   "city" (Latin)  │  drift = 0.3482
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: town, suburbs, streets, environs, country
@@ -473,43 +487,141 @@
     Shared neighbors: town
 
 ──────────────────────────────────────────────────────────────────────
-  "left" (Germanic)  │  drift = 0.3420
+  "moon" (PIE)  │  drift = 0.2688
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: leaving, quitted, leave, entered, remained
-    2000s neighbors: leaving, amputated, right, ventricle, returned
-    Shared neighbors: leaving
+    1800s neighbors: sun, clouds, stars, sky, disc
+    2000s neighbors: lunar, earth, orbit, spacecraft, liftoff
+    Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "month" (Greek)  │  drift = 0.3347
+  "heart" (PIE)  │  drift = 0.2342
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: week, year, twelvemonth, fortnight, michaelmas
-    2000s neighbors: year, week, day, days, weeks
-    Shared neighbors: year, week
+    1800s neighbors: soul, breast, hearts, conscience, spirit
+    2000s neighbors: lung, coronary, rheumatic, infarction, ischemic
+    Shared neighbors: none (complete context change)
 
 ──────────────────────────────────────────────────────────────────────
-  "take" (Other)  │  drift = 0.1826
+  "name" (PIE)  │  drift = 0.2275
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: give, taking, took, send, takin
-    2000s neighbors: taking, takes, go, hold, took
-    Shared neighbors: took, taking
+    1800s neighbors: names, surname, veller, abelard, nicodemus
+    2000s neighbors: names, surname, word, toponym, etymology
+    Shared neighbors: names, surname
 
 ──────────────────────────────────────────────────────────────────────
-  "great" (Germanic)  │  drift = 0.1606
+  "whole" (Germanic)  │  drift = 0.2198
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: vast, considerable, immense, prodigious, mighty
-    2000s neighbors: enormous, huge, renown, britain, considerable
-    Shared neighbors: considerable
+    1800s neighbors: remainder, universe, vast, throughout, entire
+    2000s neighbors: entire, rest, itself, body, wider
+    Shared neighbors: entire
 
 ──────────────────────────────────────────────────────────────────────
-  "room" (Germanic)  │  drift = 0.1603
+  "eye" (PIE)  │  drift = 0.2198
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: parlour, apartment, house, bedroom, chamber
-    2000s neighbors: palace, rooms, bedroom, dormitory, refectory
-    Shared neighbors: bedroom
+    1800s neighbors: eyes, glance, face, gaze, ear
+    2000s neighbors: unaided, eyes, naked, retina, binoculars
+    Shared neighbors: eyes
 
 ──────────────────────────────────────────────────────────────────────
-  "look" (Germanic)  │  drift = 0.1540
+  "star" (PIE)  │  drift = 0.2037
 ──────────────────────────────────────────────────────────────────────
-    1800s neighbors: looked, stare, glance, looks, looking
-    2000s neighbors: looked, looks, looking, ripped, veneer
-    Shared neighbors: looking, looked, looks
+    1800s neighbors: disc, unclouded, cloudless, scar, azure
+    2000s neighbors: stars, antliae, magnitude, supergiant, proxima
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "god" (PIE)  │  drift = 0.1951
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: heaven, merciful, mercy, almighty, bless
+    2000s neighbors: yahweh, almighty, divine, yhwh, unto
+    Shared neighbors: almighty
+
+──────────────────────────────────────────────────────────────────────
+  "red" (PIE)  │  drift = 0.1927
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: white, yellow, blue, purple, crimson
+    2000s neighbors: white, teal, blue, yellow, purple
+    Shared neighbors: white, blue, yellow, purple
+
+──────────────────────────────────────────────────────────────────────
+  "deep" (PIE)  │  drift = 0.1906
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: ruts, profound, depths, deeper, sunk
+    2000s neighbors: thinly, muddy, gorges, laterally, rhodope
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "war" (PIE)  │  drift = 0.1770
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: wars, siege, vicksburg, matrimony, battle
+    2000s neighbors: wars, occupation, kippur, civil, revolution
+    Shared neighbors: wars
+
+──────────────────────────────────────────────────────────────────────
+  "life" (PIE)  │  drift = 0.1695
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: existence, career, knowledge, destiny, soul
+    2000s neighbors: childhood, biography, lives, experiences, oblivion
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "bring" (Germanic)  │  drift = 0.1673
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: send, carry, come, fetch, throw
+    2000s neighbors: keep, get, dissuade, convince, send
+    Shared neighbors: send
+
+──────────────────────────────────────────────────────────────────────
+  "water" (PIE)  │  drift = 0.1643
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: trough, stream, mead, sea, streams
+    2000s neighbors: seawater, brackish, moisture, sewage, saline
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "wind" (PIE)  │  drift = 0.1629
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: winds, blew, breeze, rain, storm
+    2000s neighbors: turbines, blowing, mooring, lift, solar
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "son" (PIE)  │  drift = 0.1588
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: wife, daughter, father, grandfather, brother
+    2000s neighbors: father, daughter, grandson, eldest, wife
+    Shared neighbors: daughter, wife, father
+
+──────────────────────────────────────────────────────────────────────
+  "night" (PIE)  │  drift = 0.1551
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: day, evening, morning, afternoon, nights
+    2000s neighbors: morning, evening, saturday, afternoons, summer
+    Shared neighbors: morning, evening
+
+──────────────────────────────────────────────────────────────────────
+  "sun" (PIE)  │  drift = 0.1514
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: moon, sky, stars, sunlight, disc
+    2000s neighbors: shines, parsecs, aldebaran, arcminutes, eclipses
+    Shared neighbors: none (complete context change)
+
+──────────────────────────────────────────────────────────────────────
+  "man" (PIE)  │  drift = 0.1157
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: woman, gentleman, fellow, person, men
+    2000s neighbors: woman, girl, boy, creature, huntress
+    Shared neighbors: woman
+
+──────────────────────────────────────────────────────────────────────
+  "father" (PIE)  │  drift = 0.1109
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: mother, husband, wife, sister, brother
+    2000s neighbors: mother, son, grandfather, brother, wife
+    Shared neighbors: wife, brother, mother
+
+──────────────────────────────────────────────────────────────────────
+  "mother" (PIE)  │  drift = 0.0972
+──────────────────────────────────────────────────────────────────────
+    1800s neighbors: father, sister, husband, daughter, child
+    2000s neighbors: father, wife, daughter, son, grandmother
+    Shared neighbors: daughter, father

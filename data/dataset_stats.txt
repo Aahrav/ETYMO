@@ -2,35 +2,39 @@
   Etymology Dataset Statistics
 ==================================================
 
-Total words:  4,800
-Train split:  3,840 (80.0%)
-Test split:   960 (20.0%)
+Total words:  5,260
+Train split:  4,208 (80.0%)
+Test split:   1,052 (20.0%)
 
 Class Distribution (Full Dataset):
 ----------------------------------------
-  Germanic    1200  ( 25.0%) ████████████
-  Latin       1200  ( 25.0%) ████████████
-  Greek       1200  ( 25.0%) ████████████
-  Other       1200  ( 25.0%) ████████████
+  Germanic    1200  ( 22.8%) ███████████
+  Latin       1200  ( 22.8%) ███████████
+  Greek       1200  ( 22.8%) ███████████
+  Sanskrit     386  (  7.3%) ███
+  PIE           74  (  1.4%) 
+  Other       1200  ( 22.8%) ███████████
 
 Sample words per class:
 ----------------------------------------
-  Germanic: spurn, psychopath, mawk, breathe, bloom, corner, clover, minish, stone, headlong
-  Latin: insist, remain, inaugurate, carry, leprous, motion, opinative, private, venture, current
-  Greek: erotic, cycle, œniadæ, euterpe, ascetic, galilee, noematic, chthonic, halicarnassus, hera
-  Other: narasimha, kobashigawa, shiloh, jordan, bosh, kara, barbecue, mamzer, halant, senpai
+  Germanic: poppycock, crab, ord, dowf, vary, gird, gloppen, below, ice, chromatin
+  Latin: madeira, trade, subjunctive, wage, admire, symbolise, series, charge, route, lure
+  Greek: nosode, hadean, hero, elis, ephemeral, myth, anthesis, attic, drastic, lepidote
+  Sanskrit: dharma, bhakti, lakshmi, sakta, chaunk, atman, doosra, sandal, rudraksha, aditya
+  PIE: king, nose, three, name, dog, light, star, red, heart, horse
+  Other: maghreb, hamantasch, narghile, jahannam, mir, chador, shibori, shaku, almagest, basheer
 
 Spot-check (known origins):
 ----------------------------------------
   house           expected=Germanic   ✓
-  mother          expected=Germanic   ✓
-  water           expected=Germanic   ✓
+  mother          expected=Germanic   ✗ (got PIE)
+  water           expected=Germanic   ✗ (got PIE)
   government      expected=Latin      ✓
   culture         expected=Latin      ✓
   justice         expected=Latin      ✓
   biology         expected=Greek      ✓
   philosophy      expected=Greek      ✓
   democracy       expected=Greek      ✓
-  algebra         expected=Other      ✓
-  coffee          expected=Other      ✓
-  tsunami         expected=Other      ✓
+  algebra         NOT IN DATASET
+  coffee          NOT IN DATASET
+  tsunami         NOT IN DATASET

@@ -27,7 +27,7 @@ VISUALIZATIONS_DIR = PROJECT_ROOT / "visualizations"
 # ──────────────────────────────────────────────
 # Scope — Etymology Classes
 # ──────────────────────────────────────────────
-ORIGIN_CLASSES = ["Germanic", "Latin", "Greek", "Other"]
+ORIGIN_CLASSES = ["Germanic", "Latin", "Greek", "Sanskrit", "PIE", "Other"]
 
 # Fine-grained → coarse mapping
 ORIGIN_MAPPING = {
@@ -50,10 +50,15 @@ ORIGIN_MAPPING = {
     # Greek
     "Ancient Greek": "Greek",
     "Greek": "Greek",
+    # Sanskrit / Hindi
+    "Sanskrit": "Sanskrit",
+    "Hindi": "Sanskrit",
+    "Pali": "Sanskrit",
+    # PIE
+    "Proto-Indo-European": "PIE",
+    "PIE": "PIE",
     # Other
     "Arabic": "Other",
-    "Sanskrit": "Other",
-    "Hindi": "Other",
     "Japanese": "Other",
     "Persian": "Other",
     "Turkish": "Other",
@@ -99,10 +104,14 @@ ISO_TO_ORIGIN = {
     # Greek
     "grc": "Greek",      # Ancient Greek
     "ell": "Greek",      # Modern Greek
+    # Sanskrit / Hindi
+    "san": "Sanskrit",   # Sanskrit
+    "hin": "Sanskrit",   # Hindi
+    "pli": "Sanskrit",   # Pali
+    # PIE
+    "ine-pro": "PIE",    # Proto-Indo-European (ISO: ine-pro)
     # Other
     "ara": "Other",      # Arabic
-    "san": "Other",      # Sanskrit
-    "hin": "Other",      # Hindi
     "jpn": "Other",      # Japanese
     "fas": "Other",      # Persian
     "tur": "Other",      # Turkish
@@ -140,7 +149,7 @@ PERIOD_B = {"name": "Modern", "start": 2000, "end": 2020, "source": "Wikipedia /
 # ──────────────────────────────────────────────
 # Scope — Word Selection
 # ──────────────────────────────────────────────
-TOTAL_SHIFT_WORDS = 100
+TOTAL_SHIFT_WORDS = 150
 WORDS_PER_ORIGIN = 25
 CLASSIFIER_CONFIDENCE_THRESHOLD = 0.8
 
@@ -207,6 +216,30 @@ SEED_WORDS = {
         "program",  # public notice → plan → software
         "cycle",    # circle → recurring sequence
         "meter",    # measure → unit → device
+    ],
+    "Sanskrit": [
+        "avatar",   # descent of god → digital representation
+        "guru",     # teacher → expert
+        "karma",    # action → cause and effect
+        "yoga",     # union → physical practice
+        "nirvana",  # blowing out → mental state
+        "jungle",   # jangal (Hindi) → wild forest
+        "bandit",   # banjh (Hindi) → outlaw
+        "shampoo",  # champo (Hindi) → hair wash
+        "pajama",   # pa-jama (Persian/Hindi) → leg garment
+        "punch",    # paunch (Sanskrit: five) → five-ingredient drink
+    ],
+    "PIE": [
+        "father",   # *pater → ancestor
+        "mother",   # *mater → maternal ancestor
+        "water",    # *wod → liquid
+        "new",      # *newo → fresh
+        "three",    # *trei → numeral 3
+        "night",    # *nokt → dark hours
+        "eye",      # *okw → organ of sight
+        "star",     # *ster → celestial body
+        "heart",    # *kerd → core/organ
+        "name",     # *nomn → identifier
     ],
     "Other": [
         "algebra",  # Arabic: reunion of broken parts → math

@@ -3,7 +3,7 @@
   Selected Words for Semantic Drift Tracking
 ======================================================================
 
-Total words selected: 100
+Total words selected: 150
 Target per origin:    25
 Confidence threshold: 0.8
 
@@ -12,152 +12,229 @@ Confidence threshold: 0.8
 ──────────────────────────────────────────────────────────────────────
 
   Tier 1 — Curated Seeds:
-    stream               conf=0.997 ███████████████████
-    web                  conf=0.989 ███████████████████
-    cloud                conf=0.926 ██████████████████
-    board                conf=0.893 █████████████████
-    ship                 conf=0.879 █████████████████
-    craft                conf=0.873 █████████████████
-    bug                  conf=0.562 ███████████
-    barn                 conf=0.553 ███████████
-    mouse                conf=0.550 ███████████
-    broadcast            conf=0.540 ██████████
+    stream               conf=0.760 ███████████████
+    web                  conf=0.743 ██████████████
+    ship                 conf=0.689 █████████████
+    cloud                conf=0.648 ████████████
+    barn                 conf=0.585 ███████████
+    mouse                conf=0.512 ██████████
+    board                conf=0.493 █████████
+    broadcast            conf=0.452 █████████
+    craft                conf=0.449 ████████
+    bug                  conf=0.373 ███████
 
   Tier 2 — Classifier (NLTK):
-    without              conf=0.999 ███████████████████
-    knew                 conf=0.994 ███████████████████
-    early                conf=0.993 ███████████████████
-    room                 conf=0.993 ███████████████████
-    toward               conf=0.985 ███████████████████
-    great                conf=0.983 ███████████████████
-    felt                 conf=0.974 ███████████████████
-    going                conf=0.959 ███████████████████
-    enough               conf=0.952 ███████████████████
-    look                 conf=0.939 ██████████████████
-    told                 conf=0.931 ██████████████████
-    took                 conf=0.901 ██████████████████
-    always               conf=0.831 ████████████████
-    find                 conf=0.823 ████████████████
-    left                 conf=0.804 ████████████████
+    following            conf=0.937 ██████████████████
+    without              conf=0.895 █████████████████
+    feeling              conf=0.883 █████████████████
+    bring                conf=0.876 █████████████████
+    brought              conf=0.871 █████████████████
+    stood                conf=0.849 ████████████████
+    going                conf=0.849 ████████████████
+    within               conf=0.846 ████████████████
+    best                 conf=0.835 ████████████████
+    looking              conf=0.833 ████████████████
+    group                conf=0.818 ████████████████
+    whole                conf=0.812 ████████████████
+    hundred              conf=0.804 ████████████████
+    early                conf=0.802 ████████████████
+    told                 conf=0.800 ████████████████
 
-  Avg confidence: 0.8728
-  Min confidence: 0.5405
-  Max confidence: 0.9993
+  Avg confidence: 0.7366
+  Min confidence: 0.3735
+  Max confidence: 0.9366
 
 ──────────────────────────────────────────────────────────────────────
   Latin (25 words)
 ──────────────────────────────────────────────────────────────────────
 
   Tier 1 — Curated Seeds:
-    culture              conf=0.997 ███████████████████
-    server               conf=0.994 ███████████████████
-    computer             conf=0.945 ██████████████████
-    cabinet              conf=0.919 ██████████████████
-    cell                 conf=0.898 █████████████████
-    journal              conf=0.808 ████████████████
-    text                 conf=0.754 ███████████████
-    monitor              conf=0.714 ██████████████
-    virus                conf=0.702 ██████████████
-    tablet               conf=0.668 █████████████
+    culture              conf=0.818 ████████████████
+    computer             conf=0.814 ████████████████
+    server               conf=0.806 ████████████████
+    journal              conf=0.686 █████████████
+    text                 conf=0.659 █████████████
+    cell                 conf=0.599 ███████████
+    virus                conf=0.522 ██████████
+    cabinet              conf=0.519 ██████████
+    monitor              conf=0.500 █████████
+    tablet               conf=0.420 ████████
 
   Tier 2 — Classifier (NLTK):
-    information          conf=1.000 ███████████████████
-    important            conf=0.998 ███████████████████
-    president            conf=0.996 ███████████████████
-    several              conf=0.996 ███████████████████
-    development          conf=0.993 ███████████████████
-    national             conf=0.992 ███████████████████
-    different            conf=0.983 ███████████████████
-    department           conf=0.971 ███████████████████
-    since                conf=0.961 ███████████████████
-    city                 conf=0.952 ███████████████████
-    every                conf=0.946 ██████████████████
-    ever                 conf=0.946 ██████████████████
-    change               conf=0.936 ██████████████████
-    cannot               conf=0.856 █████████████████
-    never                conf=0.830 ████████████████
+    information          conf=0.924 ██████████████████
+    recent               conf=0.902 ██████████████████
+    county               conf=0.884 █████████████████
+    city                 conf=0.878 █████████████████
+    religious            conf=0.872 █████████████████
+    secretary            conf=0.843 ████████████████
+    development          conf=0.838 ████████████████
+    defense              conf=0.833 ████████████████
+    several              conf=0.832 ████████████████
+    department           conf=0.827 ████████████████
+    equipment            conf=0.826 ████████████████
+    different            conf=0.821 ████████████████
+    important            conf=0.819 ████████████████
+    national             conf=0.813 ████████████████
+    evidence             conf=0.801 ████████████████
 
-  Avg confidence: 0.9102
-  Min confidence: 0.6685
-  Max confidence: 0.9996
+  Avg confidence: 0.7622
+  Min confidence: 0.4204
+  Max confidence: 0.9239
 
 ──────────────────────────────────────────────────────────────────────
   Greek (25 words)
 ──────────────────────────────────────────────────────────────────────
 
   Tier 1 — Curated Seeds:
-    energy               conf=0.996 ███████████████████
-    plasma               conf=0.993 ███████████████████
-    cycle                conf=0.991 ███████████████████
-    phone                conf=0.989 ███████████████████
-    program              conf=0.980 ███████████████████
-    meter                conf=0.960 ███████████████████
-    atom                 conf=0.946 ██████████████████
-    organ                conf=0.858 █████████████████
-    icon                 conf=0.750 ██████████████
-    antenna              conf=0.557 ███████████
+    phone                conf=0.855 █████████████████
+    cycle                conf=0.776 ███████████████
+    icon                 conf=0.718 ██████████████
+    meter                conf=0.717 ██████████████
+    energy               conf=0.699 █████████████
+    plasma               conf=0.694 █████████████
+    program              conf=0.692 █████████████
+    atom                 conf=0.552 ███████████
+    antenna              conf=0.431 ████████
+    organ                conf=0.421 ████████
 
   Tier 2 — Classifier (NLTK):
-    democratic           conf=0.996 ███████████████████
-    electronic           conf=0.996 ███████████████████
-    political            conf=0.988 ███████████████████
-    practical            conf=0.980 ███████████████████
-    historical           conf=0.967 ███████████████████
-    poetry               conf=0.959 ███████████████████
-    musical              conf=0.958 ███████████████████
-    clothes              conf=0.931 ██████████████████
-    anode                conf=0.922 ██████████████████
-    month                conf=0.889 █████████████████
-    corps                conf=0.886 █████████████████
-    across               conf=0.870 █████████████████
-    authority            conf=0.863 █████████████████
-    type                 conf=0.852 █████████████████
-    poet                 conf=0.848 ████████████████
+    electronic           conf=0.899 █████████████████
+    sympathetic          conf=0.898 █████████████████
+    poetic               conf=0.891 █████████████████
+    diplomatic           conf=0.878 █████████████████
+    electronics          conf=0.878 █████████████████
+    axis                 conf=0.861 █████████████████
+    academic             conf=0.843 ████████████████
+    magnetic             conf=0.843 ████████████████
+    historian            conf=0.834 ████████████████
+    psychological        conf=0.832 ████████████████
+    thyroid              conf=0.823 ████████████████
+    historical           conf=0.807 ████████████████
+    basis                conf=0.807 ████████████████
+    goes                 conf=0.802 ████████████████
+    maris                conf=0.801 ████████████████
 
-  Avg confidence: 0.9169
-  Min confidence: 0.5566
-  Max confidence: 0.9963
+  Avg confidence: 0.7701
+  Min confidence: 0.4208
+  Max confidence: 0.8991
+
+──────────────────────────────────────────────────────────────────────
+  Sanskrit (25 words)
+──────────────────────────────────────────────────────────────────────
+
+  Tier 1 — Curated Seeds:
+    nirvana              conf=0.768 ███████████████
+    yoga                 conf=0.729 ██████████████
+    avatar               conf=0.531 ██████████
+    pajama               conf=0.516 ██████████
+    karma                conf=0.483 █████████
+    bandit               conf=0.481 █████████
+    guru                 conf=0.432 ████████
+    punch                conf=0.425 ████████
+    jungle               conf=0.417 ████████
+    shampoo              conf=0.415 ████████
+
+  Tier 3 — Dataset (EtymWN):
+    radha                conf=0.813 ████████████████
+    bhatt                conf=0.762 ███████████████
+    vajra                conf=0.729 ██████████████
+    vani                 conf=0.692 █████████████
+    manas                conf=0.652 █████████████
+    hari                 conf=0.637 ████████████
+    indra                conf=0.584 ███████████
+    nāga                 conf=0.497 █████████
+    stupa                conf=0.488 █████████
+    musk                 conf=0.455 █████████
+    yuga                 conf=0.455 █████████
+    sikh                 conf=0.424 ████████
+    chop                 conf=0.419 ████████
+    cot                  conf=0.413 ████████
+    pali                 conf=0.394 ███████
+
+  Avg confidence: 0.5445
+  Min confidence: 0.3940
+  Max confidence: 0.8133
+
+──────────────────────────────────────────────────────────────────────
+  PIE (25 words)
+──────────────────────────────────────────────────────────────────────
+
+  Tier 1 — Curated Seeds:
+    new                  conf=0.643 ████████████
+    night                conf=0.630 ████████████
+    heart                conf=0.593 ███████████
+    eye                  conf=0.470 █████████
+    star                 conf=0.431 ████████
+    father               conf=0.391 ███████
+    mother               conf=0.370 ███████
+    three                conf=0.367 ███████
+    name                 conf=0.342 ██████
+    water                conf=0.319 ██████
+
+  Tier 3 — Dataset (EtymWN):
+    wide                 conf=0.856 █████████████████
+    wind                 conf=0.712 ██████████████
+    ear                  conf=0.689 █████████████
+    deep                 conf=0.531 ██████████
+    war                  conf=0.431 ████████
+    man                  conf=0.423 ████████
+    red                  conf=0.401 ████████
+    cow                  conf=0.383 ███████
+    son                  conf=0.357 ███████
+    god                  conf=0.353 ███████
+    bad                  conf=0.336 ██████
+    moon                 conf=0.324 ██████
+    life                 conf=0.309 ██████
+    hot                  conf=0.308 ██████
+    sun                  conf=0.306 ██████
+
+  Avg confidence: 0.4510
+  Min confidence: 0.3063
+  Max confidence: 0.8561
 
 ──────────────────────────────────────────────────────────────────────
   Other (25 words)
 ──────────────────────────────────────────────────────────────────────
 
   Tier 1 — Curated Seeds:
-    tsunami              conf=0.997 ███████████████████
-    magazine             conf=0.987 ███████████████████
-    sugar                conf=0.981 ███████████████████
-    avatar               conf=0.965 ███████████████████
-    algebra              conf=0.960 ███████████████████
-    algorithm            conf=0.947 ██████████████████
-    guru                 conf=0.946 ██████████████████
-    coffee               conf=0.942 ██████████████████
-    candy                conf=0.857 █████████████████
-    jungle               conf=0.535 ██████████
+    tsunami              conf=0.828 ████████████████
+    coffee               conf=0.755 ███████████████
+    algorithm            conf=0.544 ██████████
+    candy                conf=0.515 ██████████
+    magazine             conf=0.495 █████████
+    sugar                conf=0.487 █████████
+    algebra              conf=0.361 ███████
 
   Tier 2 — Classifier (NLTK):
-    jazz                 conf=0.985 ███████████████████
-    take                 conf=0.949 ██████████████████
-    cash                 conf=0.938 ██████████████████
-    ashamed              conf=0.934 ██████████████████
-    michigan             conf=0.926 ██████████████████
-    marshal              conf=0.909 ██████████████████
-    suburban             conf=0.908 ██████████████████
-    radar                conf=0.895 █████████████████
-    safe                 conf=0.854 █████████████████
-    china                conf=0.843 ████████████████
-    amazing              conf=0.838 ████████████████
-    taken                conf=0.832 ████████████████
-    sketch               conf=0.829 ████████████████
-    urban                conf=0.817 ████████████████
-    sang                 conf=0.813 ████████████████
+    kayo                 conf=0.886 █████████████████
+    kazoo                conf=0.845 ████████████████
+    tuba                 conf=0.842 ████████████████
+    mullah               conf=0.826 ████████████████
+    jazz                 conf=0.825 ████████████████
+    kolkhoz              conf=0.821 ████████████████
+    hubba                conf=0.817 ████████████████
+    kivu                 conf=0.814 ████████████████
+    bashaw               conf=0.809 ████████████████
+    fuji                 conf=0.806 ████████████████
+    jerez                conf=0.803 ████████████████
 
-  Avg confidence: 0.8955
-  Min confidence: 0.5354
-  Max confidence: 0.9969
+  Tier 3 — Dataset (EtymWN):
+    kagok                conf=0.800 ████████████████
+    zōri                 conf=0.794 ███████████████
+    yuruk                conf=0.690 █████████████
+    naskh                conf=0.558 ███████████
+    riad                 conf=0.528 ██████████
+    blat                 conf=0.493 █████████
+    joel                 conf=0.431 ████████
+
+  Avg confidence: 0.6949
+  Min confidence: 0.3608
+  Max confidence: 0.8865
 
 
 ======================================================================
   Source Distribution
 ======================================================================
-  classifier_nltk        60 words (60.0%)
-  curated_seed           40 words (40.0%)
+  curated_seed           57 words (38.0%)
+  classifier_nltk        56 words (37.3%)
+  dataset_etymwn         37 words (24.7%)
