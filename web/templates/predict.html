@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% set active_page = "predict" %}
+{% block title %}Predict Origin{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Etymology Predictor</h1>
+<p class="page-subtitle">
+    Type any English word — even one not in our dataset — and the classifier will 
+    predict its etymological origin using character-level morphological patterns.
+</p>
+
+<!-- ── Input Form ── -->
+<form class="search-form" action="/predict" method="GET" id="predict-form">
+    <div style="position:relative;flex:1;">
+        <input type="text" name="word" class="form-input" id="predict-input"
+               placeholder="Type any word... (e.g. algorithm, shampoo, father)"
+               value="{{ query or '' }}" autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">Predict</button>
+</form>
+
+<!-- ── Result ── -->
+{% if result %}
+<div class="predict-result animate-in" id="predict-result">
+
+    <!-- Hero Card -->
+    <div class="predict-hero card mb-32">
+        <div class="predict-hero-inner">
+            <div class="predict-word">{{ result.word }}</div>
+            <div class="predict-arrow">→</div>
+            <div class="predict-origin-wrap">
+                <span class="origin-badge {{ result.predicted|lower }} predict-badge-glow">
+                    {{ result.predicted }}
+                </span>
+                <div class="predict-confidence">
+                    {{ "%.1f"|format(result.probabilities[result.predicted] * 100) }}% confidence
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Probability Breakdown -->
+    <div class="card mb-32 animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Probability Breakdown</div>
+                <div class="card-meta">Character n-gram classifier output across all 6 origin classes</div>
+            </div>
+        </div>
+        <div class="proba-chart">
+            {% for origin, prob in result.sorted_probs %}
+            <div class="proba-row">
+                <div class="proba-label">
+                    <span class="origin-badge {{ origin|lower }}" style="min-width:80px;text-align:center;">{{ origin }}</span>
+                </div>
+                <div class="proba-bar-track">
+                    <div class="proba-bar-fill {{ origin|lower }}" 
+                         style="width: {{ (prob * 100)|round(1) }}%;"
+                         data-width="{{ (prob * 100)|round(1) }}"></div>
+                </div>
+                <div class="proba-pct">{{ "%.1f"|format(prob * 100) }}%</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Grid: How it works + Morphological hint -->
+    <div class="grid-2 mb-32">
+        <!-- How It Works -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">How It Works</div>
+                    <div class="card-meta">Character n-gram classification pipeline</div>
+                </div>
+            </div>
+            <div class="predict-pipeline">
+                <div class="pipeline-step">
+                    <div class="pipeline-num">1</div>
+                    <div>
+                        <div class="pipeline-title">Anchor</div>
+                        <div class="pipeline-desc">Wrap the word with boundary markers: <code>^{{ result.word }}$</code></div>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">2</div>
+                    <div>
+                        <div class="pipeline-title">Extract Features</div>
+                        <div class="pipeline-desc">Generate character n-grams (2–5) via TF-IDF vectorizer trained on {{ stats.vocab_size }} words</div>
+                    </div>
+                </div>
+                <div class="pipeline-step">
+                    <div class="pipeline-num">3</div>
+                    <div>
+                        <div class="pipeline-title">Classify</div>
+                        <div class="pipeline-desc">Logistic Regression outputs probability across 6 origin classes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linguistic Insight -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Why {{ result.predicted }}?</div>
+                    <div class="card-meta">Linguistic pattern insight</div>
+                </div>
+            </div>
+            <div style="padding-top:8px;">
+                <p style="color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
+                    The classifier detected character patterns in 
+                    <strong style="color:var(--text-heading);font-style:italic;">"{{ result.word }}"</strong> 
+                    that are characteristic of <strong style="color:var(--{{ result.predicted|lower }});">{{ result.predicted }}</strong> origins.
+                </p>
+                <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+                    <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:8px;">Character N-grams (sample)</div>
+                    <div class="neighbor-list" id="ngram-display">
+                        {% for ng in result.sample_ngrams %}
+                        <span class="neighbor-tag">{{ ng }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div style="margin-top:16px;">
+                    <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.6;">
+                        {% if result.predicted == 'Germanic' %}
+                        Germanic words often feature short, consonant-heavy roots with patterns like <em>th</em>, <em>ght</em>, <em>wr</em>, and hard stops.
+                        {% elif result.predicted == 'Latin' %}
+                        Latin-derived words frequently contain suffixes like <em>-tion</em>, <em>-ment</em>, <em>-ance</em>, and vowel-rich syllable structures.
+                        {% elif result.predicted == 'Greek' %}
+                        Greek origins show patterns like <em>ph</em>, <em>-ology</em>, <em>-ism</em>, and complex consonant clusters.
+                        {% elif result.predicted == 'Sanskrit' %}
+                        Sanskrit/Hindi borrowings often carry patterns like <em>-ya</em>, <em>-va</em>, aspirated consonants, and retroflex sounds.
+                        {% elif result.predicted == 'PIE' %}
+                        Proto-Indo-European roots tend to be short, monosyllabic, and fundamental — basic concepts preserved across millennia.
+                        {% else %}
+                        Words from other language families carry distinctive orthographic signatures from Arabic, Japanese, and other non-Indo-European sources.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Try -->
+    <div class="card animate-in">
+        <div class="card-title" style="margin-bottom:16px;">Try These</div>
+        <div class="neighbor-list">
+            {% for w in suggestions %}
+            <a href="/predict?word={{ w }}" class="neighbor-tag" style="cursor:pointer;text-decoration:none;">{{ w }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- ── No word — show suggestion cards ── -->
+<div class="grid-3 mb-32">
+    {% for w, origin, desc in examples %}
+    <a href="/predict?word={{ w }}" class="card stat-card animate-in" style="cursor:pointer;text-decoration:none;">
+        <div class="stat-value" style="font-family:var(--font-heading);font-style:italic;font-size:1.5rem;">{{ w }}</div>
+        <div style="margin:8px 0;">
+            <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
+        </div>
+        <div class="stat-label" style="font-size:0.78rem;color:var(--text-secondary);">{{ desc }}</div>
+    </a>
+    {% endfor %}
+</div>
+
+<!-- How It Works (intro) -->
+<div class="card animate-in">
+    <div class="card-header">
+        <div>
+            <div class="card-title">How the Predictor Works</div>
+            <div class="card-meta">Character-level morphological analysis</div>
+        </div>
+    </div>
+    <div class="predict-pipeline">
+        <div class="pipeline-step">
+            <div class="pipeline-num">1</div>
+            <div>
+                <div class="pipeline-title">You type a word</div>
+                <div class="pipeline-desc">Any English word — even slang, proper nouns, or neologisms</div>
+            </div>
+        </div>
+        <div class="pipeline-step">
+            <div class="pipeline-num">2</div>
+            <div>
+                <div class="pipeline-title">Character n-gram extraction</div>
+                <div class="pipeline-desc">The word is split into overlapping 2–5 character fragments (e.g., "al", "alg", "algo")</div>
+            </div>
+        </div>
+        <div class="pipeline-step">
+            <div class="pipeline-num">3</div>
+            <div>
+                <div class="pipeline-title">Origin prediction</div>
+                <div class="pipeline-desc">A Logistic Regression classifier trained on 18,000+ etymologically labelled words guesses the origin</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+// Live prediction with debounce
+(function() {
+    const input = document.getElementById('predict-input');
+    let timer;
+    
+    if (!input) return;
+    
+    input.addEventListener('input', function() {
+        clearTimeout(timer);
+        const word = this.value.trim();
+        if (word.length < 2) return;
+        
+        timer = setTimeout(() => {
+            // Update URL without reload for bookmarkability
+            const url = new URL(window.location);
+            url.searchParams.set('word', word);
+            window.history.replaceState({}, '', url);
+            
+            // Fetch prediction
+            fetch(`/api/classify/${encodeURIComponent(word)}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) return;
+                    // Submit the form for full render
+                    document.getElementById('predict-form').submit();
+                });
+        }, 600);
+    });
+    
+    // Animate probability bars on load
+    document.querySelectorAll('.proba-bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = w + '%'; }, 100);
+    });
+})();
+</script>
+{% endblock %}

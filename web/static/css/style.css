@@ -989,6 +989,172 @@ a:hover { color: var(--accent); }
 
 
 /* ══════════════════════════════════════════════════════════
+   Predictor Page
+   ══════════════════════════════════════════════════════════ */
+
+.predict-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.predict-word {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 1.1;
+}
+
+.predict-arrow {
+  font-size: 2rem;
+  color: var(--text-muted);
+  animation: pulse-arrow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 0.4; transform: translateX(0); }
+  50%      { opacity: 1;   transform: translateX(6px); }
+}
+
+.predict-origin-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.predict-badge-glow {
+  font-size: 1rem;
+  padding: 8px 20px;
+  animation: badge-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(187, 134, 252, 0.1); }
+  50%      { box-shadow: 0 0 24px rgba(187, 134, 252, 0.3); }
+}
+
+.predict-confidence {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* Probability Bars */
+.proba-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 8px;
+}
+
+.proba-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.proba-label {
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.proba-bar-track {
+  flex: 1;
+  height: 24px;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.proba-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px;
+}
+
+.proba-bar-fill.germanic { background: linear-gradient(90deg, var(--germanic), rgba(79,195,247,0.5)); }
+.proba-bar-fill.latin    { background: linear-gradient(90deg, var(--latin), rgba(239,83,80,0.5)); }
+.proba-bar-fill.greek    { background: linear-gradient(90deg, var(--greek), rgba(102,187,106,0.5)); }
+.proba-bar-fill.sanskrit { background: linear-gradient(90deg, var(--sanskrit), rgba(255,213,79,0.5)); }
+.proba-bar-fill.pie      { background: linear-gradient(90deg, var(--pie), rgba(206,147,216,0.5)); }
+.proba-bar-fill.other    { background: linear-gradient(90deg, var(--other), rgba(144,164,174,0.5)); }
+
+.proba-pct {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  min-width: 52px;
+  text-align: right;
+}
+
+/* Pipeline Steps */
+.predict-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.pipeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.3s;
+}
+
+.pipeline-step:hover {
+  border-color: var(--border-accent);
+}
+
+.pipeline-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(187, 134, 252, 0.15);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(187, 134, 252, 0.3);
+}
+
+.pipeline-title {
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+  font-size: 0.9rem;
+}
+
+.pipeline-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pipeline-desc code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: rgba(255,255,255,0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+
+/* ══════════════════════════════════════════════════════════
    Responsive
    ══════════════════════════════════════════════════════════ */
 
