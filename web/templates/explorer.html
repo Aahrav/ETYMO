@@ -12,15 +12,12 @@
 <!-- ── Search Form ── -->
 <form class="search-form" action="/explorer" method="GET">
     <div style="position:relative;flex:1;">
-        <input type="text" name="word" class="form-input" 
-               placeholder="Type a word... (e.g. craft, monitor, room)" 
-               value="{{ query or '' }}" autocomplete="off" id="word-search"
-               list="word-suggestions">
-        <datalist id="word-suggestions">
+        <select name="word" class="form-input" style="cursor:pointer;" id="word-search">
+            <option value="" disabled {{ 'selected' if not query }}>Select a word... (e.g. craft, monitor, stream)</option>
             {% for w in all_words %}
-            <option value="{{ w }}">
+            <option value="{{ w }}" {{ 'selected' if query == w }}>{{ w }}</option>
             {% endfor %}
-        </datalist>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Analyze</button>
 </form>
@@ -138,27 +135,135 @@
     </div>
 </div>
 
-<!-- ── Manim Video ── -->
-<div class="video-card animate-in" style="max-width:720px; margin-top:32px;">
-    <video id="explorer-video" controls preload="metadata" key="{{ word_data.video_path or 'generic' }}">
-        {% if word_data.video_path %}
-        <source src="/videos/{{ word_data.video_path }}" type="video/mp4">
-        {% else %}
-        <source src="/videos/embeddings_intro_scene/720p30/EmbeddingsIntroScene.mp4" type="video/mp4">
-        {% endif %}
-    </video>
-    <div class="video-info">
-        {% if word_data.video_path %}
-        <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
-        <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
-        <div class="video-desc">A parametric visualization of how this specific word's neighbor constellation shifted from 1800 to 2000.</div>
-        {% else %}
-        <div class="video-label">Manim Animation — What Are Word Embeddings?</div>
-        <div class="video-title">Understanding Semantic Space</div>
-        <div class="video-desc">Watch how words move through vector space in this core conceptual animation.</div>
-        {% endif %}
+<!-- ── Dynamic Visualization ── -->
+<div class="card animate-in mb-32" id="viz-section" style="max-width:720px; margin-top:32px;">
+    {% if word_data.video_path %}
+    <!-- Pre-rendered video exists -->
+    <div class="video-card" style="border:none;box-shadow:none;">
+        <video id="explorer-video" controls preload="metadata">
+            <source src="/videos/{{ word_data.video_path }}" type="video/mp4">
+        </video>
+        <div class="video-info">
+            <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
+            <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
+            <div class="video-desc">A parametric visualization of how this specific word's neighbor constellation shifted from 1800 to 2000.</div>
+        </div>
     </div>
+    {% else %}
+    <!-- No video — show render button -->
+    <div id="render-prompt" style="text-align:center;padding:32px;">
+        <div style="font-size:2rem;margin-bottom:12px;">🎬</div>
+        <div class="card-title" style="margin-bottom:8px;">Visualize Semantic Drift</div>
+        <div style="color:var(--text-secondary);font-size:0.88rem;max-width:400px;margin:0 auto 20px;">
+            Generate an animation showing how <em>"{{ word_data.word }}"</em> moved 
+            through semantic space from 1800 to 2000.
+        </div>
+        <button class="render-btn" id="render-btn" onclick="startRender('{{ word_data.word }}')">
+            <span id="render-btn-text">▶ Visualize Drift</span>
+        </button>
+    </div>
+
+    <!-- Rendering state -->
+    <div id="render-progress" style="display:none;text-align:center;padding:40px;">
+        <div class="render-spinner"></div>
+        <div class="render-status" id="render-status">Rendering animation...</div>
+        <div style="color:var(--text-muted);font-size:0.78rem;margin-top:8px;">
+            This takes 30–60 seconds. The Manim engine is building your animation.
+        </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="render-error" style="display:none;text-align:center;padding:32px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">⚠</div>
+        <div style="color:var(--danger);font-weight:600;">Render Failed</div>
+        <div style="color:var(--text-secondary);font-size:0.85rem;margin-top:4px;" id="render-error-msg">
+            This word may not have enough embedding data for the visualization.
+        </div>
+    </div>
+
+    <!-- Video player (hidden until ready) -->
+    <div id="render-result" style="display:none;">
+        <div class="video-card" style="border:none;box-shadow:none;">
+            <video id="rendered-video" controls preload="metadata" autoplay></video>
+            <div class="video-info">
+                <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
+                <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
+                <div class="video-desc">A parametric visualization of how this word's neighbor constellation shifted from 1800 to 2000.</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
+
+<script>
+function startRender(word) {
+    const btn = document.getElementById('render-btn');
+    const prompt = document.getElementById('render-prompt');
+    const progress = document.getElementById('render-progress');
+    const result = document.getElementById('render-result');
+    const errorDiv = document.getElementById('render-error');
+
+    // Disable button
+    btn.disabled = true;
+    btn.classList.add('rendering');
+    document.getElementById('render-btn-text').textContent = 'Starting...';
+
+    fetch(`/api/render/${encodeURIComponent(word)}`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'ready') {
+                showVideo(data.url);
+            } else if (data.status === 'rendering') {
+                prompt.style.display = 'none';
+                progress.style.display = 'block';
+                pollStatus(word);
+            } else if (data.status === 'error') {
+                showError(data.message || 'Render failed');
+            }
+        })
+        .catch(() => showError('Network error'));
+}
+
+function pollStatus(word) {
+    const interval = setInterval(() => {
+        fetch(`/api/render/${encodeURIComponent(word)}/status`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ready') {
+                    clearInterval(interval);
+                    showVideo(data.url);
+                } else if (data.status === 'error') {
+                    clearInterval(interval);
+                    showError('Manim render failed for this word.');
+                }
+                // else: still rendering, keep polling
+            })
+            .catch(() => {
+                clearInterval(interval);
+                showError('Lost connection to server.');
+            });
+    }, 2500);
+}
+
+function showVideo(url) {
+    document.getElementById('render-prompt')?.style && (document.getElementById('render-prompt').style.display = 'none');
+    document.getElementById('render-progress').style.display = 'none';
+    document.getElementById('render-error').style.display = 'none';
+    const result = document.getElementById('render-result');
+    result.style.display = 'block';
+    const video = document.getElementById('rendered-video');
+    video.innerHTML = `<source src="${url}" type="video/mp4">`;
+    video.load();
+}
+
+function showError(msg) {
+    document.getElementById('render-prompt')?.style && (document.getElementById('render-prompt').style.display = 'none');
+    document.getElementById('render-progress').style.display = 'none';
+    const errorDiv = document.getElementById('render-error');
+    errorDiv.style.display = 'block';
+    if (msg) document.getElementById('render-error-msg').textContent = msg;
+}
+</script>
 
 {% else %}
 <!-- Word not found -->

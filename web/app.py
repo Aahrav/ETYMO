@@ -15,6 +15,9 @@ Usage:
 
 import sys
 import json
+import shutil
+import subprocess
+import threading
 from pathlib import Path
 
 from flask import Flask, render_template, jsonify, request, send_from_directory
@@ -385,6 +388,90 @@ def api_classify(word):
     result = {c: round(float(p), 4) for c, p in zip(classes, proba)}
     predicted = classes[proba.argmax()]
     return jsonify({"word": word, "predicted": predicted, "probabilities": result})
+
+
+# ── On-Demand Manim Rendering ──
+RENDER_JOBS = {}  # { word: "rendering" | "ready" | "error" }
+
+def _background_render(word):
+    """Run Manim render in a background thread."""
+    try:
+        scene_file = ROOT / "manim_scenes" / "single_word_scene.py"
+        scratch_file = ROOT / f"_tmp_render_{word}.py"
+        video_dir = ROOT / "results" / "videos" / "videos" / "words"
+        video_dir.mkdir(parents=True, exist_ok=True)
+
+        content = scene_file.read_text(encoding="utf-8")
+        content = content.replace('target_word = "craft"', f'target_word = "{word}"')
+        scratch_file.write_text(content, encoding="utf-8")
+
+        cmd = [
+            sys.executable, "-m", "manim", str(scratch_file), "SingleWordDriftScene",
+            "-ql",
+            "--media_dir", str(ROOT / "results" / "videos"),
+            "-o", word,
+        ]
+        subprocess.run(cmd, check=True, capture_output=True, timeout=300)
+
+        # Search for the output in possible Manim output paths
+        dest = video_dir / f"{word}.mp4"
+        found = False
+        for candidate_dir in [
+            ROOT / "results" / "videos" / "videos" / f"_tmp_render_{word}" / "480p15",
+            ROOT / "results" / "videos" / "videos" / "tmp_scene" / "480p15",
+        ]:
+            source = candidate_dir / f"{word}.mp4"
+            if source.exists():
+                shutil.copy2(source, dest)
+                found = True
+                break
+
+        RENDER_JOBS[word] = "ready" if found else "error"
+    except Exception as e:
+        print(f"Render error for {word}: {e}")
+        RENDER_JOBS[word] = "error"
+    finally:
+        sf = ROOT / f"_tmp_render_{word}.py"
+        if sf.exists():
+            sf.unlink()
+
+
+@app.route("/api/render/<word>", methods=["POST"])
+def api_render(word):
+    """Trigger on-demand Manim render for a word."""
+    word = word.lower().strip()
+    video_path = ROOT / "results" / "videos" / "videos" / "words" / f"{word}.mp4"
+
+    if video_path.exists():
+        return jsonify({"status": "ready", "url": f"/videos/words/{word}.mp4"})
+
+    if word in RENDER_JOBS:
+        return jsonify({"status": RENDER_JOBS[word],
+                        "url": f"/videos/words/{word}.mp4" if RENDER_JOBS[word] == "ready" else None})
+
+    # Check word is in our vocabulary
+    if word not in DATA["model_new"].wv:
+        return jsonify({"status": "error", "message": "Word not in embedding vocabulary"})
+
+    RENDER_JOBS[word] = "rendering"
+    t = threading.Thread(target=_background_render, args=(word,), daemon=True)
+    t.start()
+    return jsonify({"status": "rendering"})
+
+
+@app.route("/api/render/<word>/status")
+def api_render_status(word):
+    """Poll render status for a word."""
+    word = word.lower().strip()
+    video_path = ROOT / "results" / "videos" / "videos" / "words" / f"{word}.mp4"
+
+    if video_path.exists():
+        RENDER_JOBS[word] = "ready"
+        return jsonify({"status": "ready", "url": f"/videos/words/{word}.mp4"})
+
+    status = RENDER_JOBS.get(word, "unknown")
+    return jsonify({"status": status,
+                    "url": f"/videos/words/{word}.mp4" if status == "ready" else None})
 
 
 # ── Serve Manim videos from results directory ──
