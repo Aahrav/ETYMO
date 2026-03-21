@@ -474,6 +474,89 @@ def api_render_status(word):
                     "url": f"/videos/words/{word}.mp4" if status == "ready" else None})
 
 
+# ── On-Demand Comparison Rendering ──
+
+def _background_render_comparison(word_a, word_b, job_key):
+    """Render ComparisonScene for two words in a background thread."""
+    try:
+        scene_file = ROOT / "manim_scenes" / "comparison_scene.py"
+        scratch_file = ROOT / f"_tmp_cmp_{job_key}.py"
+        video_dir = ROOT / "results" / "videos" / "videos" / "comparisons"
+        video_dir.mkdir(parents=True, exist_ok=True)
+
+        content = scene_file.read_text(encoding="utf-8")
+        content = content.replace('word_a = "craft"', f'word_a = "{word_a}"')
+        content = content.replace('word_b = "room"', f'word_b = "{word_b}"')
+        scratch_file.write_text(content, encoding="utf-8")
+
+        cmd = [
+            sys.executable, "-m", "manim", str(scratch_file), "ComparisonScene",
+            "-ql",
+            "--media_dir", str(ROOT / "results" / "videos"),
+            "-o", job_key,
+        ]
+        subprocess.run(cmd, check=True, capture_output=True, timeout=300)
+
+        dest = video_dir / f"{job_key}.mp4"
+        found = False
+        for candidate_dir in [
+            ROOT / "results" / "videos" / "videos" / f"_tmp_cmp_{job_key}" / "480p15",
+            ROOT / "results" / "videos" / "videos" / "tmp_scene" / "480p15",
+        ]:
+            source = candidate_dir / f"{job_key}.mp4"
+            if source.exists():
+                shutil.copy2(source, dest)
+                found = True
+                break
+
+        RENDER_JOBS[job_key] = "ready" if found else "error"
+    except Exception as e:
+        print(f"Comparison render error for {job_key}: {e}")
+        RENDER_JOBS[job_key] = "error"
+    finally:
+        sf = ROOT / f"_tmp_cmp_{job_key}.py"
+        if sf.exists():
+            sf.unlink()
+
+
+@app.route("/api/render/compare/<word_a>/<word_b>", methods=["POST"])
+def api_render_compare(word_a, word_b):
+    """Trigger on-demand comparison Manim render."""
+    word_a = word_a.lower().strip()
+    word_b = word_b.lower().strip()
+    job_key = f"{word_a}_vs_{word_b}"
+    video_path = ROOT / "results" / "videos" / "videos" / "comparisons" / f"{job_key}.mp4"
+
+    if video_path.exists():
+        return jsonify({"status": "ready", "url": f"/videos/comparisons/{job_key}.mp4"})
+
+    if job_key in RENDER_JOBS:
+        return jsonify({"status": RENDER_JOBS[job_key],
+                        "url": f"/videos/comparisons/{job_key}.mp4" if RENDER_JOBS[job_key] == "ready" else None})
+
+    RENDER_JOBS[job_key] = "rendering"
+    t = threading.Thread(target=_background_render_comparison, args=(word_a, word_b, job_key), daemon=True)
+    t.start()
+    return jsonify({"status": "rendering"})
+
+
+@app.route("/api/render/compare/<word_a>/<word_b>/status")
+def api_render_compare_status(word_a, word_b):
+    """Poll comparison render status."""
+    word_a = word_a.lower().strip()
+    word_b = word_b.lower().strip()
+    job_key = f"{word_a}_vs_{word_b}"
+    video_path = ROOT / "results" / "videos" / "videos" / "comparisons" / f"{job_key}.mp4"
+
+    if video_path.exists():
+        RENDER_JOBS[job_key] = "ready"
+        return jsonify({"status": "ready", "url": f"/videos/comparisons/{job_key}.mp4"})
+
+    status = RENDER_JOBS.get(job_key, "unknown")
+    return jsonify({"status": status,
+                    "url": f"/videos/comparisons/{job_key}.mp4" if status == "ready" else None})
+
+
 # ── Serve Manim videos from results directory ──
 @app.route("/videos/<path:filename>")
 def serve_video(filename):

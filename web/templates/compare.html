@@ -205,6 +205,111 @@
     </div>
 </div>
 
+<!-- ── Dynamic Comparison Video ── -->
+<div class="card animate-in mb-32" style="max-width:720px; margin-top:32px;">
+    <div id="cmp-render-prompt" style="text-align:center;padding:32px;">
+        <div style="font-size:2rem;margin-bottom:12px;">🎬</div>
+        <div class="card-title" style="margin-bottom:8px;">Visualize Comparison</div>
+        <div style="color:var(--text-secondary);font-size:0.88rem;max-width:420px;margin:0 auto 20px;">
+            Generate an animation comparing how <em>"{{ data_a.word }}"</em> and <em>"{{ data_b.word }}"</em> 
+            drifted through semantic space from 1800 to 2000.
+        </div>
+        <button class="render-btn" id="cmp-render-btn" onclick="startCompareRender('{{ data_a.word }}', '{{ data_b.word }}')">
+            <span id="cmp-render-btn-text">▶ Visualize Comparison</span>
+        </button>
+    </div>
+
+    <div id="cmp-render-progress" style="display:none;text-align:center;padding:40px;">
+        <div class="render-spinner"></div>
+        <div class="render-status" id="cmp-render-status">Rendering comparison...</div>
+        <div style="color:var(--text-muted);font-size:0.78rem;margin-top:8px;">
+            This takes 30–60 seconds. The Manim engine is building your side-by-side animation.
+        </div>
+    </div>
+
+    <div id="cmp-render-error" style="display:none;text-align:center;padding:32px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">⚠</div>
+        <div style="color:var(--danger);font-weight:600;">Render Failed</div>
+        <div style="color:var(--text-secondary);font-size:0.85rem;margin-top:4px;" id="cmp-render-error-msg">
+            Could not generate comparison animation.
+        </div>
+    </div>
+
+    <div id="cmp-render-result" style="display:none;">
+        <div class="video-card" style="border:none;box-shadow:none;">
+            <video id="cmp-rendered-video" controls preload="metadata" autoplay></video>
+            <div class="video-info">
+                <div class="video-label">Manim Animation — Two Words, Two Stories</div>
+                <div class="video-title">"{{ data_a.word }}" vs "{{ data_b.word }}"</div>
+                <div class="video-desc">Side-by-side semantic drift comparison showing how both words' neighbor constellations shifted from 1800 to 2000.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function startCompareRender(wordA, wordB) {
+    const btn = document.getElementById('cmp-render-btn');
+    btn.disabled = true;
+    btn.classList.add('rendering');
+    document.getElementById('cmp-render-btn-text').textContent = 'Starting...';
+
+    fetch(`/api/render/compare/${encodeURIComponent(wordA)}/${encodeURIComponent(wordB)}`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'ready') {
+                showCmpVideo(data.url);
+            } else if (data.status === 'rendering') {
+                document.getElementById('cmp-render-prompt').style.display = 'none';
+                document.getElementById('cmp-render-progress').style.display = 'block';
+                pollCmpStatus(wordA, wordB);
+            } else if (data.status === 'error') {
+                showCmpError(data.message || 'Render failed');
+            }
+        })
+        .catch(() => showCmpError('Network error'));
+}
+
+function pollCmpStatus(wordA, wordB) {
+    const interval = setInterval(() => {
+        fetch(`/api/render/compare/${encodeURIComponent(wordA)}/${encodeURIComponent(wordB)}/status`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ready') {
+                    clearInterval(interval);
+                    showCmpVideo(data.url);
+                } else if (data.status === 'error') {
+                    clearInterval(interval);
+                    showCmpError('Manim render failed for this comparison.');
+                }
+            })
+            .catch(() => {
+                clearInterval(interval);
+                showCmpError('Lost connection to server.');
+            });
+    }, 2500);
+}
+
+function showCmpVideo(url) {
+    document.getElementById('cmp-render-prompt').style.display = 'none';
+    document.getElementById('cmp-render-progress').style.display = 'none';
+    document.getElementById('cmp-render-error').style.display = 'none';
+    const result = document.getElementById('cmp-render-result');
+    result.style.display = 'block';
+    const video = document.getElementById('cmp-rendered-video');
+    video.innerHTML = `<source src="${url}" type="video/mp4">`;
+    video.load();
+}
+
+function showCmpError(msg) {
+    document.getElementById('cmp-render-prompt').style.display = 'none';
+    document.getElementById('cmp-render-progress').style.display = 'none';
+    const errorDiv = document.getElementById('cmp-render-error');
+    errorDiv.style.display = 'block';
+    if (msg) document.getElementById('cmp-render-error-msg').textContent = msg;
+}
+</script>
+
 {% elif data_a or data_b %}
 <!-- One word not found -->
 <div class="card animate-in" style="text-align:center;padding:48px;">
