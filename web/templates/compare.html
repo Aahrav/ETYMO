@@ -12,22 +12,23 @@
 <!-- ── Search Form ── -->
 <form class="search-form" action="/compare" method="GET">
     <div style="position:relative;flex:1;">
-        <input type="text" name="a" class="form-input" 
-               placeholder="First word (e.g. craft)" 
-               value="{{ query_a or '' }}" list="word-suggestions">
+        <select name="a" class="form-input" style="cursor:pointer;">
+            <option value="" disabled {{ 'selected' if not query_a }}>First word (e.g. craft)</option>
+            {% for w in all_words %}
+            <option value="{{ w }}" {{ 'selected' if query_a == w }}>{{ w }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div style="display:flex;align-items:center;color:var(--text-muted);font-size:1.2rem;padding:0 4px;">⇌</div>
     <div style="position:relative;flex:1;">
-        <input type="text" name="b" class="form-input" 
-               placeholder="Second word (e.g. room)" 
-               value="{{ query_b or '' }}" list="word-suggestions">
+        <select name="b" class="form-input" style="cursor:pointer;">
+            <option value="" disabled {{ 'selected' if not query_b }}>Second word (e.g. room)</option>
+            {% for w in all_words %}
+            <option value="{{ w }}" {{ 'selected' if query_b == w }}>{{ w }}</option>
+            {% endfor %}
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Compare</button>
-    <datalist id="word-suggestions">
-        {% for w in all_words %}
-        <option value="{{ w }}">
-        {% endfor %}
-    </datalist>
 </form>
 
 {% if data_a and data_b and data_a.found and data_b.found %}
@@ -223,7 +224,7 @@
     <div class="section-meta">Click a pair to see their comparison</div>
 </div>
 <div class="grid-3 mb-32">
-    {% for pair in [('craft', 'room'), ('monitor', 'look'), ('sketch', 'great')] %}
+    {% for pair in [('craft', 'monitor'), ('stream', 'virus'), ('sketch', 'culture')] %}
     <a href="/compare?a={{ pair[0] }}&b={{ pair[1] }}" class="card animate-in" style="cursor:pointer;text-align:center;padding:28px;">
         <div style="font-family:var(--font-heading);font-size:1.4rem;font-style:italic;color:var(--text-heading);">
             {{ pair[0] }} <span style="color:var(--text-muted);font-style:normal;">vs</span> {{ pair[1] }}
