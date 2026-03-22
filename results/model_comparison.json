@@ -2,17 +2,17 @@
   "cross_validation": {},
   "test_set": {
     "LogisticRegression": {
-      "f1_macro": 0.5854,
-      "accuracy": 0.7243
+      "f1_macro": 0.6354,
+      "accuracy": 0.6977
     },
     "LinearSVC": {
-      "f1_macro": 0.5956,
-      "accuracy": 0.7329
+      "f1_macro": 0.5645,
+      "accuracy": 0.6877
     },
     "MultinomialNB": {
-      "f1_macro": 0.5943,
-      "accuracy": 0.7348
+      "f1_macro": 0.5686,
+      "accuracy": 0.6922
     }
   },
-  "best_model": "LinearSVC"
+  "best_model": "LogisticRegression"
 }
