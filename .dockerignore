@@ -1,0 +1,33 @@
+.git
+.gitignore
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+.eggs
+dist
+build
+venv
+.env
+.env.*
+.vscode
+.idea
+*.swp
+.ipynb_checkpoints
+Thumbs.db
+.DS_Store
+
+# Large corpora not needed to serve the web app
+corpora/raw
+corpora/processed
+
+# Manim cruft (final scene MP4s under e.g. results/videos/videos/*_scene/ are kept)
+results/videos/videos/_tmp_*
+results/videos/videos/tmp_scene
+results/videos/texts
+**/partial_movie_files
+
+# Optional: uncomment to shrink build context if you mount these at runtime instead
+# models
+# results
+# data

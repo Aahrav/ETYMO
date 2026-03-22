@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      PYTHONPATH: /app
+    # Optional: mount local artifacts instead of baking them into the image
+    # volumes:
+    #   - ./models:/app/models:ro
+    #   - ./results:/app/results:ro
+    #   - ./data:/app/data:ro

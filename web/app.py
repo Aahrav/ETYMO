@@ -13,6 +13,7 @@ Usage:
     python web/app.py
 """
 
+import os
 import sys
 import json
 import shutil
@@ -395,6 +396,35 @@ def api_classify(word):
 # ── On-Demand Manim Rendering ──
 RENDER_JOBS = {}  # { word: "rendering" | "ready" | "error" }
 
+
+def _manim_cmd_prefix() -> list[str]:
+    """Headless Linux (e.g. Docker) has no DISPLAY; Manim needs a virtual framebuffer."""
+    if sys.platform == "linux" and not os.environ.get("DISPLAY"):
+        return ["xvfb-run", "-a", "-s", "-screen 0 1920x1080x24"]
+    return []
+
+
+def _run_manim(cmd: list[str]) -> subprocess.CompletedProcess:
+    full = _manim_cmd_prefix() + cmd
+    return subprocess.run(
+        full,
+        capture_output=True,
+        timeout=300,
+        text=True,
+    )
+
+
+def _find_manim_mp4(media_dir: Path, filename: str) -> Path | None:
+    """Locate rendered file under media_dir/videos (quality subfolder varies by Manim version)."""
+    videos = media_dir / "videos"
+    if not videos.exists():
+        return None
+    matches = [p for p in videos.rglob(filename) if p.is_file()]
+    if not matches:
+        return None
+    return sorted(matches, key=lambda p: len(p.parts))[0]
+
+
 def _background_render(word):
     """Run Manim render in a background thread."""
     try:
@@ -402,6 +432,7 @@ def _background_render(word):
         scratch_file = ROOT / f"_tmp_render_{word}.py"
         video_dir = ROOT / "results" / "videos" / "videos" / "words"
         video_dir.mkdir(parents=True, exist_ok=True)
+        media_dir = ROOT / "results" / "videos"
 
         content = scene_file.read_text(encoding="utf-8")
         content = content.replace('target_word = "craft"', f'target_word = "{word}"')
@@ -410,25 +441,23 @@ def _background_render(word):
         cmd = [
             sys.executable, "-m", "manim", str(scratch_file), "SingleWordDriftScene",
             "-ql",
-            "--media_dir", str(ROOT / "results" / "videos"),
+            "--media_dir", str(media_dir),
             "-o", word,
         ]
-        subprocess.run(cmd, check=True, capture_output=True, timeout=300)
+        proc = _run_manim(cmd)
+        if proc.returncode != 0:
+            print(f"Manim failed for {word} (exit {proc.returncode}):\n{proc.stderr}\n{proc.stdout}")
+            RENDER_JOBS[word] = "error"
+            return
 
-        # Search for the output in possible Manim output paths
         dest = video_dir / f"{word}.mp4"
-        found = False
-        for candidate_dir in [
-            ROOT / "results" / "videos" / "videos" / f"_tmp_render_{word}" / "480p15",
-            ROOT / "results" / "videos" / "videos" / "tmp_scene" / "480p15",
-        ]:
-            source = candidate_dir / f"{word}.mp4"
-            if source.exists():
-                shutil.copy2(source, dest)
-                found = True
-                break
-
-        RENDER_JOBS[word] = "ready" if found else "error"
+        source = _find_manim_mp4(media_dir, f"{word}.mp4")
+        if source and source.exists():
+            shutil.copy2(source, dest)
+            RENDER_JOBS[word] = "ready"
+        else:
+            print(f"Manim reported success but no mp4 found for {word} under {media_dir / 'videos'}")
+            RENDER_JOBS[word] = "error"
     except Exception as e:
         print(f"Render error for {word}: {e}")
         RENDER_JOBS[word] = "error"
@@ -485,6 +514,7 @@ def _background_render_comparison(word_a, word_b, job_key):
         scratch_file = ROOT / f"_tmp_cmp_{job_key}.py"
         video_dir = ROOT / "results" / "videos" / "videos" / "comparisons"
         video_dir.mkdir(parents=True, exist_ok=True)
+        media_dir = ROOT / "results" / "videos"
 
         content = scene_file.read_text(encoding="utf-8")
         content = content.replace('word_a = "craft"', f'word_a = "{word_a}"')
@@ -494,24 +524,23 @@ def _background_render_comparison(word_a, word_b, job_key):
         cmd = [
             sys.executable, "-m", "manim", str(scratch_file), "ComparisonScene",
             "-ql",
-            "--media_dir", str(ROOT / "results" / "videos"),
+            "--media_dir", str(media_dir),
             "-o", job_key,
         ]
-        subprocess.run(cmd, check=True, capture_output=True, timeout=300)
+        proc = _run_manim(cmd)
+        if proc.returncode != 0:
+            print(f"Manim comparison failed for {job_key} (exit {proc.returncode}):\n{proc.stderr}\n{proc.stdout}")
+            RENDER_JOBS[job_key] = "error"
+            return
 
         dest = video_dir / f"{job_key}.mp4"
-        found = False
-        for candidate_dir in [
-            ROOT / "results" / "videos" / "videos" / f"_tmp_cmp_{job_key}" / "480p15",
-            ROOT / "results" / "videos" / "videos" / "tmp_scene" / "480p15",
-        ]:
-            source = candidate_dir / f"{job_key}.mp4"
-            if source.exists():
-                shutil.copy2(source, dest)
-                found = True
-                break
-
-        RENDER_JOBS[job_key] = "ready" if found else "error"
+        source = _find_manim_mp4(media_dir, f"{job_key}.mp4")
+        if source and source.exists():
+            shutil.copy2(source, dest)
+            RENDER_JOBS[job_key] = "ready"
+        else:
+            print(f"Manim comparison: no mp4 found for {job_key} under {media_dir / 'videos'}")
+            RENDER_JOBS[job_key] = "error"
     except Exception as e:
         print(f"Comparison render error for {job_key}: {e}")
         RENDER_JOBS[job_key] = "error"
@@ -574,7 +603,10 @@ def serve_figure(filename):
     return send_from_directory(str(RESULTS_DIR / "figures"), filename)
 
 
+# Load embeddings and CSVs when the module is imported (Gunicorn / Docker)
+load_data()
+
+
 if __name__ == "__main__":
-    load_data()
     print("\n  ✓ Starting ETYMO web app on http://127.0.0.1:5000")
     app.run(debug=True, port=5000, use_reloader=False)
