@@ -85,6 +85,7 @@ ISO_TO_ORIGIN = {
     "swe": "Germanic",   # Swedish
     "dan": "Germanic",   # Danish
     "nor": "Germanic",   # Norwegian
+    "yid": "Germanic",   # Yiddish (Germanic-based)
     # Latin
     "lat": "Latin",      # Latin
     "fra": "Latin",      # French
@@ -104,10 +105,17 @@ ISO_TO_ORIGIN = {
     # Greek
     "grc": "Greek",      # Ancient Greek
     "ell": "Greek",      # Modern Greek
-    # Sanskrit / Hindi
+    # Sanskrit / Indic
     "san": "Sanskrit",   # Sanskrit
     "hin": "Sanskrit",   # Hindi
     "pli": "Sanskrit",   # Pali
+    "urd": "Sanskrit",   # Urdu (mutually intelligible with Hindi)
+    "ben": "Sanskrit",   # Bengali
+    "mar": "Sanskrit",   # Marathi
+    "guj": "Sanskrit",   # Gujarati
+    "pan": "Sanskrit",   # Punjabi
+    "tam": "Sanskrit",   # Tamil (Dravidian, but Indic loanwords)
+    "tel": "Sanskrit",   # Telugu
     # PIE
     "ine-pro": "PIE",    # Proto-Indo-European (ISO: ine-pro)
     # Other
@@ -122,11 +130,8 @@ ISO_TO_ORIGIN = {
     "mal": "Other",      # Malay
     "tgl": "Other",      # Tagalog
     "swa": "Other",      # Swahili
-    "urd": "Other",      # Urdu
-    "tam": "Other",      # Tamil
     "nah": "Other",      # Nahuatl
     "que": "Other",      # Quechua
-    "yid": "Other",      # Yiddish
 }
 
 # ──────────────────────────────────────────────
@@ -149,14 +154,18 @@ PERIOD_B = {"name": "Modern", "start": 2000, "end": 2020, "source": "Wikipedia /
 # ──────────────────────────────────────────────
 # Scope — Word Selection
 # ──────────────────────────────────────────────
-TOTAL_SHIFT_WORDS = 150
-WORDS_PER_ORIGIN = 25
+TOTAL_SHIFT_WORDS = 600
+WORDS_PER_ORIGIN = 100
 CLASSIFIER_CONFIDENCE_THRESHOLD = 0.8
 
 # ──────────────────────────────────────────────
-# Classifier Parameters (Phase 2)
+# Classifier Parameters (Phase 2) — tuned via 480-config grid search
 # ──────────────────────────────────────────────
-NGRAM_RANGE = (1, 6)          # Character n-gram range (widened from (2,5))
+NGRAM_RANGE = (1, 6)          # Character n-gram range
+MAX_FEATURES = 30000          # TF-IDF max features
+MIN_DF = 1                    # TF-IDF min document frequency
+MAX_DF = 0.95                 # TF-IDF max document frequency
+CLASSIFIER_C = 10.0           # LogReg regularization strength
 TRAIN_TEST_SPLIT = 0.8        # 80% train, 20% test
 CLASSIFIER_TYPE = "LogisticRegression"
 CV_FOLDS = 5                  # Stratified K-Fold cross-validation

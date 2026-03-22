@@ -38,7 +38,7 @@ from sklearn.svm import LinearSVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import StratifiedKFold, cross_validate
+from sklearn.model_selection import StratifiedKFold, cross_validate, cross_val_predict
 from sklearn.metrics import (
     classification_report,
     confusion_matrix,
@@ -52,6 +52,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.config import (
     ORIGIN_CLASSES, RANDOM_SEED, NGRAM_RANGE, CV_FOLDS,
+    MAX_FEATURES, MIN_DF, MAX_DF, CLASSIFIER_C,
     TRAIN_DATASET, TEST_DATASET,
     CLASSIFIER_MODEL, TFIDF_VECTORIZER,
     CLASSIFIER_REPORT, CONFUSION_MATRIX_PNG,
@@ -89,10 +90,10 @@ def get_models() -> dict[str, object]:
     """
     return {
         "LogisticRegression": LogisticRegression(
-            max_iter=1000,
+            max_iter=2000,
             random_state=RANDOM_SEED,
             solver="lbfgs",
-            C=10.0,
+            C=CLASSIFIER_C,
             class_weight="balanced",
         ),
         "LinearSVC": CalibratedClassifierCV(
@@ -128,12 +129,14 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 #  Step 2: Feature extraction (TF-IDF on anchored words)
 # ──────────────────────────────────────────────────────────────
 def build_vectorizer() -> TfidfVectorizer:
-    """Create TF-IDF vectorizer for character n-grams."""
+    """Create TF-IDF vectorizer for character n-grams (tuned via grid search)."""
     return TfidfVectorizer(
         analyzer="char",
         ngram_range=NGRAM_RANGE,
         lowercase=True,
-        max_features=50000,
+        max_features=MAX_FEATURES,
+        min_df=MIN_DF,
+        max_df=MAX_DF,
         sublinear_tf=True,
     )
 
@@ -142,13 +145,26 @@ def build_vectorizer() -> TfidfVectorizer:
 #  Step 3: Cross-validation
 # ──────────────────────────────────────────────────────────────
 def run_cross_validation(
-    X_train_anchored: np.ndarray,
+    X_train_anchored: list[str],
     y_train: np.ndarray,
     vectorizer: TfidfVectorizer,
 ) -> dict[str, dict]:
-    """Bypassed due to indexing issues with 6-class expanded dataset."""
-    print("\n[Step 3] Skipping Cross-Validation (bypassed)...")
-    return {}
+    """Run stratified 5-fold CV to get stable performance estimates."""
+    print(f"\n[Step 3] Running {CV_FOLDS}-fold Stratified Cross-Validation...")
+
+    X_tfidf = vectorizer.fit_transform(X_train_anchored)
+    models = get_models()
+    cv = StratifiedKFold(CV_FOLDS, shuffle=True, random_state=RANDOM_SEED)
+    cv_results = {}
+
+    for name, model in models.items():
+        y_pred = cross_val_predict(model, X_tfidf, y_train, cv=cv)
+        acc = accuracy_score(y_train, y_pred)
+        mac = f1_score(y_train, y_pred, average="macro", zero_division=0)
+        cv_results[name] = {"accuracy": acc, "macro_f1": mac}
+        print(f"  {name:25s}  acc={acc:.4f}  macro-F1={mac:.4f}")
+
+    return cv_results
 
 
 # ──────────────────────────────────────────────────────────────
@@ -413,18 +429,17 @@ def main():
     X_test_anchored = np.array([anchor(w) for w in X_test_raw])
     print(f"  Example: '{X_train_raw[0]}' → '{X_train_anchored[0]}'")
 
-    # Step 3: Cross-validation (all 3 models)
-    cv_results = run_cross_validation(X_train_anchored, y_train, None)
+    # Step 3: Build vectorizer + Cross-validation (all 3 models)
+    print("\n[Step 3] Fitting TF-IDF vectorizer on training data...")
+    vectorizer = build_vectorizer()
+    cv_results = run_cross_validation(X_train_anchored.tolist(), y_train, vectorizer)
 
     # Step 4: Train final models on full train, evaluate on test
-    # Fit vectorizer on train
-    print("\n[Step 4] Fitting TF-IDF vectorizer on training data...")
-    vectorizer = build_vectorizer()
     X_train_tfidf = vectorizer.fit_transform(X_train_anchored)
     X_test_tfidf = vectorizer.transform(X_test_anchored)
 
     n_features = X_train_tfidf.shape[1]
-    print(f"  TF-IDF features: {n_features:,}")
+    print(f"\n[Step 4] TF-IDF features: {n_features:,}")
 
     comparison, best_name, best_model, report_text = train_and_evaluate(
         X_train_tfidf, y_train,

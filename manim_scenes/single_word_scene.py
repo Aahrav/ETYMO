@@ -158,7 +158,7 @@ class SingleWordDriftScene(Scene):
         self.wait(2)
 
         # ════════════════════════════════════════════
-        # SHOT 3 — Transition to 2000s
+        # SHOT 3 — Transition to 2000s (DYNAMIC DRIFT)
         # ════════════════════════════════════════════
         era_new = Text("2000s", font_size=26, color=LATIN_RED).to_edge(UP, buff=0.3)
 
@@ -170,8 +170,43 @@ class SingleWordDriftScene(Scene):
             run_time=1.0,
         )
 
-        # Shift center slightly to show movement
+        # ── Computing dynamic, data-driven drift path ──
+        # Default fallback values
         new_center = np.array([0.4, -0.3, 0])
+        unique_arc = 0.5
+        
+        if word in old_w2i and word in model_new.wv:
+            vec_old = aligned_old[old_w2i[word]]
+            vec_new = model_new.wv[word]
+            delta = vec_new - vec_old
+            
+            # 1. Use first 2 dimensions of the difference to determine direction
+            dir_x = delta[0]
+            dir_y = delta[1]
+            # Normalize direction
+            magnitude = np.sqrt(dir_x**2 + dir_y**2) + 1e-9
+            dir_x, dir_y = dir_x / magnitude, dir_y / magnitude
+            
+            # Scale length of movement exactly to the drift score (mult by 4 for visibility)
+            move_dist = min(drift * 4.0, 3.5) # cap at 3.5 so it doesn't go off screen
+            new_center = np.array([dir_x * move_dist, dir_y * move_dist, 0])
+            
+            # 2. Use dimensions 2 & 3 to create a unique curve (path_arc)
+            # Map [-1, 1] pseudo-randomness from vector to an arc between -PI/2 and PI/2
+            unique_arc = float(np.tanh(np.sum(vec_old[2:5])) * 1.5)
+
+        # 3. Dynamic easing functions per origin
+        from manim.utils.rate_functions import smooth, rush_into, rush_from, slow_into, linear, ease_out_bounce
+        easing_map = {
+            "Germanic": ease_out_bounce, # "bounce" equivalent that stays at the destination
+            "Latin": smooth,
+            "Greek": slow_into,
+            "Sanskrit": rush_from,
+            "PIE": rush_into,
+            "Other": linear,
+        }
+        dynamic_easing = easing_map.get(origin, smooth)
+
         num_new = len(new_nbrs)
         angles_new = np.linspace(0, 2 * np.pi, max(num_new, 5), endpoint=False)
 
@@ -204,10 +239,12 @@ class SingleWordDriftScene(Scene):
             new_group.add(dot, label, sim_label)
             new_lines.add(line)
 
+        # Apply the data-driven path and easing
         self.play(
-            main_dot.animate.move_to(new_center),
-            main_label.animate.next_to(Dot(new_center), DOWN, buff=0.18),
-            run_time=1.2,
+            main_dot.animate(path_arc=unique_arc).move_to(new_center),
+            main_label.animate(path_arc=unique_arc).next_to(Dot(new_center), DOWN, buff=0.18),
+            run_time=2.0,
+            rate_func=dynamic_easing
         )
         self.play(Create(new_lines), FadeIn(new_group), run_time=1.5)
 

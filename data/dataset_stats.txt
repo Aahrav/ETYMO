@@ -2,33 +2,33 @@
   Etymology Dataset Statistics
 ==================================================
 
-Total words:  5,849
-Train split:  4,679 (80.0%)
-Test split:   1,170 (20.0%)
+Total words:  5,584
+Train split:  4,467 (80.0%)
+Test split:   1,117 (20.0%)
 
 Class Distribution (Full Dataset):
 ----------------------------------------
-  Germanic    1200  ( 20.5%) ██████████
-  Latin       1200  ( 20.5%) ██████████
-  Greek       1200  ( 20.5%) ██████████
-  Sanskrit     578  (  9.9%) ████
-  PIE          471  (  8.1%) ████
-  Other       1200  ( 20.5%) ██████████
+  Germanic    1200  ( 21.5%) ██████████
+  Latin       1200  ( 21.5%) ██████████
+  Greek       1200  ( 21.5%) ██████████
+  Sanskrit     623  ( 11.2%) █████
+  PIE          161  (  2.9%) █
+  Other       1200  ( 21.5%) ██████████
 
 Sample words per class:
 ----------------------------------------
-  Germanic: atrin, township, shuttle, aboon, accidently, mensk, siker, foreshow, seethe, woof
-  Latin: vessel, resource, account, debt, office, chamber, budget, assess, saint, placet
-  Greek: protein, diarrhea, technical, organ, psoriasis, mesopotamia, esoteric, auxetic, eromenos, calydon
-  Sanskrit: himalayas, manu, chaturdashi, dhobying, bansuri, naan, dhamma, proa, crewel, bandolier
-  PIE: five, awe, long, new, gap, heel, orphan, grave, oath, when
-  Other: haifa, anwar, chilli, irade, gizzing, yamamomo, damma, rabia, djinn, fatah
+  Germanic: home, earth, will, floor, heed, trowel, sorrow, folkmoot, pot, sain
+  Latin: desire, garden, limit, debt, idealist, attempt, notion, appreciation, expert, mutilous
+  Greek: epimenides, cybernetics, cynic, autocephalous, prosthaphæresis, photograph, coulrophobia, acephal, clade, autarchy
+  Sanskrit: ekadashi, angrez, narasimha, vaisnavara, tranquility, pausha, dhenuka, vindaloo, jaggery, kshatriya
+  PIE: event, extract, aquatic, cardiac, brother, visible, dual, equine, decimal, traction
+  Other: nathanael, tombak, nakamura, purim, osmanli, commissar, maru, fukushima, inqilab, shabrack
 
 Spot-check (known origins):
 ----------------------------------------
-  house           expected=Germanic   ✗ (got PIE)
+  house           expected=Germanic   ✓
   mother          expected=Germanic   ✗ (got PIE)
-  water           expected=Germanic   ✗ (got PIE)
+  water           expected=Germanic   ✓
   government      expected=Latin      ✓
   culture         expected=Latin      ✓
   justice         expected=Latin      ✓

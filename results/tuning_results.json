@@ -1,0 +1,45 @@
+{
+  "best_config": "ng(1,6) mf=30000 mindf=1 maxdf=0.95 C=10.0 wt=bala",
+  "ngram_range": [
+    1,
+    6
+  ],
+  "max_features": 30000,
+  "min_df": 1,
+  "max_df": 0.95,
+  "C": 10.0,
+  "class_weight": "balanced",
+  "test_accuracy": 0.6787330316742082,
+  "test_macro_f1": 0.6051595049114902,
+  "ensemble_accuracy": 0.6841628959276018,
+  "ensemble_macro_f1": 0.5817568883423708,
+  "dataset_size": 5523,
+  "configs_tested": 480,
+  "top_5_configs": [
+    {
+      "config": "ng(1,6) mf=30000 mindf=1 maxdf=0.95 C=10.0 wt=bala",
+      "accuracy": 0.6959985515118595,
+      "macro_f1": 0.6173563888550989
+    },
+    {
+      "config": "ng(1,5) mf=30000 mindf=1 maxdf=1.0 C=5.0  wt=bala",
+      "accuracy": 0.6958174904942965,
+      "macro_f1": 0.6164540719728534
+    },
+    {
+      "config": "ng(1,6) mf=30000 mindf=1 maxdf=1.0 C=10.0 wt=bala",
+      "accuracy": 0.694912185406482,
+      "macro_f1": 0.616372687151042
+    },
+    {
+      "config": "ng(1,5) mf=30000 mindf=1 maxdf=1.0 C=10.0 wt=bala",
+      "accuracy": 0.6956364294767337,
+      "macro_f1": 0.616139187274351
+    },
+    {
+      "config": "ng(1,6) mf=30000 mindf=2 maxdf=1.0 C=5.0  wt=bala",
+      "accuracy": 0.6927394531957269,
+      "macro_f1": 0.6158818961553537
+    }
+  ]
+}

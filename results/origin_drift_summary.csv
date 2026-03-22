@@ -1,7 +1,7 @@
 origin_class,n_words,mean_drift,median_drift,std_drift,min_drift,max_drift,min_word,max_word
-Germanic,23,0.5522,0.5542,0.1582,0.1673,0.8207,bring,craft
-Latin,21,0.6281,0.631,0.1371,0.3482,0.8791,city,recent
-Greek,13,0.6815,0.6977,0.1028,0.4814,0.8065,goes,diplomatic
-Sanskrit,3,0.7242,0.7681,0.0953,0.615,0.7897,chop,musk
-PIE,25,0.2735,0.1951,0.1664,0.0972,0.6063,mother,ear
-Other,4,0.6689,0.6733,0.1256,0.5385,0.7907,coffee,magazine
+Germanic,97,0.5713,0.5851,0.1288,0.1673,0.8207,bring,craft
+Latin,93,0.6111,0.6042,0.1211,0.2448,0.8791,sure,recent
+Greek,50,0.6669,0.6874,0.1119,0.379,0.8543,days,philosophical
+Sanskrit,8,0.6865,0.7012,0.0826,0.5564,0.7681,lime,punch
+PIE,63,0.5502,0.5769,0.1916,0.0972,0.8888,mother,verb
+Other,10,0.6292,0.5871,0.0903,0.5385,0.7907,coffee,magazine

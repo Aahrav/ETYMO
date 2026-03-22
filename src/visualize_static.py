@@ -37,7 +37,9 @@ COLORS = {
     "Germanic": "#4FC3F7",
     "Latin":    "#EF5350",
     "Greek":    "#66BB6A",
-    "Other":    "#FFA726",
+    "Sanskrit": "#FFD54F",
+    "PIE":      "#CE93D8",
+    "Other":    "#90A4AE",
 }
 BG_COLOR = "#1a1a2e"
 TEXT_COLOR = "#e0e0e0"
