@@ -1,17 +1,30 @@
 {
-  "cross_validation": {},
-  "test_set": {
+  "cross_validation": {
     "LogisticRegression": {
-      "f1_macro": 0.6354,
-      "accuracy": 0.6977
+      "accuracy": 0.6858306926210955,
+      "macro_f1": 0.5984297810716261
     },
     "LinearSVC": {
-      "f1_macro": 0.5645,
-      "accuracy": 0.6877
+      "accuracy": 0.6896785875961974,
+      "macro_f1": 0.5685955973199156
     },
     "MultinomialNB": {
-      "f1_macro": 0.5686,
-      "accuracy": 0.6922
+      "accuracy": 0.6837935717519239,
+      "macro_f1": 0.5617715640998268
+    }
+  },
+  "test_set": {
+    "LogisticRegression": {
+      "f1_macro": 0.6052,
+      "accuracy": 0.6787
+    },
+    "LinearSVC": {
+      "f1_macro": 0.5398,
+      "accuracy": 0.6688
+    },
+    "MultinomialNB": {
+      "f1_macro": 0.5495,
+      "accuracy": 0.6796
     }
   },
   "best_model": "LogisticRegression"

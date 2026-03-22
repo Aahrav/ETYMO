@@ -1,151 +1,601 @@
 word,origin_class,drift_score,similarity,confidence,source,status
-stream,Germanic,0.548484,0.451516,0.76,curated_seed,OK
-web,Germanic,0.770459,0.229541,0.7426,curated_seed,OK
-ship,Germanic,0.532427,0.467573,0.6894,curated_seed,OK
-cloud,Germanic,0.643149,0.356851,0.6485,curated_seed,OK
-barn,Germanic,0.440936,0.559064,0.5849,curated_seed,OK
-mouse,Germanic,0.687218,0.312782,0.5121,curated_seed,OK
-board,Germanic,0.73159,0.26841,0.4927,curated_seed,OK
-broadcast,Germanic,,,0.4522,curated_seed,MISSING (no historical)
-craft,Germanic,0.820716,0.179284,0.449,curated_seed,OK
-bug,Germanic,,,0.3735,curated_seed,MISSING (no historical)
-following,Germanic,0.667744,0.332256,0.9366,classifier_nltk,OK
-without,Germanic,0.499989,0.500011,0.8951,classifier_nltk,OK
-feeling,Germanic,0.530895,0.469105,0.8827,classifier_nltk,OK
-bring,Germanic,0.1673,0.8327,0.8761,classifier_nltk,OK
-brought,Germanic,0.423009,0.576991,0.8708,classifier_nltk,OK
-stood,Germanic,0.633095,0.366905,0.8494,classifier_nltk,OK
-going,Germanic,0.473046,0.526954,0.849,classifier_nltk,OK
-within,Germanic,0.570792,0.429208,0.846,classifier_nltk,OK
-best,Germanic,0.606338,0.393662,0.8345,classifier_nltk,OK
-looking,Germanic,0.666671,0.333329,0.8327,classifier_nltk,OK
-group,Germanic,0.505765,0.494235,0.8175,classifier_nltk,OK
-whole,Germanic,0.21985,0.78015,0.8122,classifier_nltk,OK
-hundred,Germanic,0.628705,0.371295,0.8044,classifier_nltk,OK
-early,Germanic,0.554186,0.445814,0.802,classifier_nltk,OK
-told,Germanic,0.377792,0.622208,0.8003,classifier_nltk,OK
-phone,Greek,,,0.8553,curated_seed,MISSING (no historical)
-cycle,Greek,,,0.7757,curated_seed,MISSING (no historical)
-icon,Greek,,,0.7184,curated_seed,MISSING (no historical)
-meter,Greek,,,0.7171,curated_seed,MISSING (no historical)
-energy,Greek,0.776608,0.223392,0.6985,curated_seed,OK
-plasma,Greek,,,0.694,curated_seed,MISSING (no historical)
-program,Greek,,,0.6922,curated_seed,MISSING (no historical)
-atom,Greek,0.701348,0.298652,0.5523,curated_seed,OK
-antenna,Greek,,,0.4313,curated_seed,MISSING (no historical)
-organ,Greek,0.697715,0.302285,0.4208,curated_seed,OK
-electronic,Greek,,,0.8991,classifier_nltk,MISSING (no historical)
-sympathetic,Greek,0.771774,0.228226,0.8983,classifier_nltk,OK
-poetic,Greek,0.795887,0.204113,0.8907,classifier_nltk,OK
-diplomatic,Greek,0.806533,0.193467,0.8784,classifier_nltk,OK
-electronics,Greek,,,0.878,classifier_nltk,MISSING (no historical)
-axis,Greek,0.653654,0.346346,0.8605,classifier_nltk,OK
-academic,Greek,,,0.8432,classifier_nltk,MISSING (no historical)
-magnetic,Greek,0.741405,0.258595,0.843,classifier_nltk,OK
-historian,Greek,0.638651,0.361349,0.8337,classifier_nltk,OK
-psychological,Greek,0.665371,0.334629,0.8317,classifier_nltk,OK
-thyroid,Greek,,,0.823,classifier_nltk,MISSING (no historical)
-historical,Greek,0.61996,0.38004,0.8072,classifier_nltk,OK
-basis,Greek,0.508685,0.491315,0.8071,classifier_nltk,OK
-goes,Greek,0.481406,0.518594,0.8024,classifier_nltk,OK
-maris,Greek,,,0.8007,classifier_nltk,MISSING (no historical)
-culture,Latin,0.593324,0.406676,0.8183,curated_seed,OK
-computer,Latin,,,0.8139,curated_seed,MISSING (no historical)
-server,Latin,,,0.8063,curated_seed,MISSING (no historical)
-journal,Latin,0.680818,0.319182,0.6857,curated_seed,OK
-text,Latin,0.545833,0.454167,0.6588,curated_seed,OK
-cell,Latin,0.630956,0.369044,0.5988,curated_seed,OK
-virus,Latin,,,0.5221,curated_seed,MISSING (no historical)
-cabinet,Latin,0.833229,0.166771,0.5192,curated_seed,OK
-monitor,Latin,0.848478,0.151522,0.4996,curated_seed,OK
-tablet,Latin,0.556261,0.443739,0.4204,curated_seed,OK
-information,Latin,0.491198,0.508802,0.9239,classifier_nltk,OK
-recent,Latin,0.879094,0.120906,0.9016,classifier_nltk,OK
-county,Latin,0.520769,0.479231,0.8839,classifier_nltk,OK
-city,Latin,0.348221,0.651779,0.878,classifier_nltk,OK
-religious,Latin,0.509847,0.490153,0.8722,classifier_nltk,OK
-secretary,Latin,0.686056,0.313944,0.8431,classifier_nltk,OK
-development,Latin,0.645754,0.354246,0.8379,classifier_nltk,OK
-defense,Latin,,,0.8332,classifier_nltk,MISSING (no historical)
-several,Latin,0.482582,0.517418,0.8318,classifier_nltk,OK
-department,Latin,0.637848,0.362152,0.827,classifier_nltk,OK
-equipment,Latin,0.794063,0.205937,0.826,classifier_nltk,OK
-different,Latin,0.563217,0.436783,0.8209,classifier_nltk,OK
-important,Latin,0.536081,0.463919,0.8191,classifier_nltk,OK
-national,Latin,0.764361,0.235639,0.8127,classifier_nltk,OK
-evidence,Latin,0.641178,0.358822,0.8014,classifier_nltk,OK
-tsunami,Other,,,0.8279,curated_seed,MISSING (no historical)
-coffee,Other,0.538487,0.461513,0.7547,curated_seed,OK
-algorithm,Other,,,0.5444,curated_seed,MISSING (no historical)
-candy,Other,0.76109,0.23891,0.5147,curated_seed,OK
-magazine,Other,0.790692,0.209308,0.4952,curated_seed,OK
-sugar,Other,0.585444,0.414556,0.4868,curated_seed,OK
-algebra,Other,,,0.3608,curated_seed,MISSING (no historical)
-kayo,Other,,,0.8865,classifier_nltk,MISSING (no historical) (no modern)
-kazoo,Other,,,0.8449,classifier_nltk,MISSING (no historical) (no modern)
-tuba,Other,,,0.8421,classifier_nltk,MISSING (no historical) (no modern)
-mullah,Other,,,0.8258,classifier_nltk,MISSING (no historical) (no modern)
-jazz,Other,,,0.8247,classifier_nltk,MISSING (no historical)
-kolkhoz,Other,,,0.8206,classifier_nltk,MISSING (no historical) (no modern)
-hubba,Other,,,0.8173,classifier_nltk,MISSING (no historical) (no modern)
-kivu,Other,,,0.8141,classifier_nltk,MISSING (no historical) (no modern)
-bashaw,Other,,,0.8087,classifier_nltk,MISSING (no historical) (no modern)
-fuji,Other,,,0.8062,classifier_nltk,MISSING (no historical)
-jerez,Other,,,0.8035,classifier_nltk,MISSING (no historical)
-kagok,Other,,,0.8,dataset_etymwn,MISSING (no historical) (no modern)
-zōri,Other,,,0.7941,dataset_etymwn,MISSING (no historical) (no modern)
-yuruk,Other,,,0.6897,dataset_etymwn,MISSING (no historical) (no modern)
-naskh,Other,,,0.558,dataset_etymwn,MISSING (no historical) (no modern)
-riad,Other,,,0.5279,dataset_etymwn,MISSING (no historical) (no modern)
-blat,Other,,,0.4935,dataset_etymwn,MISSING (no historical) (no modern)
-joel,Other,,,0.4313,dataset_etymwn,MISSING (no historical)
-new,PIE,0.571625,0.428375,0.6431,curated_seed,OK
-night,PIE,0.155061,0.844939,0.6305,curated_seed,OK
-heart,PIE,0.234171,0.765829,0.5933,curated_seed,OK
-eye,PIE,0.219847,0.780153,0.4697,curated_seed,OK
-star,PIE,0.20375,0.79625,0.4311,curated_seed,OK
-father,PIE,0.110916,0.889084,0.3914,curated_seed,OK
-mother,PIE,0.097227,0.902773,0.3696,curated_seed,OK
-three,PIE,0.492817,0.507183,0.3675,curated_seed,OK
-name,PIE,0.227493,0.772507,0.3419,curated_seed,OK
-water,PIE,0.16426,0.83574,0.3194,curated_seed,OK
-wide,PIE,0.467459,0.532541,0.8561,dataset_etymwn,OK
-wind,PIE,0.162889,0.837111,0.7115,dataset_etymwn,OK
-ear,PIE,0.606294,0.393706,0.6886,dataset_etymwn,OK
-deep,PIE,0.190604,0.809396,0.5307,dataset_etymwn,OK
-war,PIE,0.176984,0.823016,0.4313,dataset_etymwn,OK
-man,PIE,0.115729,0.884271,0.4232,dataset_etymwn,OK
-red,PIE,0.192723,0.807277,0.4011,dataset_etymwn,OK
-cow,PIE,0.535114,0.464886,0.383,dataset_etymwn,OK
-son,PIE,0.158825,0.841175,0.3574,dataset_etymwn,OK
-god,PIE,0.195067,0.804933,0.3528,dataset_etymwn,OK
-bad,PIE,0.378601,0.621399,0.3358,dataset_etymwn,OK
-moon,PIE,0.268842,0.731158,0.3235,dataset_etymwn,OK
-life,PIE,0.169505,0.830495,0.3089,dataset_etymwn,OK
-hot,PIE,0.5899,0.4101,0.3078,dataset_etymwn,OK
-sun,PIE,0.151425,0.848575,0.3063,dataset_etymwn,OK
-nirvana,Sanskrit,,,0.7681,curated_seed,MISSING (no historical)
-yoga,Sanskrit,,,0.7291,curated_seed,MISSING (no historical)
-avatar,Sanskrit,,,0.5312,curated_seed,MISSING (no historical)
-pajama,Sanskrit,,,0.5163,curated_seed,MISSING (no historical) (no modern)
-karma,Sanskrit,,,0.4832,curated_seed,MISSING (no historical)
-bandit,Sanskrit,,,0.4808,curated_seed,MISSING (no historical) (no modern)
-guru,Sanskrit,,,0.4325,curated_seed,MISSING (no historical)
-punch,Sanskrit,0.768123,0.231877,0.425,curated_seed,OK
-jungle,Sanskrit,,,0.4175,curated_seed,MISSING (no historical)
-shampoo,Sanskrit,,,0.4148,curated_seed,MISSING (no historical) (no modern)
-radha,Sanskrit,,,0.8133,dataset_etymwn,MISSING (no historical) (no modern)
-bhatt,Sanskrit,,,0.7621,dataset_etymwn,MISSING (no historical) (no modern)
-vajra,Sanskrit,,,0.7293,dataset_etymwn,MISSING (no historical) (no modern)
-vani,Sanskrit,,,0.6915,dataset_etymwn,MISSING (no historical) (no modern)
-manas,Sanskrit,,,0.6518,dataset_etymwn,MISSING (no historical) (no modern)
-hari,Sanskrit,,,0.6366,dataset_etymwn,MISSING (no historical)
-indra,Sanskrit,,,0.5841,dataset_etymwn,MISSING (no historical) (no modern)
-nāga,Sanskrit,,,0.4974,dataset_etymwn,MISSING (no historical) (no modern)
-stupa,Sanskrit,,,0.4877,dataset_etymwn,MISSING (no historical)
-musk,Sanskrit,0.789672,0.210328,0.4553,dataset_etymwn,OK
-yuga,Sanskrit,,,0.4549,dataset_etymwn,MISSING (no historical) (no modern)
-sikh,Sanskrit,,,0.4245,dataset_etymwn,MISSING (no historical)
-chop,Sanskrit,0.614951,0.385049,0.4192,dataset_etymwn,OK
-cot,Sanskrit,,,0.4126,dataset_etymwn,MISSING (no modern)
-pali,Sanskrit,,,0.394,dataset_etymwn,MISSING (no historical)
+web,Germanic,0.770459,0.229541,0.9376,curated_seed,OK
+stream,Germanic,0.548484,0.451516,0.8958,curated_seed,OK
+ship,Germanic,0.532427,0.467573,0.8895,curated_seed,OK
+bug,Germanic,,,0.8241,curated_seed,MISSING (no historical)
+board,Germanic,0.73159,0.26841,0.7547,curated_seed,OK
+craft,Germanic,0.820716,0.179284,0.6877,curated_seed,OK
+broadcast,Germanic,,,0.6473,curated_seed,MISSING (no historical)
+cloud,Germanic,0.643149,0.356851,0.5799,curated_seed,OK
+barn,Germanic,0.440936,0.559064,0.5058,curated_seed,OK
+mouse,Germanic,0.687218,0.312782,0.4819,curated_seed,OK
+following,Germanic,0.667744,0.332256,0.9944,classifier_nltk,OK
+follow,Germanic,0.454852,0.545148,0.9874,classifier_nltk,OK
+working,Germanic,0.485221,0.514779,0.9869,classifier_nltk,OK
+hearing,Germanic,0.742337,0.257663,0.9851,classifier_nltk,OK
+stood,Germanic,0.633095,0.366905,0.9848,classifier_nltk,OK
+fell,Germanic,0.523369,0.476631,0.9826,classifier_nltk,OK
+told,Germanic,0.377792,0.622208,0.982,classifier_nltk,OK
+growing,Germanic,0.694842,0.305158,0.9815,classifier_nltk,OK
+felt,Germanic,0.464344,0.535656,0.9767,classifier_nltk,OK
+show,Germanic,0.579079,0.420921,0.9735,classifier_nltk,OK
+flow,Germanic,0.702571,0.297429,0.9732,classifier_nltk,OK
+forward,Germanic,0.480858,0.519142,0.9726,classifier_nltk,OK
+wore,Germanic,0.438931,0.561069,0.972,classifier_nltk,OK
+worked,Germanic,0.62152,0.37848,0.9719,classifier_nltk,OK
+left,Germanic,0.34202,0.65798,0.9701,classifier_nltk,OK
+slowly,Germanic,0.697433,0.302567,0.968,classifier_nltk,OK
+growth,Germanic,0.623773,0.376227,0.9647,classifier_nltk,OK
+build,Germanic,0.436509,0.563491,0.9646,classifier_nltk,OK
+whole,Germanic,0.21985,0.78015,0.964,classifier_nltk,OK
+forth,Germanic,0.781095,0.218905,0.964,classifier_nltk,OK
+waiting,Germanic,0.571164,0.428836,0.9611,classifier_nltk,OK
+willing,Germanic,0.494304,0.505696,0.9606,classifier_nltk,OK
+full,Germanic,0.190516,0.809484,0.9593,classifier_nltk,OK
+learned,Germanic,0.596916,0.403084,0.9578,classifier_nltk,OK
+wall,Germanic,0.512216,0.487784,0.9532,classifier_nltk,OK
+seeing,Germanic,0.711851,0.288149,0.9531,classifier_nltk,OK
+holding,Germanic,0.659984,0.340016,0.9513,classifier_nltk,OK
+bring,Germanic,0.1673,0.8327,0.9507,classifier_nltk,OK
+fighting,Germanic,0.596066,0.403934,0.9469,classifier_nltk,OK
+blood,Germanic,0.205557,0.794443,0.9453,classifier_nltk,OK
+fully,Germanic,0.666047,0.333953,0.9453,classifier_nltk,OK
+works,Germanic,0.700929,0.299071,0.9437,classifier_nltk,OK
+straight,Germanic,0.612894,0.387106,0.9409,classifier_nltk,OK
+watching,Germanic,0.656641,0.343359,0.939,classifier_nltk,OK
+grew,Germanic,0.655129,0.344871,0.9373,classifier_nltk,OK
+without,Germanic,0.499989,0.500011,0.9364,classifier_nltk,OK
+bright,Germanic,0.489277,0.510723,0.9364,classifier_nltk,OK
+slightly,Germanic,0.583904,0.416096,0.9335,classifier_nltk,OK
+writing,Germanic,0.553813,0.446187,0.9332,classifier_nltk,OK
+feeling,Germanic,0.530895,0.469105,0.9319,classifier_nltk,OK
+brought,Germanic,0.423009,0.576991,0.9284,classifier_nltk,OK
+leading,Germanic,0.665455,0.334545,0.9284,classifier_nltk,OK
+feel,Germanic,0.447369,0.552631,0.9255,classifier_nltk,OK
+building,Germanic,0.402258,0.597742,0.924,classifier_nltk,OK
+best,Germanic,0.606338,0.393662,0.9223,classifier_nltk,OK
+leaving,Germanic,0.491357,0.508643,0.9199,classifier_nltk,OK
+freedom,Germanic,0.670636,0.329364,0.9198,classifier_nltk,OK
+understanding,Germanic,0.571435,0.428565,0.9193,classifier_nltk,OK
+drew,Germanic,0.709723,0.290277,0.919,classifier_nltk,OK
+hardly,Germanic,0.638758,0.361242,0.9189,classifier_nltk,OK
+feed,Germanic,0.567991,0.432009,0.9175,classifier_nltk,OK
+looking,Germanic,0.666671,0.333329,0.9105,classifier_nltk,OK
+within,Germanic,0.570792,0.429208,0.9103,classifier_nltk,OK
+thinking,Germanic,0.63724,0.36276,0.9096,classifier_nltk,OK
+wrote,Germanic,0.585124,0.414876,0.9073,classifier_nltk,OK
+leadership,Germanic,,,0.9058,classifier_nltk,MISSING (no historical)
+twice,Germanic,0.630542,0.369458,0.8991,classifier_nltk,OK
+built,Germanic,0.592416,0.407584,0.8985,classifier_nltk,OK
+early,Germanic,0.554186,0.445814,0.8983,classifier_nltk,OK
+watched,Germanic,0.633274,0.366726,0.8952,classifier_nltk,OK
+standing,Germanic,0.558193,0.441807,0.8878,classifier_nltk,OK
+nearly,Germanic,0.537664,0.462336,0.8865,classifier_nltk,OK
+starting,Germanic,0.66874,0.33126,0.8845,classifier_nltk,OK
+wait,Germanic,0.444279,0.555721,0.8831,classifier_nltk,OK
+trying,Germanic,0.53359,0.46641,0.8683,classifier_nltk,OK
+reading,Germanic,0.663714,0.336286,0.8667,classifier_nltk,OK
+quickly,Germanic,0.587838,0.412162,0.8664,classifier_nltk,OK
+youth,Germanic,0.659805,0.340195,0.8564,classifier_nltk,OK
+took,Germanic,0.566065,0.433935,0.8544,classifier_nltk,OK
+least,Germanic,0.695275,0.304725,0.8496,classifier_nltk,OK
+really,Germanic,0.321191,0.678809,0.849,classifier_nltk,OK
+going,Germanic,0.473046,0.526954,0.8459,classifier_nltk,OK
+running,Germanic,0.690641,0.309359,0.8455,classifier_nltk,OK
+western,Germanic,0.64547,0.35453,0.8443,classifier_nltk,OK
+shot,Germanic,0.553217,0.446783,0.8442,classifier_nltk,OK
+shown,Germanic,0.675119,0.324881,0.8415,classifier_nltk,OK
+frame,Germanic,0.752,0.248,0.841,classifier_nltk,OK
+knew,Germanic,0.47342,0.52658,0.8387,classifier_nltk,OK
+lived,Germanic,0.406404,0.593596,0.8363,classifier_nltk,OK
+store,Germanic,0.581597,0.418403,0.8266,classifier_nltk,OK
+otherwise,Germanic,0.602802,0.397198,0.8239,classifier_nltk,OK
+bill,Germanic,0.804285,0.195715,0.823,classifier_nltk,OK
+somehow,Germanic,0.597825,0.402175,0.82,classifier_nltk,OK
+game,Germanic,0.627965,0.372035,0.8179,classifier_nltk,OK
+break,Germanic,0.485727,0.514273,0.8154,classifier_nltk,OK
+laid,Germanic,0.692547,0.307453,0.8125,classifier_nltk,OK
+walk,Germanic,0.546003,0.453997,0.811,classifier_nltk,OK
+leader,Germanic,0.631337,0.368663,0.8069,classifier_nltk,OK
+teeth,Germanic,0.522862,0.477138,0.8053,classifier_nltk,OK
+boat,Germanic,0.55413,0.44587,0.8042,classifier_nltk,OK
+phone,Greek,,,0.9362,curated_seed,MISSING (no historical)
+plasma,Greek,,,0.8412,curated_seed,MISSING (no historical)
+energy,Greek,0.776608,0.223392,0.8365,curated_seed,OK
+cycle,Greek,,,0.7975,curated_seed,MISSING (no historical)
+organ,Greek,0.697715,0.302285,0.7909,curated_seed,OK
+icon,Greek,,,0.7514,curated_seed,MISSING (no historical)
+program,Greek,,,0.7279,curated_seed,MISSING (no historical)
+meter,Greek,,,0.6649,curated_seed,MISSING (no historical)
+atom,Greek,0.701348,0.298652,0.5205,curated_seed,OK
+antenna,Greek,,,0.3474,curated_seed,MISSING (no historical)
+demographic,Greek,,,0.9967,classifier_nltk,MISSING (no historical)
+dialysis,Greek,,,0.9922,classifier_nltk,MISSING (no historical) (no modern)
+sympathetic,Greek,0.771774,0.228226,0.9903,classifier_nltk,OK
+synthetic,Greek,,,0.99,classifier_nltk,MISSING (no historical)
+thyroid,Greek,,,0.9798,classifier_nltk,MISSING (no historical)
+therapeutic,Greek,,,0.9795,classifier_nltk,MISSING (no historical)
+heroic,Greek,0.830845,0.169155,0.9772,classifier_nltk,OK
+diplomatic,Greek,0.806533,0.193467,0.9769,classifier_nltk,OK
+analytic,Greek,,,0.9768,classifier_nltk,MISSING (no historical)
+metaphysics,Greek,0.666731,0.333269,0.9763,classifier_nltk,OK
+enthusiastic,Greek,0.740447,0.259553,0.9762,classifier_nltk,OK
+poetic,Greek,0.795887,0.204113,0.976,classifier_nltk,OK
+mimesis,Greek,,,0.9741,classifier_nltk,MISSING (no historical)
+autistic,Greek,,,0.9712,classifier_nltk,MISSING (no historical) (no modern)
+athletic,Greek,0.778555,0.221445,0.9706,classifier_nltk,OK
+epic,Greek,,,0.9689,classifier_nltk,MISSING (no historical)
+axis,Greek,0.653654,0.346346,0.9683,classifier_nltk,OK
+diplomacy,Greek,0.53959,0.46041,0.9682,classifier_nltk,OK
+electronics,Greek,,,0.9679,classifier_nltk,MISSING (no historical)
+psychological,Greek,0.665371,0.334629,0.9666,classifier_nltk,OK
+mythological,Greek,,,0.9666,classifier_nltk,MISSING (no historical)
+drastic,Greek,,,0.9654,classifier_nltk,MISSING (no historical)
+characteristic,Greek,0.498083,0.501917,0.963,classifier_nltk,OK
+acrylic,Greek,,,0.9624,classifier_nltk,MISSING (no historical)
+historic,Greek,0.625083,0.374917,0.9617,classifier_nltk,OK
+automatically,Greek,0.836388,0.163612,0.9598,classifier_nltk,OK
+paramagnetic,Greek,,,0.9596,classifier_nltk,MISSING (no historical) (no modern)
+analyses,Greek,,,0.9591,classifier_nltk,MISSING (no historical)
+rhythmic,Greek,,,0.9543,classifier_nltk,MISSING (no historical)
+democratic,Greek,,,0.954,classifier_nltk,MISSING (no historical)
+electronic,Greek,,,0.9531,classifier_nltk,MISSING (no historical)
+magnetic,Greek,0.741405,0.258595,0.9471,classifier_nltk,OK
+dramatic,Greek,0.618121,0.381879,0.9461,classifier_nltk,OK
+systematic,Greek,0.780518,0.219482,0.9448,classifier_nltk,OK
+theological,Greek,0.69796,0.30204,0.9444,classifier_nltk,OK
+telegraph,Greek,0.816877,0.183123,0.9431,classifier_nltk,OK
+clothes,Greek,0.418048,0.581952,0.9422,classifier_nltk,OK
+theorem,Greek,,,0.9404,classifier_nltk,MISSING (no historical)
+fantastic,Greek,0.70916,0.29084,0.9389,classifier_nltk,OK
+symbolic,Greek,,,0.9386,classifier_nltk,MISSING (no historical)
+atomic,Greek,,,0.9379,classifier_nltk,MISSING (no historical)
+romantic,Greek,0.727126,0.272874,0.936,classifier_nltk,OK
+academic,Greek,,,0.9359,classifier_nltk,MISSING (no historical)
+domestic,Greek,0.841988,0.158012,0.9315,classifier_nltk,OK
+optimistic,Greek,,,0.9294,classifier_nltk,MISSING (no historical)
+phony,Greek,,,0.927,classifier_nltk,MISSING (no historical) (no modern)
+atlantic,Greek,0.549891,0.450109,0.9269,classifier_nltk,OK
+theoretical,Greek,,,0.9249,classifier_nltk,MISSING (no historical)
+basis,Greek,0.508685,0.491315,0.9236,classifier_nltk,OK
+methodist,Greek,,,0.9209,classifier_nltk,MISSING (no historical)
+phases,Greek,0.604267,0.395733,0.9139,classifier_nltk,OK
+hypothalamic,Greek,,,0.9048,classifier_nltk,MISSING (no historical) (no modern)
+plastics,Greek,,,0.9042,classifier_nltk,MISSING (no historical)
+artistic,Greek,0.694886,0.305114,0.9007,classifier_nltk,OK
+historically,Greek,,,0.8996,classifier_nltk,MISSING (no historical)
+philosophical,Greek,0.854336,0.145664,0.8991,classifier_nltk,OK
+geometric,Greek,,,0.897,classifier_nltk,MISSING (no historical)
+mechanics,Greek,0.685017,0.314983,0.8969,classifier_nltk,OK
+physiological,Greek,,,0.8911,classifier_nltk,MISSING (no historical)
+geographical,Greek,0.646489,0.353511,0.8864,classifier_nltk,OK
+climax,Greek,0.723321,0.276679,0.8816,classifier_nltk,OK
+sociology,Greek,,,0.877,classifier_nltk,MISSING (no historical)
+tactics,Greek,0.557198,0.442802,0.8761,classifier_nltk,OK
+philosopher,Greek,0.689729,0.310271,0.8669,classifier_nltk,OK
+organize,Greek,,,0.8615,classifier_nltk,MISSING (no historical)
+arch,Greek,0.650259,0.349741,0.8608,classifier_nltk,OK
+antibody,Greek,,,0.8592,classifier_nltk,MISSING (no historical)
+historical,Greek,0.61996,0.38004,0.8583,classifier_nltk,OK
+technological,Greek,,,0.8556,classifier_nltk,MISSING (no historical)
+phenomena,Greek,0.590125,0.409875,0.8496,classifier_nltk,OK
+days,Greek,0.37901,0.62099,0.8493,classifier_nltk,OK
+historian,Greek,0.638651,0.361349,0.848,classifier_nltk,OK
+emphasize,Greek,,,0.8473,classifier_nltk,MISSING (no historical)
+organized,Greek,0.749291,0.250709,0.8429,classifier_nltk,OK
+mathematical,Greek,0.704945,0.295055,0.8428,classifier_nltk,OK
+mechanism,Greek,0.595671,0.404329,0.8374,classifier_nltk,OK
+hypothalamus,Greek,,,0.8296,classifier_nltk,MISSING (no historical)
+ballistic,Greek,,,0.8229,classifier_nltk,MISSING (no historical)
+tales,Greek,0.589694,0.410306,0.8225,classifier_nltk,OK
+chorus,Greek,0.664744,0.335256,0.8211,classifier_nltk,OK
+therapist,Greek,,,0.8174,classifier_nltk,MISSING (no historical)
+chemistry,Greek,0.55128,0.44872,0.8151,classifier_nltk,OK
+optimism,Greek,,,0.8144,classifier_nltk,MISSING (no historical)
+metaphysical,Greek,0.700825,0.299175,0.8131,classifier_nltk,OK
+goes,Greek,0.481406,0.518594,0.8126,classifier_nltk,OK
+helium,Greek,,,0.8089,classifier_nltk,MISSING (no historical)
+ideological,Greek,,,0.8054,classifier_nltk,MISSING (no historical)
+scheme,Greek,0.694244,0.305756,0.8052,classifier_nltk,OK
+comes,Greek,0.483795,0.516205,0.8048,classifier_nltk,OK
+antigen,Greek,,,0.8042,classifier_nltk,MISSING (no historical)
+culture,Latin,0.593324,0.406676,0.8977,curated_seed,OK
+computer,Latin,,,0.8854,curated_seed,MISSING (no historical)
+server,Latin,,,0.8743,curated_seed,MISSING (no historical)
+cabinet,Latin,0.833229,0.166771,0.7555,curated_seed,OK
+journal,Latin,0.680818,0.319182,0.7353,curated_seed,OK
+cell,Latin,0.630956,0.369044,0.7062,curated_seed,OK
+tablet,Latin,0.556261,0.443739,0.6083,curated_seed,OK
+virus,Latin,,,0.5956,curated_seed,MISSING (no historical)
+text,Latin,0.545833,0.454167,0.5795,curated_seed,OK
+monitor,Latin,0.848478,0.151522,0.5146,curated_seed,OK
+recent,Latin,0.879094,0.120906,0.9918,classifier_nltk,OK
+respect,Latin,0.659968,0.340032,0.9883,classifier_nltk,OK
+importance,Latin,0.598867,0.401133,0.9866,classifier_nltk,OK
+information,Latin,0.491198,0.508802,0.9847,classifier_nltk,OK
+pretty,Latin,0.572098,0.427902,0.983,classifier_nltk,OK
+performance,Latin,0.643663,0.356337,0.9812,classifier_nltk,OK
+evidence,Latin,0.641178,0.358822,0.9747,classifier_nltk,OK
+construction,Latin,0.726806,0.273194,0.9745,classifier_nltk,OK
+opportunity,Latin,0.600781,0.399219,0.9742,classifier_nltk,OK
+failure,Latin,0.714617,0.285383,0.9687,classifier_nltk,OK
+responsibility,Latin,0.634551,0.365449,0.9672,classifier_nltk,OK
+department,Latin,0.637848,0.362152,0.9665,classifier_nltk,OK
+existence,Latin,0.515464,0.484536,0.9599,classifier_nltk,OK
+important,Latin,0.536081,0.463919,0.9578,classifier_nltk,OK
+conference,Latin,0.831488,0.168512,0.9532,classifier_nltk,OK
+religious,Latin,0.509847,0.490153,0.9531,classifier_nltk,OK
+county,Latin,0.520769,0.479231,0.9521,classifier_nltk,OK
+development,Latin,0.645754,0.354246,0.9505,classifier_nltk,OK
+production,Latin,0.646853,0.353147,0.9485,classifier_nltk,OK
+dance,Latin,0.700182,0.299818,0.9484,classifier_nltk,OK
+secretary,Latin,0.686056,0.313944,0.9462,classifier_nltk,OK
+direction,Latin,0.549477,0.450523,0.9453,classifier_nltk,OK
+received,Latin,0.740047,0.259953,0.9424,classifier_nltk,OK
+effective,Latin,0.671533,0.328467,0.9353,classifier_nltk,OK
+administration,Latin,0.638632,0.361368,0.9348,classifier_nltk,OK
+sure,Latin,0.244781,0.755219,0.9338,classifier_nltk,OK
+remember,Latin,0.486871,0.513129,0.9302,classifier_nltk,OK
+inside,Latin,0.492891,0.507109,0.9281,classifier_nltk,OK
+professional,Latin,0.728497,0.271503,0.9276,classifier_nltk,OK
+recently,Latin,0.552912,0.447088,0.9233,classifier_nltk,OK
+defense,Latin,,,0.9212,classifier_nltk,MISSING (no historical)
+objective,Latin,0.649442,0.350558,0.9208,classifier_nltk,OK
+operation,Latin,0.844931,0.155069,0.9203,classifier_nltk,OK
+current,Latin,0.762922,0.237078,0.9178,classifier_nltk,OK
+international,Latin,,,0.9141,classifier_nltk,MISSING (no historical)
+university,Latin,0.593818,0.406182,0.912,classifier_nltk,OK
+return,Latin,0.486231,0.513769,0.9095,classifier_nltk,OK
+science,Latin,0.47585,0.52415,0.9089,classifier_nltk,OK
+considerable,Latin,0.487081,0.512919,0.9088,classifier_nltk,OK
+president,Latin,0.81192,0.18808,0.9079,classifier_nltk,OK
+interested,Latin,0.594336,0.405664,0.906,classifier_nltk,OK
+officer,Latin,0.654065,0.345935,0.9057,classifier_nltk,OK
+sent,Latin,0.522626,0.477374,0.9054,classifier_nltk,OK
+congress,Latin,0.703855,0.296145,0.9002,classifier_nltk,OK
+reaction,Latin,0.6387,0.3613,0.8978,classifier_nltk,OK
+primary,Latin,0.707492,0.292508,0.8976,classifier_nltk,OK
+letter,Latin,0.581699,0.418301,0.895,classifier_nltk,OK
+discussion,Latin,0.517327,0.482673,0.8904,classifier_nltk,OK
+ever,Latin,0.515133,0.484867,0.8873,classifier_nltk,OK
+student,Latin,0.736786,0.263214,0.8843,classifier_nltk,OK
+research,Latin,0.576316,0.423684,0.8823,classifier_nltk,OK
+city,Latin,0.348221,0.651779,0.8819,classifier_nltk,OK
+industrial,Latin,,,0.8803,classifier_nltk,MISSING (no historical)
+marriage,Latin,0.505387,0.494613,0.8782,classifier_nltk,OK
+communist,Latin,,,0.8775,classifier_nltk,MISSING (no historical)
+average,Latin,0.637031,0.362969,0.8751,classifier_nltk,OK
+particular,Latin,0.524706,0.475294,0.8737,classifier_nltk,OK
+additional,Latin,0.639961,0.360039,0.8711,classifier_nltk,OK
+four,Latin,0.54432,0.45568,0.8707,classifier_nltk,OK
+director,Latin,0.843815,0.156185,0.8705,classifier_nltk,OK
+concerned,Latin,0.54488,0.45512,0.8704,classifier_nltk,OK
+course,Latin,0.597744,0.402256,0.8676,classifier_nltk,OK
+certainly,Latin,0.658745,0.341255,0.8651,classifier_nltk,OK
+latter,Latin,0.587124,0.412876,0.8619,classifier_nltk,OK
+council,Latin,0.670819,0.329181,0.8605,classifier_nltk,OK
+prepared,Latin,0.568465,0.431535,0.8581,classifier_nltk,OK
+continued,Latin,0.604189,0.395811,0.8571,classifier_nltk,OK
+obviously,Latin,0.651129,0.348871,0.8521,classifier_nltk,OK
+provided,Latin,0.662789,0.337211,0.8435,classifier_nltk,OK
+returned,Latin,0.532197,0.467803,0.8423,classifier_nltk,OK
+personal,Latin,0.52918,0.47082,0.8387,classifier_nltk,OK
+equipment,Latin,0.794063,0.205937,0.834,classifier_nltk,OK
+agreement,Latin,0.611938,0.388062,0.8332,classifier_nltk,OK
+spent,Latin,0.390502,0.609498,0.8309,classifier_nltk,OK
+various,Latin,0.425926,0.574074,0.8299,classifier_nltk,OK
+plane,Latin,0.829875,0.170125,0.8299,classifier_nltk,OK
+association,Latin,0.768063,0.231937,0.828,classifier_nltk,OK
+picture,Latin,0.565497,0.434503,0.8271,classifier_nltk,OK
+effects,Latin,0.567211,0.432789,0.8242,classifier_nltk,OK
+blue,Latin,0.315175,0.684825,0.822,classifier_nltk,OK
+included,Latin,0.65393,0.34607,0.8159,classifier_nltk,OK
+reason,Latin,0.641168,0.358832,0.8152,classifier_nltk,OK
+dinner,Latin,0.417681,0.582319,0.811,classifier_nltk,OK
+every,Latin,0.428533,0.571467,0.8109,classifier_nltk,OK
+cent,Latin,0.50794,0.49206,0.8101,classifier_nltk,OK
+determined,Latin,0.73147,0.26853,0.8086,classifier_nltk,OK
+income,Latin,0.545501,0.454499,0.8075,classifier_nltk,OK
+decision,Latin,0.634903,0.365097,0.8063,classifier_nltk,OK
+decided,Latin,0.580501,0.419499,0.8027,classifier_nltk,OK
+particularly,Latin,0.72349,0.27651,0.8003,classifier_nltk,OK
+algebra,Other,,,0.836,curated_seed,MISSING (no historical)
+tsunami,Other,,,0.8088,curated_seed,MISSING (no historical)
+algorithm,Other,,,0.7633,curated_seed,MISSING (no historical)
+coffee,Other,0.538487,0.461513,0.5219,curated_seed,OK
+sugar,Other,0.585444,0.414556,0.4876,curated_seed,OK
+magazine,Other,0.790692,0.209308,0.388,curated_seed,OK
+kayo,Other,,,0.9799,classifier_nltk,MISSING (no historical) (no modern)
+jazz,Other,,,0.9692,classifier_nltk,MISSING (no historical)
+kazoo,Other,,,0.9497,classifier_nltk,MISSING (no historical) (no modern)
+hurrah,Other,,,0.9496,classifier_nltk,MISSING (no modern)
+kolkhoz,Other,,,0.947,classifier_nltk,MISSING (no historical) (no modern)
+kamikaze,Other,,,0.9425,classifier_nltk,MISSING (no historical) (no modern)
+fuji,Other,,,0.9411,classifier_nltk,MISSING (no historical)
+kivu,Other,,,0.9404,classifier_nltk,MISSING (no historical) (no modern)
+jerez,Other,,,0.9279,classifier_nltk,MISSING (no historical)
+unabashed,Other,,,0.9248,classifier_nltk,MISSING (no historical) (no modern)
+hazel,Other,0.54523,0.45477,0.9196,classifier_nltk,OK
+kali,Other,,,0.9106,classifier_nltk,MISSING (no historical) (no modern)
+carabao,Other,,,0.909,classifier_nltk,MISSING (no historical) (no modern)
+matsu,Other,,,0.9042,classifier_nltk,MISSING (no historical) (no modern)
+rabbi,Other,,,0.9032,classifier_nltk,MISSING (no historical)
+mazurka,Other,,,0.901,classifier_nltk,MISSING (no historical) (no modern)
+caramel,Other,,,0.9006,classifier_nltk,MISSING (no historical) (no modern)
+jazzy,Other,,,0.8977,classifier_nltk,MISSING (no historical) (no modern)
+muezzin,Other,,,0.8922,classifier_nltk,MISSING (no historical) (no modern)
+tuba,Other,,,0.8898,classifier_nltk,MISSING (no historical) (no modern)
+alibi,Other,,,0.8886,classifier_nltk,MISSING (no historical)
+buzz,Other,0.695885,0.304115,0.8834,classifier_nltk,OK
+turban,Other,,,0.8829,classifier_nltk,MISSING (no modern)
+fuzz,Other,,,0.8804,classifier_nltk,MISSING (no historical) (no modern)
+onrush,Other,,,0.8703,classifier_nltk,MISSING (no historical) (no modern)
+yeah,Other,,,0.8687,classifier_nltk,MISSING (no historical) (no modern)
+sabina,Other,,,0.8676,classifier_nltk,MISSING (no historical)
+shih,Other,,,0.8614,classifier_nltk,MISSING (no historical) (no modern)
+sofa,Other,,,0.8578,classifier_nltk,MISSING (no modern)
+kosher,Other,,,0.8572,classifier_nltk,MISSING (no historical)
+turbofan,Other,,,0.857,classifier_nltk,MISSING (no historical)
+miro,Other,,,0.8569,classifier_nltk,MISSING (no historical) (no modern)
+haze,Other,0.574468,0.425532,0.852,classifier_nltk,OK
+hafiz,Other,,,0.8511,classifier_nltk,MISSING (no historical) (no modern)
+hamlet,Other,0.631922,0.368078,0.8507,classifier_nltk,OK
+dashed,Other,,,0.8466,classifier_nltk,MISSING (no modern)
+assai,Other,,,0.8441,classifier_nltk,MISSING (no historical) (no modern)
+shaved,Other,0.588727,0.411273,0.8438,classifier_nltk,OK
+alkali,Other,,,0.8413,classifier_nltk,MISSING (no historical)
+mezzo,Other,,,0.8335,classifier_nltk,MISSING (no historical) (no modern)
+onrushing,Other,,,0.8289,classifier_nltk,MISSING (no historical) (no modern)
+ashen,Other,,,0.8271,classifier_nltk,MISSING (no historical) (no modern)
+keddah,Other,,,0.8246,classifier_nltk,MISSING (no historical) (no modern)
+farina,Other,,,0.8239,classifier_nltk,MISSING (no historical) (no modern)
+jake,Other,,,0.8227,classifier_nltk,MISSING (no historical)
+keno,Other,,,0.8222,classifier_nltk,MISSING (no historical) (no modern)
+hazy,Other,,,0.8212,classifier_nltk,MISSING (no modern)
+urban,Other,,,0.8203,classifier_nltk,MISSING (no historical)
+mackintosh,Other,,,0.8201,classifier_nltk,MISSING (no historical) (no modern)
+marimba,Other,,,0.8141,classifier_nltk,MISSING (no historical) (no modern)
+toto,Other,,,0.8113,classifier_nltk,MISSING (no historical) (no modern)
+alamo,Other,,,0.8078,classifier_nltk,MISSING (no historical) (no modern)
+tariff,Other,,,0.8065,classifier_nltk,MISSING (no historical)
+kazi,Other,,,0.9758,dataset_etymwn,MISSING (no historical) (no modern)
+baku,Other,,,0.974,dataset_etymwn,MISSING (no historical)
+zanj,Other,,,0.9562,dataset_etymwn,MISSING (no historical) (no modern)
+kush,Other,,,0.9413,dataset_etymwn,MISSING (no historical)
+tazi,Other,,,0.9354,dataset_etymwn,MISSING (no historical) (no modern)
+irori,Other,,,0.9175,dataset_etymwn,MISSING (no historical) (no modern)
+soyuz,Other,,,0.8998,dataset_etymwn,MISSING (no historical)
+oka,Other,,,0.8976,dataset_etymwn,MISSING (no historical) (no modern)
+qafiz,Other,,,0.8944,dataset_etymwn,MISSING (no historical) (no modern)
+ōsaka,Other,,,0.8846,dataset_etymwn,MISSING (no historical) (no modern)
+abib,Other,,,0.8791,dataset_etymwn,MISSING (no historical) (no modern)
+inrō,Other,,,0.876,dataset_etymwn,MISSING (no historical) (no modern)
+yarak,Other,,,0.876,dataset_etymwn,MISSING (no historical) (no modern)
+jeon,Other,,,0.8572,dataset_etymwn,MISSING (no historical) (no modern)
+abkar,Other,,,0.8461,dataset_etymwn,MISSING (no historical) (no modern)
+khan,Other,,,0.8327,dataset_etymwn,MISSING (no historical)
+gosu,Other,,,0.8299,dataset_etymwn,MISSING (no historical) (no modern)
+iman,Other,,,0.8295,dataset_etymwn,MISSING (no historical) (no modern)
+kara,Other,,,0.8287,dataset_etymwn,MISSING (no historical)
+posho,Other,,,0.825,dataset_etymwn,MISSING (no historical) (no modern)
+pegah,Other,,,0.8142,dataset_etymwn,MISSING (no historical) (no modern)
+cacik,Other,,,0.8071,dataset_etymwn,MISSING (no historical) (no modern)
+jared,Other,,,0.8071,dataset_etymwn,MISSING (no historical)
+bentō,Other,,,0.8033,dataset_etymwn,MISSING (no historical) (no modern)
+akçe,Other,,,0.7976,dataset_etymwn,MISSING (no historical) (no modern)
+emir,Other,,,0.7866,dataset_etymwn,MISSING (no historical)
+eruv,Other,,,0.7816,dataset_etymwn,MISSING (no historical) (no modern)
+laban,Other,,,0.7676,dataset_etymwn,MISSING (no historical) (no modern)
+deneb,Other,,,0.7616,dataset_etymwn,MISSING (no historical) (no modern)
+urdu,Other,,,0.7567,dataset_etymwn,MISSING (no historical)
+turk,Other,0.576845,0.423155,0.7498,dataset_etymwn,OK
+bento,Other,,,0.743,dataset_etymwn,MISSING (no historical) (no modern)
+damma,Other,,,0.7329,dataset_etymwn,MISSING (no historical) (no modern)
+adar,Other,,,0.7301,dataset_etymwn,MISSING (no historical) (no modern)
+vali,Other,,,0.7235,dataset_etymwn,MISSING (no historical) (no modern)
+coir,Other,,,0.7084,dataset_etymwn,MISSING (no historical) (no modern)
+ukha,Other,,,0.6995,dataset_etymwn,MISSING (no historical) (no modern)
+reis,Other,0.764462,0.235538,0.6987,dataset_etymwn,OK
+anwar,Other,,,0.6884,dataset_etymwn,MISSING (no historical)
+skunk,Other,,,0.6846,dataset_etymwn,MISSING (no historical)
+dror,Other,,,0.5737,dataset_etymwn,MISSING (no historical) (no modern)
+heart,PIE,0.234171,0.765829,0.9534,curated_seed,OK
+father,PIE,0.110916,0.889084,0.9354,curated_seed,OK
+three,PIE,0.492817,0.507183,0.9332,curated_seed,OK
+mother,PIE,0.097227,0.902773,0.928,curated_seed,OK
+new,PIE,0.571625,0.428375,0.856,curated_seed,OK
+water,PIE,0.16426,0.83574,0.8258,curated_seed,OK
+eye,PIE,0.219847,0.780153,0.81,curated_seed,OK
+night,PIE,0.155061,0.844939,0.8044,curated_seed,OK
+star,PIE,0.20375,0.79625,0.7429,curated_seed,OK
+name,PIE,0.227493,0.772507,0.38,curated_seed,OK
+stateroom,PIE,,,0.9667,classifier_nltk,MISSING (no modern)
+fractional,PIE,,,0.9523,classifier_nltk,MISSING (no historical)
+bridegroom,PIE,,,0.947,classifier_nltk,MISSING (no modern)
+sternal,PIE,,,0.9243,classifier_nltk,MISSING (no historical) (no modern)
+vernal,PIE,,,0.9219,classifier_nltk,MISSING (no historical)
+acquired,PIE,0.793127,0.206873,0.9179,classifier_nltk,OK
+fragile,PIE,0.832153,0.167847,0.916,classifier_nltk,OK
+threaten,PIE,0.494037,0.505963,0.8999,classifier_nltk,OK
+nonverbal,PIE,,,0.8945,classifier_nltk,MISSING (no historical) (no modern)
+ruined,PIE,0.700433,0.299567,0.8852,classifier_nltk,OK
+veined,PIE,,,0.8723,classifier_nltk,MISSING (no historical) (no modern)
+eternal,PIE,0.640101,0.359899,0.8556,classifier_nltk,OK
+genuinely,PIE,,,0.8555,classifier_nltk,MISSING (no historical)
+threat,PIE,0.644289,0.355711,0.8448,classifier_nltk,OK
+mediumship,PIE,,,0.8428,classifier_nltk,MISSING (no historical) (no modern)
+napkin,PIE,,,0.8378,classifier_nltk,MISSING (no modern)
+hundredth,PIE,,,0.8373,classifier_nltk,MISSING (no modern)
+thousandth,PIE,,,0.8359,classifier_nltk,MISSING (no modern)
+granddaughter,PIE,0.569727,0.430273,0.8311,classifier_nltk,OK
+visitor,PIE,0.766721,0.233279,0.8259,classifier_nltk,OK
+freighter,PIE,,,0.8177,classifier_nltk,MISSING (no historical)
+kindred,PIE,0.772255,0.227745,0.8057,classifier_nltk,OK
+stated,PIE,0.589987,0.410013,0.8035,classifier_nltk,OK
+threadbare,PIE,,,0.8023,classifier_nltk,MISSING (no modern)
+meat,PIE,0.444451,0.555549,0.8011,classifier_nltk,OK
+static,PIE,,,0.968,dataset_etymwn,MISSING (no historical)
+equine,PIE,,,0.9624,dataset_etymwn,MISSING (no historical) (no modern)
+verbal,PIE,0.766213,0.233787,0.9617,dataset_etymwn,OK
+genial,PIE,,,0.9608,dataset_etymwn,MISSING (no modern)
+vein,PIE,0.649025,0.350975,0.9605,dataset_etymwn,OK
+visit,PIE,0.453018,0.546982,0.9605,dataset_etymwn,OK
+dual,PIE,,,0.9596,dataset_etymwn,MISSING (no historical)
+verb,PIE,0.888807,0.111193,0.9596,dataset_etymwn,OK
+noun,PIE,,,0.9528,dataset_etymwn,MISSING (no historical)
+frail,PIE,,,0.9524,dataset_etymwn,MISSING (no modern)
+filial,PIE,,,0.9519,dataset_etymwn,MISSING (no modern)
+event,PIE,0.491793,0.508207,0.9516,dataset_etymwn,OK
+duke,PIE,0.525341,0.474659,0.9505,dataset_etymwn,OK
+audit,PIE,,,0.9499,dataset_etymwn,MISSING (no historical)
+vista,PIE,0.526528,0.473472,0.9481,dataset_etymwn,OK
+nine,PIE,0.654704,0.345296,0.9478,dataset_etymwn,OK
+nasal,PIE,,,0.947,dataset_etymwn,MISSING (no historical)
+state,PIE,0.566869,0.433131,0.9468,dataset_etymwn,OK
+genus,PIE,0.635619,0.364381,0.9455,dataset_etymwn,OK
+ursine,PIE,,,0.9454,dataset_etymwn,MISSING (no historical) (no modern)
+ruin,PIE,0.589698,0.410302,0.9437,dataset_etymwn,OK
+yoke,PIE,0.796663,0.203337,0.9434,dataset_etymwn,OK
+elbow,PIE,0.430277,0.569723,0.9425,dataset_etymwn,OK
+natal,PIE,,,0.9424,dataset_etymwn,MISSING (no historical)
+spoke,PIE,0.594925,0.405075,0.9415,dataset_etymwn,OK
+hub,PIE,,,0.9389,dataset_etymwn,MISSING (no historical)
+noon,PIE,0.50219,0.49781,0.9388,dataset_etymwn,OK
+ewe,PIE,,,0.9374,dataset_etymwn,MISSING (no historical) (no modern)
+agile,PIE,0.851536,0.148464,0.9374,dataset_etymwn,OK
+novel,PIE,0.586001,0.413999,0.9372,dataset_etymwn,OK
+five,PIE,0.517902,0.482098,0.936,dataset_etymwn,OK
+dusk,PIE,0.530731,0.469269,0.9349,dataset_etymwn,OK
+two,PIE,0.425191,0.574809,0.9346,dataset_etymwn,OK
+widow,PIE,0.458221,0.541779,0.9346,dataset_etymwn,OK
+ten,PIE,0.625481,0.374519,0.933,dataset_etymwn,OK
+triple,PIE,,,0.9327,dataset_etymwn,MISSING (no historical)
+clan,PIE,,,0.9325,dataset_etymwn,MISSING (no historical)
+medium,PIE,0.67345,0.32655,0.9316,dataset_etymwn,OK
+one,PIE,0.131513,0.868487,0.9309,dataset_etymwn,OK
+womb,PIE,,,0.9296,dataset_etymwn,MISSING (no historical)
+chin,PIE,0.527884,0.472116,0.9278,dataset_etymwn,OK
+orphan,PIE,0.509022,0.490978,0.9272,dataset_etymwn,OK
+hound,PIE,0.698798,0.301202,0.9241,dataset_etymwn,OK
+kin,PIE,0.581963,0.418037,0.9234,dataset_etymwn,OK
+gland,PIE,,,0.9234,dataset_etymwn,MISSING (no historical)
+nave,PIE,0.447489,0.552511,0.923,dataset_etymwn,OK
+groom,PIE,0.757106,0.242894,0.9193,dataset_etymwn,OK
+eight,PIE,0.616987,0.383013,0.9186,dataset_etymwn,OK
+bride,PIE,0.659969,0.340031,0.9177,dataset_etymwn,OK
+lip,PIE,0.576898,0.423102,0.917,dataset_etymwn,OK
+treat,PIE,0.656865,0.343135,0.917,dataset_etymwn,OK
+mare,PIE,0.607288,0.392712,0.9138,dataset_etymwn,OK
+mead,PIE,0.761675,0.238325,0.9074,dataset_etymwn,OK
+brow,PIE,,,0.8833,dataset_etymwn,MISSING (no modern)
+advent,PIE,0.834089,0.165911,0.8568,dataset_etymwn,OK
+midst,PIE,0.595129,0.404871,0.6117,dataset_etymwn,OK
+lunar,PIE,,,0.5597,dataset_etymwn,MISSING (no historical)
+oral,PIE,,,0.5435,dataset_etymwn,MISSING (no historical)
+manual,PIE,0.620134,0.379866,0.5243,dataset_etymwn,OK
+pedal,PIE,,,0.498,dataset_etymwn,MISSING (no historical)
+senile,PIE,,,0.4491,dataset_etymwn,MISSING (no historical) (no modern)
+axle,PIE,,,0.4164,dataset_etymwn,MISSING (no historical) (no modern)
+seven,PIE,0.576423,0.423577,0.4068,dataset_etymwn,OK
+nephew,PIE,0.498236,0.501764,0.3605,dataset_etymwn,OK
+dawn,PIE,0.543432,0.456568,0.3301,dataset_etymwn,OK
+pajama,Sanskrit,,,0.9289,curated_seed,MISSING (no historical) (no modern)
+nirvana,Sanskrit,,,0.9133,curated_seed,MISSING (no historical)
+bandit,Sanskrit,,,0.9101,curated_seed,MISSING (no historical) (no modern)
+yoga,Sanskrit,,,0.8551,curated_seed,MISSING (no historical)
+avatar,Sanskrit,,,0.833,curated_seed,MISSING (no historical)
+karma,Sanskrit,,,0.8231,curated_seed,MISSING (no historical)
+jungle,Sanskrit,,,0.7856,curated_seed,MISSING (no historical)
+shampoo,Sanskrit,,,0.6629,curated_seed,MISSING (no historical) (no modern)
+punch,Sanskrit,0.768123,0.231877,0.4968,curated_seed,OK
+guru,Sanskrit,,,0.425,curated_seed,MISSING (no historical)
+gingham,Sanskrit,,,0.9251,classifier_nltk,MISSING (no historical) (no modern)
+mana,Sanskrit,,,0.9246,classifier_nltk,MISSING (no historical) (no modern)
+pasha,Sanskrit,,,0.9103,classifier_nltk,MISSING (no historical)
+bani,Sanskrit,,,0.9005,classifier_nltk,MISSING (no historical)
+amra,Sanskrit,,,0.8916,classifier_nltk,MISSING (no historical) (no modern)
+banshee,Sanskrit,,,0.8799,classifier_nltk,MISSING (no historical)
+vita,Sanskrit,,,0.8731,classifier_nltk,MISSING (no historical)
+checkup,Sanskrit,,,0.8711,classifier_nltk,MISSING (no historical) (no modern)
+tango,Sanskrit,,,0.8691,classifier_nltk,MISSING (no historical)
+rotunda,Sanskrit,,,0.8631,classifier_nltk,MISSING (no historical) (no modern)
+frangipani,Sanskrit,,,0.8572,classifier_nltk,MISSING (no historical) (no modern)
+needham,Sanskrit,,,0.8558,classifier_nltk,MISSING (no historical) (no modern)
+laura,Sanskrit,0.738587,0.261413,0.8392,classifier_nltk,OK
+pickup,Sanskrit,,,0.8367,classifier_nltk,MISSING (no historical)
+panama,Sanskrit,,,0.8311,classifier_nltk,MISSING (no historical)
+ungallant,Sanskrit,,,0.8261,classifier_nltk,MISSING (no historical) (no modern)
+samba,Sanskrit,,,0.8233,classifier_nltk,MISSING (no historical)
+punk,Sanskrit,,,0.8227,classifier_nltk,MISSING (no historical)
+vanilla,Sanskrit,,,0.819,classifier_nltk,MISSING (no historical)
+paprika,Sanskrit,,,0.8119,classifier_nltk,MISSING (no historical) (no modern)
+gala,Sanskrit,,,0.8118,classifier_nltk,MISSING (no historical)
+banging,Sanskrit,,,0.8003,classifier_nltk,MISSING (no modern)
+dhoti,Sanskrit,,,0.9604,dataset_etymwn,MISSING (no historical) (no modern)
+dhaki,Sanskrit,,,0.9528,dataset_etymwn,MISSING (no historical) (no modern)
+yana,Sanskrit,,,0.9379,dataset_etymwn,MISSING (no historical) (no modern)
+akasa,Sanskrit,,,0.9301,dataset_etymwn,MISSING (no historical) (no modern)
+khud,Sanskrit,,,0.9274,dataset_etymwn,MISSING (no historical) (no modern)
+surya,Sanskrit,,,0.9212,dataset_etymwn,MISSING (no historical) (no modern)
+yajna,Sanskrit,,,0.9195,dataset_etymwn,MISSING (no historical) (no modern)
+mudra,Sanskrit,,,0.9119,dataset_etymwn,MISSING (no historical) (no modern)
+deva,Sanskrit,,,0.9038,dataset_etymwn,MISSING (no historical) (no modern)
+sadhu,Sanskrit,,,0.902,dataset_etymwn,MISSING (no historical) (no modern)
+bhatt,Sanskrit,,,0.8977,dataset_etymwn,MISSING (no historical) (no modern)
+dhobi,Sanskrit,,,0.895,dataset_etymwn,MISSING (no historical) (no modern)
+matra,Sanskrit,,,0.8862,dataset_etymwn,MISSING (no historical) (no modern)
+karna,Sanskrit,,,0.8779,dataset_etymwn,MISSING (no historical) (no modern)
+indra,Sanskrit,,,0.8697,dataset_etymwn,MISSING (no historical) (no modern)
+balti,Sanskrit,,,0.8671,dataset_etymwn,MISSING (no historical) (no modern)
+kavya,Sanskrit,,,0.8665,dataset_etymwn,MISSING (no historical) (no modern)
+pagri,Sanskrit,,,0.8607,dataset_etymwn,MISSING (no historical) (no modern)
+aryan,Sanskrit,,,0.8585,dataset_etymwn,MISSING (no historical)
+ushas,Sanskrit,,,0.856,dataset_etymwn,MISSING (no historical) (no modern)
+vasu,Sanskrit,,,0.8559,dataset_etymwn,MISSING (no historical) (no modern)
+check,Sanskrit,0.765792,0.234208,0.8511,dataset_etymwn,OK
+choli,Sanskrit,,,0.8437,dataset_etymwn,MISSING (no historical) (no modern)
+anna,Sanskrit,,,0.8386,dataset_etymwn,MISSING (no historical)
+thali,Sanskrit,,,0.8368,dataset_etymwn,MISSING (no historical) (no modern)
+asana,Sanskrit,,,0.8331,dataset_etymwn,MISSING (no historical) (no modern)
+taluk,Sanskrit,,,0.8315,dataset_etymwn,MISSING (no historical) (no modern)
+agni,Sanskrit,,,0.8301,dataset_etymwn,MISSING (no historical) (no modern)
+paddy,Sanskrit,,,0.8258,dataset_etymwn,MISSING (no historical)
+narc,Sanskrit,,,0.8233,dataset_etymwn,MISSING (no historical) (no modern)
+yoni,Sanskrit,,,0.8184,dataset_etymwn,MISSING (no historical) (no modern)
+sari,Sanskrit,,,0.8174,dataset_etymwn,MISSING (no historical) (no modern)
+nehra,Sanskrit,,,0.8149,dataset_etymwn,MISSING (no historical) (no modern)
+candy,Sanskrit,0.76109,0.23891,0.8146,dataset_etymwn,OK
+rama,Sanskrit,,,0.8083,dataset_etymwn,MISSING (no historical)
+devi,Sanskrit,,,0.805,dataset_etymwn,MISSING (no historical)
+nawab,Sanskrit,,,0.8022,dataset_etymwn,MISSING (no historical)
+krait,Sanskrit,,,0.8006,dataset_etymwn,MISSING (no historical) (no modern)
+mango,Sanskrit,,,0.7997,dataset_etymwn,MISSING (no historical)
+khaki,Sanskrit,,,0.7987,dataset_etymwn,MISSING (no historical) (no modern)
+kesa,Sanskrit,,,0.7977,dataset_etymwn,MISSING (no historical) (no modern)
+sowar,Sanskrit,,,0.7952,dataset_etymwn,MISSING (no historical) (no modern)
+pie,Sanskrit,0.61618,0.38382,0.7943,dataset_etymwn,OK
+tola,Sanskrit,,,0.7887,dataset_etymwn,MISSING (no historical) (no modern)
+zinc,Sanskrit,,,0.7865,dataset_etymwn,MISSING (no historical)
+hari,Sanskrit,,,0.7844,dataset_etymwn,MISSING (no historical)
+sikh,Sanskrit,,,0.7744,dataset_etymwn,MISSING (no historical)
+areca,Sanskrit,,,0.77,dataset_etymwn,MISSING (no historical) (no modern)
+beryl,Sanskrit,,,0.7688,dataset_etymwn,MISSING (no historical)
+magic,Sanskrit,0.663811,0.336189,0.7662,dataset_etymwn,OK
+pice,Sanskrit,,,0.7611,dataset_etymwn,MISSING (no historical) (no modern)
+soma,Sanskrit,,,0.7603,dataset_etymwn,MISSING (no historical) (no modern)
+solah,Sanskrit,,,0.7556,dataset_etymwn,MISSING (no historical) (no modern)
+silk,Sanskrit,0.621898,0.378102,0.755,dataset_etymwn,OK
+atman,Sanskrit,,,0.7545,dataset_etymwn,MISSING (no historical) (no modern)
+diwan,Sanskrit,,,0.7496,dataset_etymwn,MISSING (no historical) (no modern)
+chow,Sanskrit,,,0.7379,dataset_etymwn,MISSING (no historical)
+rook,Sanskrit,,,0.7331,dataset_etymwn,MISSING (no modern)
+loot,Sanskrit,,,0.7261,dataset_etymwn,MISSING (no historical)
+ustad,Sanskrit,,,0.7039,dataset_etymwn,MISSING (no historical) (no modern)
+zen,Sanskrit,,,0.6984,dataset_etymwn,MISSING (no historical)
+neem,Sanskrit,,,0.6924,dataset_etymwn,MISSING (no historical) (no modern)
+polo,Sanskrit,,,0.6909,dataset_etymwn,MISSING (no historical)
+yama,Sanskrit,,,0.6691,dataset_etymwn,MISSING (no historical) (no modern)
+suraj,Sanskrit,,,0.6574,dataset_etymwn,MISSING (no historical) (no modern)
+lime,Sanskrit,0.556425,0.443575,0.6383,dataset_etymwn,OK
+idli,Sanskrit,,,0.6153,dataset_etymwn,MISSING (no historical) (no modern)
+stupa,Sanskrit,,,0.3579,dataset_etymwn,MISSING (no historical)
