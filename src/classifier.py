@@ -92,12 +92,14 @@ def get_models() -> dict[str, object]:
             max_iter=1000,
             random_state=RANDOM_SEED,
             solver="lbfgs",
-            C=1.0,
+            C=10.0,
+            class_weight="balanced",
         ),
         "LinearSVC": CalibratedClassifierCV(
             estimator=LinearSVC(
                 max_iter=2000,
                 random_state=RANDOM_SEED,
+                class_weight="balanced",
             ),
             cv=2,
         ),

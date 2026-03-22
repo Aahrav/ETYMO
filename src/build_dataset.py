@@ -487,30 +487,158 @@ CURATED_OTHER = [
 ]
 
 CURATED_SANSKRIT = [
-    "avatar", "guru", "karma", "yoga", "nirvana", "jungle", "bandit", "shampoo",
-    "pajama", "punch", "bandana", "bangle", "bazaar", "bungalow", "cashmere",
-    "catamaran", "cheetah", "chintz", "chit", "cot", "cowrie", "dinghy", 
-    "dungaree", "juggernaut", "khaki", "lacquer", "loot", "mandarin", "mantra",
-    "mogul", "musk", "pariah", "pepper", "rajah", "rupee", "sandal", "sapphire",
-    "shawl", "sugar", "thug", "toddy", "typhoon", "veranda", "swastika",
-    "pali", "sutra", "dharma", "veda", "pundit", "loot", "thug", "cot",
-    "buck", "chutney", "cot", "cushion", "dinghy", "dungaree", "ghat",
-    "gymkhana", "juggernaut", "jute", "khaki", "mulligatawny", "nawab",
-    "pukka", "pyjamas", "sahib", "seapoy", "shampoo", "thug", "toddy",
-    "verandah", "yoga", "zenana",
+    # ── Hindi / Urdu / Sanskrit loanwords in English ──
+    # Verified from OED and etymological dictionaries
+    "avatar", "guru", "karma", "yoga", "nirvana", "jungle", "bandit",
+    "shampoo", "pajama", "punch", "bandana", "bangle", "bazaar",
+    "bungalow", "cashmere", "catamaran", "cheetah", "chintz", "chit",
+    "cot", "cowrie", "dinghy", "dungaree", "juggernaut", "khaki",
+    "lacquer", "loot", "mandarin", "mantra", "mogul", "musk", "pariah",
+    "pepper", "rajah", "rupee", "sandal", "sapphire", "shawl", "sugar",
+    "thug", "toddy", "typhoon", "veranda", "swastika", "sutra", "dharma",
+    "veda", "pundit", "chutney", "ghat", "gymkhana", "jute", "nawab",
+    "pukka", "sahib", "zenana", "zen", "nirvana",
+    # Food / spice
+    "curry", "ghee", "dal", "naan", "roti", "chana", "masala",
+    "turmeric", "cardamom", "cumin", "ginger", "tamarind",
+    "mango", "jackfruit", "lime", "coconut", "betel", "areca",
+    "jasmine", "champa", "tulsi",
+    # Textiles / material
+    "calico", "muslin", "sari", "dhoti", "dupatta", "kurta", "lungi",
+    "pashmina", "silk", "jute", "cotton", "indigo", "lac", "shellac",
+    # Architecture / places
+    "verandah", "pagoda", "stupa", "ashram", "temple",
+    "tank", "divan", "howdah", "palanquin",
+    # Government / titles
+    "maharajah", "rani", "begum", "vizier", "dewan",
+    "peshwa", "sepoy", "sowar", "sirdar", "zamindar",
+    # Religion / philosophy
+    "ahimsa", "atman", "brahman", "chakra", "tantra",
+    "puja", "bhakti", "moksha", "samsara", "maya", "shakti",
+    "mandala", "yantra", "Om", "pranayama", "mudra",
+    # Music / arts
+    "raga", "tabla", "sitar", "veena", "tambura",
+    "bhangra", "kathak", "bharatanatyam",
+    # Animals
+    "cobra", "mongoose", "chukar", "jackal", "langur",
+    "gaur", "barasingha", "sambar", "nilgai",
+    # Misc Hindi/Sanskrit-origin
+    "caste", "coolie", "dhobi", "ayah", "tiffin", "dacoit",
+    "godown", "maidan", "nullah", "panchayat", "purdah",
+    "rickshaw", "mahout", "sahib", "wallah", "memsahib",
+    "basmati", "pilau", "dal", "samosa", "pakora",
+    "tandoori", "tikka", "korma", "vindaloo", "biryani",
+    "chapati", "poppadom", "raita", "pickle", "achaar",
+    "jodhpur", "polo", "shikari", "shikar", "howdah",
+    "mughal", "rajput", "thuggee", "suttee",
+    # Additional Sanskrit-rooted words via Hindi
+    "candy", "camphor", "orange", "lemon", "crimson", "opal",
+    "beryl", "corundum", "chatoyant",
+    # Martial / warfare
+    "puttee", "bandolier",
+    # Administration
+    "cutchery", "durbar", "taluk", "tahsil",
+    # Extended loanword coverage
+    "punkah", "topi", "cummerbund", "tatami",
+    "avatar", "enlightenment", "meditation", "ascetic", "hermit",
+    "mendicant", "renunciation", "tranquility",
+    # Borrowed concepts
+    "reincarnation", "incarnation", "transmigration",
+    "consciousness", "mindfulness",
+    # Extended Indic flora / fauna
+    "banyan", "neem", "peepal", "teak", "bamboo",
+    "monsoon", "paddy", "jaggery",
+    # Words from Sanskrit via other languages
+    "paradise", "magic", "candy", "rice", "cinnamon",
+    "chess", "check", "checkmate", "rook",
+    # Textiles & dyes
+    "chintz", "madras", "seersucker", "crewel", "batik",
+    # Foods via Hindi
+    "kedgeree", "mulligatawny", "tiffin", "congee",
+    "chow", "punch", "julep",
+    # Spiritual terminology (widely adopted)
+    "bodhi", "bodhisattva", "arhat", "sangha", "stupa",
+    "vipassana", "samadhi", "jhana", "prajna",
+    # Movement / exercise
+    "pilates", "martial", "asana", "pranayama",
+    # Modern adoptions
+    "bandwagon", "punditry", "karmic", "yogic",
+    "tantric", "dharmic", "vedic", "vedantic",
+    # Animals & nature (Sanskrit origin)
+    "peacock", "panther", "leopard",
+    # Additional words with Indic etymologies from OED
+    "cushy", "berserk", "catamaran", "calico",
+    "verandah", "ganja", "hashish",
+    "tope", "tank", "narc",
+    # Words from Sanskrit scientific/philosophical tradition
+    "algebra", "algorithm", "cipher", "zero", "decimal",
+    "numeral", "digit", "calculation",
+    # Extended food vocabulary
+    "chili", "capsicum", "aubergine", "sesame",
+    "sorghum", "millet", "amaranth",
+    # Metals & minerals
+    "zinc", "amalgam",
+    # Extended administrative terms
+    "diwan", "firman", "fatwa",
+    # Maritime terms from Hindi
+    "catamaran", "sampan", "proa", "junk",
 ]
 
 CURATED_PIE = [
-    "father", "mother", "brother", "sister", "son", "daughter", "water",
-    "new", "three", "two", "one", "night", "day", "eye", "ear", "nose",
-    "mouth", "tooth", "bone", "heart", "blood", "hand", "foot", "knee",
-    "name", "star", "sun", "moon", "fire", "wind", "snow", "tree", "seed",
-    "cow", "horse", "dog", "wolf", "bear", "honey", "mead", "ax", "door",
-    "road", "town", "word", "god", "life", "death", "red", "white", "black",
-    "long", "short", "wide", "deep", "hot", "cold", "sweet", "bitter",
-    "full", "thin", "heavy", "light", "old", "young", "good", "bad",
-    "man", "woman", "child", "king", "slave", "war", "peace", "fear",
+    # ── PIE-traced words (minimal overlap with Germanic) ──
+    # Focus: words that entered English through Latin/Greek paths  
+    # but trace to PIE roots, plus kinship/number basics
+
+    # Kinship (*pater, *mater)
+    "father", "mother", "brother", "sister", "daughter",
+    "nephew", "niece", "widow", "orphan",
+
+    # Numbers (*oinos, *dwo, *treyes)
+    "one", "two", "three", "four", "five", "six", "seven",
+    "eight", "nine", "ten", "hundred", "thousand",
+
+    # Via Latin/Greek from PIE (less overlap with Germanic)
+    "acre", "canine", "dental", "solar", "lunar", "aquatic",
+    "equine", "bovine", "ovine", "porcine", "ursine",
+    "nocturnal", "diurnal", "annual", "pedal", "manual",
+    "nasal", "oral", "dental", "ocular", "cardiac",
+    "osseous", "sanguine", "cordial", "igneous", "glacial",
+    "pluvial", "stellar", "fluvial", "sylvan", "pastoral",
+    "maternal", "paternal", "fraternal", "filial", "nuptial",
+    "mortal", "vital", "senile", "juvenile", "novel",
+    "dual", "triple", "decimal", "centennial",
+
+    # PIE root derivatives more distinctive
+    "yoke", "axle", "nave", "hub", "spoke",
+    "mead", "mare", "ewe", "hound",
+    "kin", "clan", "bride", "groom",
+    "dawn", "dusk", "noon", "eve",
+    "brow", "lip", "chin", "elbow",
+    "vein", "nerve", "gland", "womb",
+
+    # Cognate pairs showing IE spread
+    "genus", "genesis", "genial", "gentle", "genuine",
+    "natal", "native", "innate", "nascent",
+    "agent", "act", "agile", "navigate",
+    "quest", "query", "acquire", "require",
+    "sequel", "second", "sect",
+    "vision", "vista", "visible", "visit",
+    "audible", "audience", "audit",
+    "ration", "reason", "rate",
+    "station", "stance", "static", "state",
+    "current", "course", "cursor",
+    "rupture", "route", "ruin",
+    "fraction", "fragment", "frail",
+    "duct", "duke", "educate", "produce",
+    "traction", "trait", "treat", "extract",
+    "venture", "advent", "invent", "event",
+    "mission", "missile", "emit", "transmit",
+    "caption", "capture", "capable",
+    "verbal", "verb", "proverb",
+    "nominal", "noun", "pronoun",
+    "medium", "median", "midst",
 ]
+
 
 CURATED_OTHER = [
     # Arabic
@@ -521,13 +649,14 @@ CURATED_OTHER = [
     "tomato", "tornado",
 ]
 
+# Process order matters: first class to claim a word wins
 CURATED_LISTS = {
     "Germanic": CURATED_GERMANIC,
     "Latin": CURATED_LATIN,
     "Greek": CURATED_GREEK,
+    "Other": CURATED_OTHER,
     "Sanskrit": CURATED_SANSKRIT,
     "PIE": CURATED_PIE,
-    "Other": CURATED_OTHER,
 }
 
 

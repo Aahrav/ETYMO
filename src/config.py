@@ -156,7 +156,7 @@ CLASSIFIER_CONFIDENCE_THRESHOLD = 0.8
 # ──────────────────────────────────────────────
 # Classifier Parameters (Phase 2)
 # ──────────────────────────────────────────────
-NGRAM_RANGE = (2, 5)          # Character n-gram range
+NGRAM_RANGE = (1, 6)          # Character n-gram range (widened from (2,5))
 TRAIN_TEST_SPLIT = 0.8        # 80% train, 20% test
 CLASSIFIER_TYPE = "LogisticRegression"
 CV_FOLDS = 5                  # Stratified K-Fold cross-validation
