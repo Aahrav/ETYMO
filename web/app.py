@@ -197,12 +197,14 @@ def dashboard():
     most_stable = valid.tail(5).to_dict("records")
 
     origin_data = DATA["origin_summary"].to_dict("records")
+    all_drifts = valid[["word", "origin_class", "drift_score"]].to_dict("records")
 
     return render_template("dashboard.html",
         stats=DATA["stats"],
         top_drifted=top_drifted,
         most_stable=most_stable,
         origin_data=origin_data,
+        all_drifts=all_drifts,
         videos=VIDEO_MAP,
     )
 

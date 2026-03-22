@@ -194,25 +194,33 @@
 <script>
 // Populate dot distribution
 document.addEventListener('DOMContentLoaded', function() {
-    const driftData = {{ top_drifted | tojson }};
-    const stableData = {{ most_stable | tojson }};
+    const allWords = {{ all_drifts | tojson }};
+    const container = document.getElementById('dot-dist');
     
-    // Get ALL drift data from the page context
-    fetch('/api/search?q=')
-      .then(r => r.json())
-      .then(words => {
-        // We'll build dots from the table data we have
-        const allWords = [...stableData.reverse(), ...driftData];
-        // Sort by drift score
-        allWords.sort((a, b) => a.drift_score - b.drift_score);
+    container.style.position = 'relative';
+    container.style.height = '60px'; 
+    container.style.display = 'block';
+    
+    // Map scores to a fixed [0, 1] semantic scale for proper alignment
+    // This avoids dots jamming into the extreme edges of the container
+    const maxScore = Math.max(1.0, Math.max(...allWords.map(w => w.drift_score)));
+    const minScore = 0.0;
+    const range = maxScore - minScore;
+    
+    allWords.forEach(w => {
+        const dot = document.createElement('div');
+        dot.className = `drift-dot ${w.origin_class.toLowerCase()}`;
+        dot.setAttribute('data-tooltip', `${w.word}: ${w.drift_score.toFixed(3)}`);
         
-        const container = document.getElementById('dot-dist');
-        allWords.forEach(w => {
-            const dot = document.createElement('div');
-            dot.className = `drift-dot ${w.origin_class.toLowerCase()}`;
-            dot.setAttribute('data-tooltip', `${w.word}: ${w.drift_score.toFixed(3)}`);
-            container.appendChild(dot);
-        });
+        const pct = ((w.drift_score - minScore) / range) * 100;
+        dot.style.position = 'absolute';
+        dot.style.left = `calc(${pct}% - 5px)`;
+        
+        // Tighter jitter to prevent vertical bleed into the label text below
+        const jitter = (Math.random() - 0.5) * 32;
+        dot.style.top = `calc(50% + ${jitter}px - 5px)`;
+        
+        container.appendChild(dot);
     });
 });
 </script>

@@ -377,7 +377,13 @@ a:hover { color: var(--accent); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.grid-7-3 { display: grid; grid-template-columns: 7fr 3fr; gap: 20px; }
+/* align-items: start — avoid stretching the shorter column to match the tall one (removes empty space under chart/legend) */
+.grid-7-3 {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 20px;
+  align-items: start;
+}
 .grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 .mb-20 { margin-bottom: 20px; }
