@@ -915,11 +915,11 @@ select.form-input option {
    ══════════════════════════════════════════════════════════ */
 
 .dot-distribution {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 0;
-  flex-wrap: wrap;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 60px;      /* must match JS H constant */
+  overflow: hidden;  /* hard clip — no dots escape */
 }
 
 .drift-dot {

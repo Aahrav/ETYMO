@@ -30,10 +30,10 @@
     </div>
 </div>
 
-<!-- ── Main Grid: Chart + ANOVA ── -->
-<div class="grid-7-3 mb-32">
-    <!-- Origin Bar Chart -->
-    <div class="card animate-in">
+<!-- ── Main Grid: Chart + ANOVA + Distribution + Video ── -->
+<div style="display:grid; grid-template-columns:7fr 3fr; grid-template-rows:auto auto; gap:20px;" class="mb-32">
+    <!-- Row 1, Col 1: Bar Chart (stretches to match Kruskal-Wallis) -->
+    <div class="card animate-in" style="grid-column:1; grid-row:1;">
         <div class="card-header">
             <div>
                 <div class="card-title">Mean Semantic Drift</div>
@@ -57,9 +57,8 @@
             {% endfor %}
         </div>
     </div>
-
-    <!-- ANOVA Results Card -->
-    <div class="result-card animate-in">
+    <!-- Row 1, Col 2: Kruskal-Wallis -->
+    <div class="result-card animate-in" style="grid-column:2; grid-row:1;">
         <div class="result-badge">Significance Test</div>
         <div class="result-title">Kruskal-Wallis</div>
         <div class="result-desc">
@@ -81,26 +80,26 @@
             ✓ &nbsp;Pairwise: PIE vs All Others p < 0.001
         </div>
     </div>
-</div>
-
-<!-- ── Dot Distribution + Video ── -->
-<div class="grid-7-3 mb-32">
-    <div class="card animate-in">
+    <!-- Row 2, Col 1: Dot Distribution -->
+    <div class="card animate-in" style="grid-column:1; grid-row:2; display:flex; flex-direction:column;">
         <div class="card-header">
             <div>
                 <div class="card-title">Distribution of Tracked Words</div>
                 <div class="card-meta">Individual word drift scores across 150 samples</div>
             </div>
         </div>
-        <div class="dot-distribution" id="dot-dist">
-            {% for w in top_drifted[:0] %}{% endfor %}
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;">
-            <span>Low Drift (Stable)</span>
-            <span>High Drift (Dynamic)</span>
+        <div style="margin: auto 0;">
+            <div class="dot-distribution" id="dot-dist">
+                {% for w in top_drifted[:0] %}{% endfor %}
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0 0;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;">
+                <span>Low Drift (Stable)</span>
+                <span>High Drift (Dynamic)</span>
+            </div>
         </div>
     </div>
-    <div class="video-card animate-in">
+    <!-- Row 2, Col 2: Video -->
+    <div class="video-card animate-in" style="grid-column:2; grid-row:2;">
         <video controls preload="metadata" poster="">
             <source src="/videos/{{ videos.origin_bars }}" type="video/mp4">
         </video>
@@ -192,34 +191,38 @@
 </div>
 
 <script>
-// Populate dot distribution
 document.addEventListener('DOMContentLoaded', function() {
     const allWords = {{ all_drifts | tojson }};
     const container = document.getElementById('dot-dist');
-    
-    container.style.position = 'relative';
-    container.style.height = '60px'; 
-    container.style.display = 'block';
-    
-    // Map scores to a fixed [0, 1] semantic scale for proper alignment
-    // This avoids dots jamming into the extreme edges of the container
-    const maxScore = Math.max(1.0, Math.max(...allWords.map(w => w.drift_score)));
+
+    const DOT    = 10;   // dot diameter px
+    const H      = 60;   // container height px — must match CSS
+    const PAD    = 6;    // left/right padding px
+    const BAND   = 20;   // max ± jitter from centre (keeps all dots inside H)
+
     const minScore = 0.0;
-    const range = maxScore - minScore;
-    
-    allWords.forEach(w => {
+    const maxScore = Math.max(1.0, ...allWords.map(w => w.drift_score));
+    const range    = maxScore - minScore;
+
+    const sorted = [...allWords].sort((a, b) => a.drift_score - b.drift_score);
+
+    sorted.forEach((w, i) => {
         const dot = document.createElement('div');
         dot.className = `drift-dot ${w.origin_class.toLowerCase()}`;
         dot.setAttribute('data-tooltip', `${w.word}: ${w.drift_score.toFixed(3)}`);
-        
-        const pct = ((w.drift_score - minScore) / range) * 100;
-        dot.style.position = 'absolute';
-        dot.style.left = `calc(${pct}% - 5px)`;
-        
-        // Tighter jitter to prevent vertical bleed into the label text below
-        const jitter = (Math.random() - 0.5) * 32;
-        dot.style.top = `calc(50% + ${jitter}px - 5px)`;
-        
+
+        const pct    = ((w.drift_score - minScore) / range) * 100;
+        const seed   = (i * 2654435761) >>> 0;
+        const jitter = ((seed % 1000) / 1000 - 0.5) * 2 * BAND;
+        // clamp so dot never exits the container
+        const top    = Math.min(H - DOT, Math.max(0, H / 2 + jitter - DOT / 2));
+
+        dot.style.cssText = `
+            position:absolute;
+            left:calc(${PAD}px + (100% - ${PAD*2}px) * ${pct/100} - ${DOT/2}px);
+            top:${top}px;
+            z-index:${i};
+        `;
         container.appendChild(dot);
     });
 });
