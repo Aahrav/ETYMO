@@ -561,14 +561,14 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: laying, put, lay, placed, lying
     2000s neighbors: lay, laying, groundwork, lays, put
-    Shared neighbors: laying, lay, put
+    Shared neighbors: put, lay, laying
 
 ──────────────────────────────────────────────────────────────────────
   "running" (Germanic)  │  drift = 0.6906
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: rushing, ran, run, coming, bouncing
     2000s neighbors: run, ran, runs, overhead, operating
-    Shared neighbors: ran, run
+    Shared neighbors: run, ran
 
 ──────────────────────────────────────────────────────────────────────
   "philosopher" (Greek)  │  drift = 0.6897
@@ -680,7 +680,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: led, leads, running, stepping, narrow
     2000s neighbors: led, leads, major, contributing, prominent
-    Shared neighbors: leads, led
+    Shared neighbors: led, leads
 
 ──────────────────────────────────────────────────────────────────────
   "psychological" (Greek)  │  drift = 0.6654
@@ -750,7 +750,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: indeed, perhaps, suppose, probably, yes
     2000s neighbors: indeed, probably, nothing, always, seems
-    Shared neighbors: indeed, probably
+    Shared neighbors: probably, indeed
 
 ──────────────────────────────────────────────────────────────────────
   "treat" (PIE)  │  drift = 0.6569
@@ -778,7 +778,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: eight, ten, twelve, eleven, five
     2000s neighbors: eight, five, six, seven, four
-    Shared neighbors: five, eight
+    Shared neighbors: eight, five
 
 ──────────────────────────────────────────────────────────────────────
   "officer" (Latin)  │  drift = 0.6541
@@ -1030,7 +1030,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: five, twenty, nine, twelve, eight
     2000s neighbors: five, eight, four, seven, six
-    Shared neighbors: five, eight
+    Shared neighbors: eight, five
 
 ──────────────────────────────────────────────────────────────────────
   "historic" (Greek)  │  drift = 0.6251
@@ -1086,7 +1086,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: nine, six, twelve, ten, five
     2000s neighbors: five, four, six, nine, seven
-    Shared neighbors: five, nine, six
+    Shared neighbors: nine, six, five
 
 ──────────────────────────────────────────────────────────────────────
   "pie" (Sanskrit)  │  drift = 0.6162
@@ -1149,7 +1149,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: chance, advantage, impossibility, opportunities, intention
     2000s neighbors: chance, advantage, opportunities, incentive, excuse
-    Shared neighbors: opportunities, advantage, chance
+    Shared neighbors: chance, advantage, opportunities
 
 ──────────────────────────────────────────────────────────────────────
   "importance" (Latin)  │  drift = 0.5989
@@ -1177,7 +1177,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: learnt, learn, read, naturalists, languages
     2000s neighbors: learn, taught, learnt, mastered, ridiculed
-    Shared neighbors: learnt, learn
+    Shared neighbors: learn, learnt
 
 ──────────────────────────────────────────────────────────────────────
   "fighting" (Germanic)  │  drift = 0.5961
@@ -1205,7 +1205,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: spoken, speaking, looked, speaks, speak
     2000s neighbors: speak, speaking, speaks, spoken, ababda
-    Shared neighbors: spoken, speak, speaking, speaks
+    Shared neighbors: speaks, speaking, speak, spoken
 
 ──────────────────────────────────────────────────────────────────────
   "interested" (Latin)  │  drift = 0.5943
@@ -1366,7 +1366,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: six, five, eight, twelve, ten
     2000s neighbors: eight, five, four, nine, six
-    Shared neighbors: five, six, eight
+    Shared neighbors: eight, six, five
 
 ──────────────────────────────────────────────────────────────────────
   "research" (Latin)  │  drift = 0.5763
@@ -1429,7 +1429,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: preparing, ready, obliged, prepare, arranged
     2000s neighbors: prepare, preparation, preparing, purifying, oxidized
-    Shared neighbors: preparing, prepare
+    Shared neighbors: prepare, preparing
 
 ──────────────────────────────────────────────────────────────────────
   "feed" (Germanic)  │  drift = 0.5680
@@ -1457,7 +1457,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: taking, takes, take, gave, taken
     2000s neighbors: taking, takes, gave, came, take
-    Shared neighbors: take, gave, takes, taking
+    Shared neighbors: takes, taking, take, gave
 
 ──────────────────────────────────────────────────────────────────────
   "picture" (Latin)  │  drift = 0.5655
@@ -1513,7 +1513,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: reading, write, written, shorthand, books
     2000s neighbors: written, write, nonfiction, fancher, script
-    Shared neighbors: write, written
+    Shared neighbors: written, write
 
 ──────────────────────────────────────────────────────────────────────
   "shot" (Germanic)  │  drift = 0.5532
@@ -1541,7 +1541,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: pacific, mediterranean, icebergs, gulf, ocean
     2000s neighbors: ocean, north, pacific, seaboard, bering
-    Shared neighbors: ocean, pacific
+    Shared neighbors: pacific, ocean
 
 ──────────────────────────────────────────────────────────────────────
   "direction" (Latin)  │  drift = 0.5495
@@ -1597,7 +1597,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: three, two, six, five, ten
     2000s neighbors: three, five, six, eight, two
-    Shared neighbors: three, two, six, five
+    Shared neighbors: two, three, six, five
 
 ──────────────────────────────────────────────────────────────────────
   "dawn" (PIE)  │  drift = 0.5434
@@ -1793,7 +1793,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: per, annum, milrays, francs, dollar
     2000s neighbors: per, percent, cents, totaled, annum
-    Shared neighbors: per, annum
+    Shared neighbors: annum, per
 
 ──────────────────────────────────────────────────────────────────────
   "marriage" (Latin)  │  drift = 0.5054
@@ -1856,7 +1856,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: four, two, six, five, ten
     2000s neighbors: four, two, five, six, eight
-    Shared neighbors: five, two, four, six
+    Shared neighbors: four, two, six, five
 
 ──────────────────────────────────────────────────────────────────────
   "event" (PIE)  │  drift = 0.4918
@@ -1933,7 +1933,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: comes, gets, takes, went, runs
     2000s neighbors: went, looks, going, comes, go
-    Shared neighbors: comes, went
+    Shared neighbors: went, comes
 
 ──────────────────────────────────────────────────────────────────────
   "forward" (Germanic)  │  drift = 0.4809
@@ -1961,7 +1961,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: coming, go, wanted, gone, ready
     2000s neighbors: go, coming, went, put, ripped
-    Shared neighbors: go, coming
+    Shared neighbors: coming, go
 
 ──────────────────────────────────────────────────────────────────────
   "felt" (Germanic)  │  drift = 0.4643
@@ -2003,7 +2003,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: felt, think, know, acknowledge, really
     2000s neighbors: anybody, ashamed, think, know, felt
-    Shared neighbors: think, felt, know
+    Shared neighbors: felt, think, know
 
 ──────────────────────────────────────────────────────────────────────
   "meat" (PIE)  │  drift = 0.4445
@@ -2066,14 +2066,14 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: three, four, six, couple, five
     2000s neighbors: three, four, five, six, eight
-    Shared neighbors: three, four, six, five
+    Shared neighbors: four, three, six, five
 
 ──────────────────────────────────────────────────────────────────────
   "brought" (Germanic)  │  drift = 0.4230
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: sent, bring, bringing, come, came
     2000s neighbors: bringing, put, came, turned, pushed
-    Shared neighbors: came, bringing
+    Shared neighbors: bringing, came
 
 ──────────────────────────────────────────────────────────────────────
   "clothes" (Greek)  │  drift = 0.4180
@@ -2108,14 +2108,14 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: spend, spending, lived, spends, vacation
     2000s neighbors: spend, stayed, spends, spending, traveled
-    Shared neighbors: spends, spending, spend
+    Shared neighbors: spends, spend, spending
 
 ──────────────────────────────────────────────────────────────────────
   "days" (Greek)  │  drift = 0.3790
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: weeks, months, hours, nights, years
     2000s neighbors: months, weeks, hours, years, month
-    Shared neighbors: years, hours, weeks, months
+    Shared neighbors: hours, years, weeks, months
 
 ──────────────────────────────────────────────────────────────────────
   "told" (Germanic)  │  drift = 0.3778
@@ -2150,7 +2150,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: black, yellow, purple, white, red
     2000s neighbors: black, white, red, purple, yellow
-    Shared neighbors: white, red, yellow, purple, black
+    Shared neighbors: black, red, white, yellow, purple
 
 ──────────────────────────────────────────────────────────────────────
   "sure" (Latin)  │  drift = 0.2448
@@ -2171,7 +2171,7 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: names, surname, veller, abelard, nicodemus
     2000s neighbors: names, surname, word, toponym, etymology
-    Shared neighbors: names, surname
+    Shared neighbors: surname, names
 
 ──────────────────────────────────────────────────────────────────────
   "whole" (Germanic)  │  drift = 0.2198
@@ -2234,18 +2234,18 @@
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: other, another, each, that, single
     2000s neighbors: another, single, two, each, three
-    Shared neighbors: single, another, each
+    Shared neighbors: another, each, single
 
 ──────────────────────────────────────────────────────────────────────
   "father" (PIE)  │  drift = 0.1109
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: mother, husband, wife, sister, brother
     2000s neighbors: mother, son, grandfather, brother, wife
-    Shared neighbors: wife, brother, mother
+    Shared neighbors: brother, wife, mother
 
 ──────────────────────────────────────────────────────────────────────
   "mother" (PIE)  │  drift = 0.0972
 ──────────────────────────────────────────────────────────────────────
     1800s neighbors: father, sister, husband, daughter, child
     2000s neighbors: father, wife, daughter, son, grandmother
-    Shared neighbors: daughter, father
+    Shared neighbors: father, daughter
