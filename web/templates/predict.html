@@ -33,7 +33,11 @@
                     {{ result.predicted }}
                 </span>
                 <div class="predict-confidence">
+                    {% if result.is_known %}
+                    Exact match (100% known)
+                    {% else %}
                     {{ "%.1f"|format(result.probabilities[result.predicted] * 100) }}% confidence
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -109,9 +113,13 @@
             </div>
             <div style="padding-top:8px;">
                 <p style="color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
-                    The classifier detected character patterns in 
+                    {% if result.is_known %}
+                    <strong style="color:var(--text-heading);font-style:italic;">"{{ result.word }}"</strong> is a known tracked word in our Etymological database, directly mapped to <strong style="color:var(--{{ result.predicted|lower }});">{{ result.predicted }}</strong>. The machine learning model was safely bypassed.
+                    {% else %}
+                    The ML model detected character patterns in 
                     <strong style="color:var(--text-heading);font-style:italic;">"{{ result.word }}"</strong> 
                     that are characteristic of <strong style="color:var(--{{ result.predicted|lower }});">{{ result.predicted }}</strong> origins.
+                    {% endif %}
                 </p>
                 <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
                     <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:8px;">Character N-grams (sample)</div>

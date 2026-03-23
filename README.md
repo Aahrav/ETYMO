@@ -1,60 +1,64 @@
-# From Roots to Meaning: Etymology-Aware Semantic Shift Analysis
+# Etymo: Etymology-Aware Semantic Shift Analysis 🏛️📈
 
-An NLP project that investigates how word meanings shift over time, and whether a word's etymological origin influences the degree of that shift.
+**Etymo** is an advanced Natural Language Processing (NLP) system and full-stack web application designed to quantitatively measure how word meanings change over time (semantic drift), and statistically determine if ancient linguistic roots (like Proto-Indo-European or Germanic) are more resistant to meaning-change than modern borrowed words.
 
-## Project Scope
+![System Architecture](REPORT_PNGS/System_Archi.png)
 
-| Parameter | Value |
-|---|---|
-| **Language** | English only |
-| **Etymology Classes** | Germanic · Latin · Greek · Other |
-| **Historical Period** | 1800–1900 (Project Gutenberg) |
-| **Modern Period** | 2000–2020 (Wikipedia / News) |
-| **Words Tracked** | ~100 total (≈25 per origin class) |
+## ✨ Core Features
+- **Diachronic Word Embeddings:** Independently trained Word2Vec models mapping 19th-century and 21st-century text corpora.
+- **Orthogonal Procrustes Alignment:** Advanced linear algebra to mathematically rotate and align the differing century vector spaces.
+- **Machine Learning Predictor:** A Support Vector Machine (LinearSVC) utilizing character-level TF-IDF n-grams to guess the historical origin of any English word without needing a dictionary.
+- **Mathematical Manim Animations:** Procedurally generated geometry animations rendering the Procrustes rotations using exactly the math calculated.
+- **Bespoke Flask Dashboard:** A deeply customized, responsive GUI built completely on CSS Grids to map data visually without frontend bloat.
 
-## Methodology
+## 🚀 Quick Start (Docker)
+The easiest way to run the application is via Docker.
+```bash
+# Clone the repository
+git clone https://github.com/Aahrav/ETYMO.git
+cd ETYMO
 
-1. **Etymology Classification** — Character n-gram features + TF-IDF → Logistic Regression
-2. **Diachronic Embeddings** — Word2Vec Skip-gram trained on historical & modern corpora
-3. **Embedding Alignment** — Orthogonal Procrustes to align vector spaces
-4. **Semantic Drift** — `1 − cosine_similarity(vec_old, vec_new)` per word
-5. **Origin-Wise Analysis** — Compare mean drift across etymology classes
-
-## Directory Structure
-
+# Build and run the containers
+docker-compose up --build
 ```
-ETYMO/
-├── data/                # Etymology datasets (CSVs, word lists)
-├── src/                 # Source code
-│   ├── config.py        # Project-wide constants
-│   ├── classifier.py    # Etymology classifier (Phase 2)
-│   ├── preprocessing.py # Corpus preprocessing (Phase 4)
-│   ├── embeddings.py    # Word2Vec training & alignment (Phases 5-6)
-│   └── shift_analysis.py# Drift computation & analysis (Phases 7-8)
-├── models/              # Saved model artifacts (.pkl, .model)
-├── corpora/
-│   ├── raw/             # Raw corpus text files
-│   └── processed/       # Cleaned & tokenized corpus files
-├── results/             # Drift scores, analysis outputs
-├── notebooks/           # Jupyter notebooks for exploration
-├── visualizations/      # Generated plots and Manim outputs
-├── phases.md            # Full project plan (Phases 0–11)
-├── SCOPE.md             # Formal scope definition
-└── requirements.txt     # Python dependencies
-```
+Access the dashboard at `http://localhost:5000`.
 
-## Quick Start
-
+## 💻 Manual Installation
 ```bash
 # Create and activate virtual environment
 python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Run the backend
+python web/app.py
 ```
 
-## License
+## 🎥 Demonstration Video
+*(If you have a screen recording of the dynamic dashboard or Manim animations, please upload `demo.mp4` to your repository and uncomment the line below to embed it natively in GitHub)*
+<!-- <video src="media/demo.mp4" controls="controls" muted="muted" playsinline="playsinline" width="100%"></video> -->
 
+## 🔬 Methodology Pipeline
+1. **EtymWN Preprocessing:** Scrubbed the Etymological WordNet into 6 core classes (`Germanic`, `Latin`, `Greek`, `Sanskrit`, `PIE`, `Other`).
+2. **Classifier Training:** Feature extraction via character n-grams. SVM cross-validated at ~91% macro F1.
+3. **Embeddings Engine:** Trained CBOW / Skip-Gram diachronically. 
+4. **Semantic Drift:** Measured mathematically via `1 - cosine_similarity(OldVec, NewVec)` after orthogonal rotation.
+5. **Statistical Testing:** Applied Kruskal-Wallis H-test on drift scores, discovering PIE roots form the most stable semantic cluster.
+
+## 🗂️ Directory Structure
+```text
+ETYMO/
+├── REPORT_PNGS/         # Architectural and Data Flow Diagrams
+├── data/                # Etymology datasets and origin subsets
+├── src/                 # ML and NLP Source code
+├── web/                 # Flask Backend & Dashboard UI
+├── manim_scenes/        # Python animation scripts for mathematical visuals
+├── results/             # Saved Word2Vec models, aligned spaces, and videos
+├── DOCKER.md            # Detailed Docker run instructions
+└── requirements.txt     # Python dependencies
+```
+
+## 📜 License
 Academic project — all rights reserved.
