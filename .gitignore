@@ -21,7 +21,7 @@ venv/
 .ipynb_checkpoints/
 
 # Models (large binaries)
-models/*.pkl
+# models/*.pkl  ← intentionally kept tracked so Render can load the classifier
 models/*.model
 
 # Large data files

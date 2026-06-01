@@ -427,7 +427,7 @@ def main():
     print("\n[Step 2] Applying ^word$ boundary anchors...")
     X_train_anchored = np.array([anchor(w) for w in X_train_raw])
     X_test_anchored = np.array([anchor(w) for w in X_test_raw])
-    print(f"  Example: '{X_train_raw[0]}' → '{X_train_anchored[0]}'")
+    print(f"  Example: '{X_train_raw[0]}' -> '{X_train_anchored[0]}'")
 
     # Step 3: Build vectorizer + Cross-validation (all 3 models)
     print("\n[Step 3] Fitting TF-IDF vectorizer on training data...")
