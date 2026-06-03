@@ -1,0 +1,14 @@
+name: Keep Render Service Alive
+
+on:
+  schedule:
+    # Runs every 50 minutes to prevent the 15-minute inactivity spin-down
+    - cron: '*/50 * * * *'
+  workflow_dispatch: # Allows you to trigger the ping manually from GitHub
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive request
+        run: curl -I https://etymo-3nnc.onrender.com/
