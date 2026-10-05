@@ -9,6 +9,7 @@ build/
 
 # Virtual environment
 venv/
+.venv/
 .env
 
 # IDE
@@ -24,11 +25,24 @@ venv/
 # models/*.pkl  ← intentionally kept tracked so Render can load the classifier
 models/*.model
 
-# Large data files
+# Large data & archive files
 data/raw/
 data/etymwn.tsv
 corpora/raw/
 corpora/processed/
+*.tar.bz2
+*.tar.gz
+*.db
+*.sqlite3
+
+# Manim media, renders, and text caches
+media/
+results/videos/texts/
+**/partial_movie_files/
+results/videos/videos/_tmp_*
+results/videos/videos/tmp_scene/
+results/videos/videos/**/_tmp_*
+results/videos/videos/comparisons/
 
 # OS
 Thumbs.db
