@@ -178,6 +178,13 @@ CONFUSION_MATRIX_PNG = RESULTS_DIR / "confusion_matrix.png"
 MISCLASSIFIED_CSV = RESULTS_DIR / "misclassified_words.csv"
 MODEL_COMPARISON_JSON = RESULTS_DIR / "model_comparison.json"
 
+# Deep Learning Classifier output paths (Phase 1)
+DL_CLASSIFIER_MODEL = MODELS_DIR / "etymology_bilstm.pt"
+DL_CHAR_VOCAB = MODELS_DIR / "char_vocab.json"
+DL_CLASSIFIER_REPORT = RESULTS_DIR / "dl_classifier_report.txt"
+DL_CONFUSION_MATRIX_PNG = RESULTS_DIR / "dl_confusion_matrix.png"
+DL_MODEL_METRICS_JSON = RESULTS_DIR / "dl_model_metrics.json"
+
 # ──────────────────────────────────────────────
 # Word Selection Parameters (Phase 3)
 # ──────────────────────────────────────────────
