@@ -311,6 +311,13 @@ W2V_MODEL_NEW = EMBEDDINGS_DIR / "w2v_new.model"
 W2V_ALIGNED_OLD = EMBEDDINGS_DIR / "w2v_old_aligned.npy"
 EMBEDDING_REPORT = RESULTS_DIR / "embedding_report.txt"
 
+# Deep Learning Embeddings Parameters & Paths (Phase 2)
+DL_CONTEXTUAL_EMBEDDINGS = EMBEDDINGS_DIR / "contextual_embeddings.h5"
+MINED_CONTEXTS_FILE = DATA_DIR / "mined_contexts.json.gz"
+DL_EMBEDDINGS_REPORT = RESULTS_DIR / "dl_embeddings_report.txt"
+MAX_CONTEXT_SENTENCES = 100
+TRANSFORMER_MODEL_NAME = "bert-base-uncased"
+
 # ──────────────────────────────────────────────
 # Alignment (Phase 6)
 # ──────────────────────────────────────────────

@@ -47,3 +47,6 @@ results/videos/videos/comparisons/
 # OS
 Thumbs.db
 .DS_Store
+
+data/mined_contexts.json.gz
+models/embeddings/contextual_embeddings.h5
