@@ -318,6 +318,12 @@ DL_EMBEDDINGS_REPORT = RESULTS_DIR / "dl_embeddings_report.txt"
 MAX_CONTEXT_SENTENCES = 100
 TRANSFORMER_MODEL_NAME = "bert-base-uncased"
 
+# Deep Learning Drift & Optimal Transport Paths (Phase 3)
+DL_DRIFT_SCORES_CSV = RESULTS_DIR / "dl_drift_scores.csv"
+DL_ORIGIN_DRIFT_SUMMARY = RESULTS_DIR / "dl_origin_drift_summary.csv"
+DL_DRIFT_REPORT = RESULTS_DIR / "dl_drift_report.txt"
+
+
 # ──────────────────────────────────────────────
 # Alignment (Phase 6)
 # ──────────────────────────────────────────────

@@ -1,0 +1,7 @@
+origin_class,n_words,mean_w2,median_w2,std_w2,mean_w1_cos,mean_centroid_drift,mean_delta_dispersion,pct_polysemy_expansion,pct_core_invariant,min_drift_word,min_w2,max_drift_word,max_w2
+Greek,73,0.8178,0.8239,0.0745,0.3371,0.1239,0.1017,63.0,23.3,metaphysics,0.6501,comes,0.9631
+Other,29,0.8285,0.8443,0.0988,0.3479,0.1704,0.094,20.7,37.9,rabbi,0.5722,buzz,1.0188
+PIE,89,0.8471,0.8396,0.0908,0.3628,0.146,0.0543,40.4,27.0,bridegroom,0.5948,veined,1.0813
+Latin,96,0.85,0.8475,0.0631,0.3632,0.1188,0.0586,46.9,17.7,marriage,0.7041,cell,1.0011
+Germanic,100,0.8642,0.8613,0.0613,0.3753,0.1094,0.0346,43.0,19.0,ship,0.7023,best,1.0631
+Sanskrit,24,0.8729,0.8717,0.0941,0.3852,0.1988,0.1028,50.0,29.2,gingham,0.6574,polo,1.038
