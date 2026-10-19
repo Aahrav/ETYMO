@@ -178,6 +178,13 @@ CONFUSION_MATRIX_PNG = RESULTS_DIR / "confusion_matrix.png"
 MISCLASSIFIED_CSV = RESULTS_DIR / "misclassified_words.csv"
 MODEL_COMPARISON_JSON = RESULTS_DIR / "model_comparison.json"
 
+# Deep Learning Classifier output paths (Phase 1)
+DL_CLASSIFIER_MODEL = MODELS_DIR / "etymology_bilstm.pt"
+DL_CHAR_VOCAB = MODELS_DIR / "char_vocab.json"
+DL_CLASSIFIER_REPORT = RESULTS_DIR / "dl_classifier_report.txt"
+DL_CONFUSION_MATRIX_PNG = RESULTS_DIR / "dl_confusion_matrix.png"
+DL_MODEL_METRICS_JSON = RESULTS_DIR / "dl_model_metrics.json"
+
 # ──────────────────────────────────────────────
 # Word Selection Parameters (Phase 3)
 # ──────────────────────────────────────────────
@@ -303,6 +310,23 @@ W2V_MODEL_OLD = EMBEDDINGS_DIR / "w2v_old.model"
 W2V_MODEL_NEW = EMBEDDINGS_DIR / "w2v_new.model"
 W2V_ALIGNED_OLD = EMBEDDINGS_DIR / "w2v_old_aligned.npy"
 EMBEDDING_REPORT = RESULTS_DIR / "embedding_report.txt"
+
+# Deep Learning Embeddings Parameters & Paths (Phase 2)
+DL_CONTEXTUAL_EMBEDDINGS = EMBEDDINGS_DIR / "contextual_embeddings.h5"
+MINED_CONTEXTS_FILE = DATA_DIR / "mined_contexts.json.gz"
+DL_EMBEDDINGS_REPORT = RESULTS_DIR / "dl_embeddings_report.txt"
+MAX_CONTEXT_SENTENCES = 100
+TRANSFORMER_MODEL_NAME = "bert-base-uncased"
+
+# Deep Learning Drift & Optimal Transport Paths (Phase 3)
+DL_DRIFT_SCORES_CSV = RESULTS_DIR / "dl_drift_scores.csv"
+DL_ORIGIN_DRIFT_SUMMARY = RESULTS_DIR / "dl_origin_drift_summary.csv"
+DL_DRIFT_REPORT = RESULTS_DIR / "dl_drift_report.txt"
+DL_STATISTICAL_TESTS_JSON = RESULTS_DIR / "dl_statistical_tests.json"
+DL_HYPOTHESIS_REPORT = RESULTS_DIR / "dl_hypothesis_testing_report.txt"
+DL_FIGURES_DIR = RESULTS_DIR / "figures"
+
+
 
 # ──────────────────────────────────────────────
 # Alignment (Phase 6)

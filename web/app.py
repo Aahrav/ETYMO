@@ -30,13 +30,18 @@ sys.path.insert(0, str(ROOT))
 import numpy as np
 import pandas as pd
 from gensim.models import Word2Vec
+import torch
 
 from src.config import (
     W2V_MODEL_OLD, W2V_MODEL_NEW, W2V_ALIGNED_OLD,
     RESULTS_DIR, ORIGIN_CLASSES, MODELS_DIR,
     SELECTED_WORDS_CSV,
+    DL_CLASSIFIER_MODEL, DL_CHAR_VOCAB, DL_DRIFT_SCORES_CSV,
+    DL_ORIGIN_DRIFT_SUMMARY, DL_STATISTICAL_TESTS_JSON,
 )
 from src.classifier import anchor
+from src.char_tokenizer import CharTokenizer
+from src.dl_classifier import CharBiLSTMAttention, predict_origin_dl
 
 # ── Flask App ──
 app = Flask(__name__,
@@ -117,7 +122,64 @@ def load_data():
     if nbr_path.exists():
         DATA["neighbor_text"] = nbr_path.read_text(encoding="utf-8")
 
-    print(f"  ✓ Data loaded: {DATA['stats']['total_words']} tracked words")
+    # ── Deep Learning Phase 3 & 4 Data Loading ──
+    print("    Loading Deep Learning drift & optimal transport data...")
+    if DL_DRIFT_SCORES_CSV.exists():
+        dl_df = pd.read_csv(DL_DRIFT_SCORES_CSV)
+        DATA["dl_drift_df"] = dl_df
+        DATA["dl_drift_map"] = {str(row["word"]).strip().lower(): row.to_dict() for _, row in dl_df.iterrows()}
+        print(f"    ✓ DL drift scores loaded: {len(dl_df)} tracked words")
+    else:
+        DATA["dl_drift_df"] = pd.DataFrame()
+        DATA["dl_drift_map"] = {}
+
+    if DL_ORIGIN_DRIFT_SUMMARY.exists():
+        DATA["dl_origin_summary"] = pd.read_csv(DL_ORIGIN_DRIFT_SUMMARY)
+        print("    ✓ DL origin summary loaded")
+    else:
+        DATA["dl_origin_summary"] = pd.DataFrame()
+
+    if DL_STATISTICAL_TESTS_JSON.exists():
+        try:
+            DATA["dl_statistical_tests"] = json.loads(DL_STATISTICAL_TESTS_JSON.read_text(encoding="utf-8"))
+            print("    ✓ DL statistical hypothesis tests loaded")
+        except Exception as e:
+            print("    Warning: could not parse DL statistical tests:", e)
+            DATA["dl_statistical_tests"] = {}
+    else:
+        DATA["dl_statistical_tests"] = {}
+
+    # Load DL Classifier (CharBiLSTMAttention)
+    try:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        DATA["dl_device"] = device
+        if DL_CHAR_VOCAB.exists() and DL_CLASSIFIER_MODEL.exists():
+            tokenizer = CharTokenizer.load(DL_CHAR_VOCAB)
+            checkpoint = torch.load(DL_CLASSIFIER_MODEL, map_location=device)
+            cfg = checkpoint.get("model_config", {})
+            dl_model = CharBiLSTMAttention(
+                vocab_size=cfg.get("vocab_size", len(tokenizer)),
+                embedding_dim=cfg.get("embedding_dim", 64),
+                hidden_dim=cfg.get("hidden_dim", 128),
+                num_layers=cfg.get("num_layers", 2),
+                num_classes=cfg.get("num_classes", len(ORIGIN_CLASSES)),
+                dropout=0.0,
+                padding_idx=cfg.get("padding_idx", CharTokenizer.PAD_IDX),
+            ).to(device)
+            dl_model.load_state_dict(checkpoint["model_state_dict"])
+            dl_model.eval()
+            DATA["dl_tokenizer"] = tokenizer
+            DATA["dl_model"] = dl_model
+            print(f"    ✓ DL CharBiLSTM classifier loaded on {device}")
+        else:
+            DATA["dl_tokenizer"] = None
+            DATA["dl_model"] = None
+    except Exception as e:
+        print("    Warning: could not load DL model:", e)
+        DATA["dl_tokenizer"] = None
+        DATA["dl_model"] = None
+
+    print(f"  ✓ Data loaded: {DATA['stats']['total_words']} classical words, {len(DATA.get('dl_drift_map', {}))} DL words")
 
 
 def cosine_sim(v1, v2):
@@ -190,6 +252,60 @@ def get_word_data(word):
         result["video_path"] = f"words/{word}.mp4"
     else:
         result["video_path"] = None
+
+    return result
+
+
+def get_dl_word_data(word: str) -> dict:
+    """Get Deep Learning Optimal Transport & Sense Dynamics data for a single word."""
+    word = word.lower().strip()
+    result = {"word": word, "found": False}
+    row_dict = DATA.get("dl_drift_map", {}).get(word)
+
+    if not row_dict:
+        return result
+
+    result["found"] = True
+    result["origin_class"] = row_dict.get("origin_class", "Unknown")
+    result["tier"] = row_dict.get("tier", "standard")
+    result["n_hist"] = int(row_dict.get("n_hist", 0))
+    result["n_mod"] = int(row_dict.get("n_mod", 0))
+    result["wasserstein_w2"] = round(float(row_dict.get("wasserstein_w2", 0.0)), 4)
+    result["wasserstein_w1_cos"] = round(float(row_dict.get("wasserstein_w1_cos", 0.0)), 4)
+    result["wasserstein_raw_w2"] = round(float(row_dict.get("wasserstein_raw_w2", 0.0)), 4)
+    result["centroid_cosine_drift"] = round(float(row_dict.get("centroid_cosine_drift", 0.0)), 4)
+    result["centroid_euclidean_drift"] = round(float(row_dict.get("centroid_euclidean_drift", 0.0)), 4)
+    result["k_hist"] = int(row_dict.get("k_hist", 1))
+    result["k_mod"] = int(row_dict.get("k_mod", 1))
+    result["delta_k"] = int(row_dict.get("delta_k", 0))
+    result["dispersion_hist"] = round(float(row_dict.get("dispersion_hist", 0.0)), 4)
+    result["dispersion_mod"] = round(float(row_dict.get("dispersion_mod", 0.0)), 4)
+    result["delta_dispersion"] = round(float(row_dict.get("delta_dispersion", 0.0)), 4)
+    result["shift_type"] = row_dict.get("shift_type", "Core Invariant")
+
+    # Qualitative stability tiering based on W2
+    w2 = result["wasserstein_w2"]
+    if w2 < 0.80:
+        result["stability_level"] = "Highly Invariant"
+        result["stability_badge"] = "badge-success"
+    elif w2 < 0.85:
+        result["stability_level"] = "Moderate Stability"
+        result["stability_badge"] = "badge-info"
+    elif w2 < 0.92:
+        result["stability_level"] = "Significant Semantic Transport"
+        result["stability_badge"] = "badge-warning"
+    else:
+        result["stability_level"] = "Major Diachronic Transformation"
+        result["stability_badge"] = "badge-danger"
+
+    # Compare with Classical score if present
+    classical_data = get_word_data(word)
+    if classical_data.get("found"):
+        result["classical_drift_score"] = classical_data["drift_score"]
+        result["classical_drift_level"] = classical_data["drift_level"]
+    else:
+        result["classical_drift_score"] = None
+        result["classical_drift_level"] = "Missing in Classical Corpora"
 
     return result
 
@@ -430,6 +546,137 @@ def api_classify(word):
         is_known = False
         
     return jsonify({"word": word, "predicted": predicted, "probabilities": result, "is_known": is_known})
+
+
+# ──────────────────────────────────────────────────────────────
+#  Deep Learning (DL) API Endpoints (Phase 4 — Task 4.1)
+# ──────────────────────────────────────────────────────────────
+@app.route("/api/dl/classify/<word>")
+def api_dl_classify(word):
+    """Deep Learning CharBiLSTMAttention classification with character-level attention weights."""
+    word = word.lower().strip()
+    if not word:
+        return jsonify({"error": "No word provided"}), 400
+
+    if DATA.get("dl_model") is None or DATA.get("dl_tokenizer") is None:
+        return jsonify({"error": "Deep Learning model not loaded"}), 503
+
+    try:
+        res = predict_origin_dl(
+            word,
+            model=DATA["dl_model"],
+            tokenizer=DATA["dl_tokenizer"],
+            device=DATA["dl_device"],
+        )
+        res["model"] = "CharBiLSTMAttention (Deep Learning)"
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/dl/word/<word>")
+def api_dl_word(word):
+    """Deep Learning Optimal Transport (W2) and Sense Dynamics data for a single word."""
+    return jsonify(get_dl_word_data(word))
+
+
+@app.route("/api/dl/words")
+def api_dl_words():
+    """Autocomplete search and list of available Deep Learning words."""
+    q = request.args.get("q", "").lower().strip()
+    all_dl_words = sorted(DATA.get("dl_drift_map", {}).keys())
+    if not q:
+        return jsonify(all_dl_words[:50])
+    matches = [w for w in all_dl_words if w.startswith(q)]
+    return jsonify(matches[:20])
+
+
+@app.route("/api/dl/summary")
+def api_dl_summary():
+    """Origin-level summary and statistical hypothesis test results."""
+    dl_df = DATA.get("dl_drift_df", pd.DataFrame())
+    origin_summary = DATA.get("dl_origin_summary", pd.DataFrame())
+    stats_data = DATA.get("dl_statistical_tests", {})
+
+    typology_dist = {}
+    if not dl_df.empty and "shift_type" in dl_df.columns:
+        counts = dl_df["shift_type"].value_counts()
+        total = len(dl_df)
+        for st, c in counts.items():
+            typology_dist[st] = {
+                "count": int(c),
+                "pct": round(float(c / total * 100), 1),
+            }
+
+    # Curated benchmark seeds
+    sample_seeds = ["father", "night", "stream", "cell", "mouse", "craft", "monitor", "atom", "avatar"]
+    seed_records = [get_dl_word_data(w) for w in sample_seeds if get_dl_word_data(w).get("found")]
+
+    return jsonify({
+        "total_words": len(dl_df),
+        "origin_summary": origin_summary.to_dict(orient="records") if not origin_summary.empty else [],
+        "typology_distribution": typology_dist,
+        "statistical_tests": stats_data,
+        "benchmark_seeds": seed_records,
+    })
+
+
+@app.route("/api/dl/compare/<word_a>/<word_b>")
+def api_dl_compare(word_a, word_b):
+    """Compare two words in the Deep Learning Optimal Transport space."""
+    data_a = get_dl_word_data(word_a)
+    data_b = get_dl_word_data(word_b)
+
+    delta_w2 = None
+    more_stable = None
+    if data_a.get("found") and data_b.get("found"):
+        delta_w2 = round(abs(data_a["wasserstein_w2"] - data_b["wasserstein_w2"]), 4)
+        more_stable = word_a if data_a["wasserstein_w2"] < data_b["wasserstein_w2"] else word_b
+
+    return jsonify({
+        "word_a": data_a,
+        "word_b": data_b,
+        "delta_w2": delta_w2,
+        "more_stable": more_stable,
+    })
+
+
+@app.route("/api/dl/figures")
+def api_dl_figures():
+    """Returns metadata and paths for publication-quality figures."""
+    figures = [
+        {
+            "id": "w2_distribution",
+            "title": "2-Wasserstein Drift Distribution by Origin",
+            "url": "/figures/dl_w2_distribution_boxplot.png",
+            "description": "Boxplot showing W2 distribution, medians, and Kruskal-Wallis significance.",
+        },
+        {
+            "id": "shift_typology",
+            "title": "Semantic Shift Typology Distribution",
+            "url": "/figures/dl_shift_typology_breakdown.png",
+            "description": "Stacked proportion of Sense Broadening, Invariance, Migration, and Narrowing.",
+        },
+        {
+            "id": "classical_vs_dl",
+            "title": "Classical vs. Deep Learning Cross-Paradigm Scatter",
+            "url": "/figures/dl_classical_vs_dl_scatter.png",
+            "description": "Scatter plot with regression trendline and benchmark seed callouts.",
+        },
+        {
+            "id": "dispersion_space",
+            "title": "Diachronic Dispersion Space (σ²_hist vs σ²_mod)",
+            "url": "/figures/dl_dispersion_shift_scatter.png",
+            "description": "Intra-cloud variance showing domain broadening vs specialization.",
+        },
+        {
+            "id": "correlation_heatmap",
+            "title": "Inter-Metric Diachronic Shift Correlation Matrix",
+            "url": "/figures/dl_correlation_heatmap.png",
+            "description": "Spearman rank correlations across all classical and deep learning metrics.",
+        },
+    ]
+    return jsonify(figures)
 
 
 # ── On-Demand Manim Rendering ──

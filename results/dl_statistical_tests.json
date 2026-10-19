@@ -1,0 +1,473 @@
+{
+  "total_words": 411,
+  "omnibus_wasserstein_w2": {
+    "metric": "wasserstein_w2",
+    "n_total": 411,
+    "k_groups": 6,
+    "kruskal_wallis": {
+      "H_statistic": 18.2315,
+      "p_value": 0.002669805403219595,
+      "significant_005": true,
+      "significant_001": true,
+      "eta_squared": 0.0327,
+      "epsilon_squared": 0.0445
+    },
+    "anova": {
+      "F_statistic": 4.0832,
+      "p_value": 0.0012543938096098997,
+      "significant_005": true,
+      "eta_squared": 0.048
+    }
+  },
+  "omnibus_centroid_drift": {
+    "metric": "centroid_cosine_drift",
+    "n_total": 411,
+    "k_groups": 6,
+    "kruskal_wallis": {
+      "H_statistic": 30.0298,
+      "p_value": 1.4550909541097841e-05,
+      "significant_005": true,
+      "significant_001": true,
+      "eta_squared": 0.0618,
+      "epsilon_squared": 0.0732
+    },
+    "anova": {
+      "F_statistic": 9.5064,
+      "p_value": 1.3794112543366989e-08,
+      "significant_005": true,
+      "eta_squared": 0.105
+    }
+  },
+  "pairwise_comparisons": [
+    {
+      "pair": "Germanic vs Greek",
+      "origin_1": "Germanic",
+      "origin_2": "Greek",
+      "n1": 100,
+      "n2": 73,
+      "mean_1": 0.8642,
+      "mean_2": 0.8178,
+      "u_statistic": 4928.5,
+      "p_raw": 8.560788630596212e-05,
+      "rank_biserial_r": -0.3503,
+      "p_bonferroni": 0.0012841182945894317,
+      "sig_bonferroni": true,
+      "fdr_threshold": 0.003333,
+      "p_fdr": 0.0012841182945894317,
+      "sig_fdr": true
+    },
+    {
+      "pair": "Germanic vs Latin",
+      "origin_1": "Germanic",
+      "origin_2": "Latin",
+      "n1": 100,
+      "n2": 96,
+      "mean_1": 0.8642,
+      "mean_2": 0.85,
+      "u_statistic": 5380.0,
+      "p_raw": 0.14435962704543306,
+      "rank_biserial_r": -0.1208,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.026667,
+      "p_fdr": 0.270674300710187,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Germanic vs Other",
+      "origin_1": "Germanic",
+      "origin_2": "Other",
+      "n1": 100,
+      "n2": 29,
+      "mean_1": 0.8642,
+      "mean_2": 0.8285,
+      "u_statistic": 1739.0,
+      "p_raw": 0.10359341906491094,
+      "rank_biserial_r": -0.1993,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.02,
+      "p_fdr": 0.2589835476622774,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Germanic vs PIE",
+      "origin_1": "Germanic",
+      "origin_2": "PIE",
+      "n1": 100,
+      "n2": 89,
+      "mean_1": 0.8642,
+      "mean_2": 0.8471,
+      "u_statistic": 5065.5,
+      "p_raw": 0.10135797251420542,
+      "rank_biserial_r": -0.1383,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.016667,
+      "p_fdr": 0.30407391754261626,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Germanic vs Sanskrit",
+      "origin_1": "Germanic",
+      "origin_2": "Sanskrit",
+      "n1": 100,
+      "n2": 24,
+      "mean_1": 0.8642,
+      "mean_2": 0.8729,
+      "u_statistic": 1103.0,
+      "p_raw": 0.5416475792038319,
+      "rank_biserial_r": 0.0808,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.043333,
+      "p_fdr": 0.6249779760044214,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Greek vs Other",
+      "origin_1": "Greek",
+      "origin_2": "Other",
+      "n1": 73,
+      "n2": 29,
+      "mean_1": 0.8178,
+      "mean_2": 0.8285,
+      "u_statistic": 927.0,
+      "p_raw": 0.3311433947283824,
+      "rank_biserial_r": 0.1242,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.036667,
+      "p_fdr": 0.4515591746296123,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Greek vs PIE",
+      "origin_1": "Greek",
+      "origin_2": "PIE",
+      "n1": 73,
+      "n2": 89,
+      "mean_1": 0.8178,
+      "mean_2": 0.8471,
+      "u_statistic": 2636.0,
+      "p_raw": 0.03938739166941185,
+      "rank_biserial_r": 0.1885,
+      "p_bonferroni": 0.5908108750411778,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.013333,
+      "p_fdr": 0.14770271876029445,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Greek vs Sanskrit",
+      "origin_1": "Greek",
+      "origin_2": "Sanskrit",
+      "n1": 73,
+      "n2": 24,
+      "mean_1": 0.8178,
+      "mean_2": 0.8729,
+      "u_statistic": 557.5,
+      "p_raw": 0.007848590393336515,
+      "rank_biserial_r": 0.3636,
+      "p_bonferroni": 0.11772885590004772,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.01,
+      "p_fdr": 0.03924295196668258,
+      "sig_fdr": true
+    },
+    {
+      "pair": "Latin vs Greek",
+      "origin_1": "Latin",
+      "origin_2": "Greek",
+      "n1": 96,
+      "n2": 73,
+      "mean_1": 0.85,
+      "mean_2": 0.8178,
+      "u_statistic": 4396.5,
+      "p_raw": 0.004640727903687766,
+      "rank_biserial_r": -0.2547,
+      "p_bonferroni": 0.0696109185553165,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.006667,
+      "p_fdr": 0.03480545927765825,
+      "sig_fdr": true
+    },
+    {
+      "pair": "Latin vs Other",
+      "origin_1": "Latin",
+      "origin_2": "Other",
+      "n1": 96,
+      "n2": 29,
+      "mean_1": 0.85,
+      "mean_2": 0.8285,
+      "u_statistic": 1527.5,
+      "p_raw": 0.42976137392795144,
+      "rank_biserial_r": -0.0973,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.04,
+      "p_fdr": 0.5372017174099393,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Latin vs PIE",
+      "origin_1": "Latin",
+      "origin_2": "PIE",
+      "n1": 96,
+      "n2": 89,
+      "mean_1": 0.85,
+      "mean_2": 0.8471,
+      "u_statistic": 4424.5,
+      "p_raw": 0.6761773760971369,
+      "rank_biserial_r": -0.0357,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.05,
+      "p_fdr": 0.6761773760971369,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Latin vs Sanskrit",
+      "origin_1": "Latin",
+      "origin_2": "Sanskrit",
+      "n1": 96,
+      "n2": 24,
+      "mean_1": 0.85,
+      "mean_2": 0.8729,
+      "u_statistic": 944.5,
+      "p_raw": 0.17443362907257054,
+      "rank_biserial_r": 0.1801,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.03,
+      "p_fdr": 0.29072271512095094,
+      "sig_fdr": false
+    },
+    {
+      "pair": "PIE vs Other",
+      "origin_1": "PIE",
+      "origin_2": "Other",
+      "n1": 89,
+      "n2": 29,
+      "mean_1": 0.8471,
+      "mean_2": 0.8285,
+      "u_statistic": 1375.0,
+      "p_raw": 0.5995442852211925,
+      "rank_biserial_r": -0.0655,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.046667,
+      "p_fdr": 0.6423688770227063,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Sanskrit vs Other",
+      "origin_1": "Sanskrit",
+      "origin_2": "Other",
+      "n1": 24,
+      "n2": 29,
+      "mean_1": 0.8729,
+      "mean_2": 0.8285,
+      "u_statistic": 432.0,
+      "p_raw": 0.1356930431161223,
+      "rank_biserial_r": -0.2414,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.023333,
+      "p_fdr": 0.2907708066774049,
+      "sig_fdr": false
+    },
+    {
+      "pair": "Sanskrit vs PIE",
+      "origin_1": "Sanskrit",
+      "origin_2": "PIE",
+      "n1": 24,
+      "n2": 89,
+      "mean_1": 0.8729,
+      "mean_2": 0.8471,
+      "u_statistic": 1254.5,
+      "p_raw": 0.1916463988713787,
+      "rank_biserial_r": -0.1746,
+      "p_bonferroni": 1.0,
+      "sig_bonferroni": false,
+      "fdr_threshold": 0.033333,
+      "p_fdr": 0.28746959830706803,
+      "sig_fdr": false
+    }
+  ],
+  "macro_roots": {
+    "n_ancestral": 189,
+    "n_borrowed": 222,
+    "w2": {
+      "ancestral_mean": 0.8561,
+      "ancestral_std": 0.0767,
+      "borrowed_mean": 0.8391,
+      "borrowed_std": 0.0774,
+      "mann_whitney_u": 23387.5,
+      "p_value_mw": 0.044826245895226706,
+      "welch_t": 2.2276,
+      "p_value_welch": 0.026462050076511683,
+      "cliffs_delta": 0.1148,
+      "significant_005": true
+    },
+    "centroid_drift": {
+      "ancestral_mean": 0.1267,
+      "borrowed_mean": 0.1359,
+      "mann_whitney_u": 19153.5,
+      "p_value_mw": 0.1283748500456804,
+      "significant_005": false
+    }
+  },
+  "typology_independence": {
+    "chi2_test": {
+      "chi2_statistic": 28.0836,
+      "p_value": 0.02105160089579646,
+      "degrees_of_freedom": 15,
+      "cramers_v": 0.1509,
+      "significant_005": true
+    },
+    "sense_change_anova": {
+      "F_statistic": 2.1541,
+      "p_value": 0.05835279322386244,
+      "significant_005": false
+    },
+    "dispersion_delta_anova": {
+      "F_statistic": 6.5813,
+      "p_value": 6.646217445544346e-06,
+      "significant_005": true
+    },
+    "contingency_table": {
+      "Centroid Migration": {
+        "Germanic": 19,
+        "Greek": 4,
+        "Latin": 19,
+        "Other": 6,
+        "PIE": 14,
+        "Sanskrit": 4
+      },
+      "Core Invariant": {
+        "Germanic": 19,
+        "Greek": 17,
+        "Latin": 17,
+        "Other": 11,
+        "PIE": 24,
+        "Sanskrit": 7
+      },
+      "Sense Broadening": {
+        "Germanic": 43,
+        "Greek": 46,
+        "Latin": 45,
+        "Other": 6,
+        "PIE": 36,
+        "Sanskrit": 12
+      },
+      "Sense Narrowing": {
+        "Germanic": 19,
+        "Greek": 6,
+        "Latin": 15,
+        "Other": 6,
+        "PIE": 15,
+        "Sanskrit": 1
+      }
+    }
+  },
+  "cross_paradigm_validation": {
+    "n_overlapping_words": 321,
+    "correlation_w2_vs_classical": {
+      "pearson_r": 0.1059,
+      "pearson_p": 0.05797770188017407,
+      "spearman_rho": 0.1621,
+      "spearman_p": 0.0035941548965364666
+    },
+    "correlation_centroid_vs_classical": {
+      "pearson_r": 0.2197,
+      "pearson_p": 7.224763360429855e-05,
+      "spearman_rho": 0.2831,
+      "spearman_p": 2.500251833617854e-07
+    },
+    "classical_false_alarms": [
+      {
+        "word": "full",
+        "origin_class": "Germanic",
+        "drift_score": 0.190516,
+        "wasserstein_w2": 0.9644,
+        "shift_type": "Sense Narrowing",
+        "rank_divergence": 303.0
+      },
+      {
+        "word": "star",
+        "origin_class": "PIE",
+        "drift_score": 0.20375,
+        "wasserstein_w2": 0.945,
+        "shift_type": "Sense Broadening",
+        "rank_divergence": 284.0
+      },
+      {
+        "word": "sure",
+        "origin_class": "Latin",
+        "drift_score": 0.244781,
+        "wasserstein_w2": 0.9302,
+        "shift_type": "Centroid Migration",
+        "rank_divergence": 268.0
+      },
+      {
+        "word": "heart",
+        "origin_class": "PIE",
+        "drift_score": 0.234171,
+        "wasserstein_w2": 0.9227,
+        "shift_type": "Centroid Migration",
+        "rank_divergence": 263.0
+      },
+      {
+        "word": "comes",
+        "origin_class": "Greek",
+        "drift_score": 0.483795,
+        "wasserstein_w2": 0.9631,
+        "shift_type": "Sense Narrowing",
+        "rank_divergence": 262.0
+      }
+    ],
+    "dl_discovered_shifts": [
+      {
+        "word": "verb",
+        "origin_class": "PIE",
+        "drift_score": 0.888807,
+        "wasserstein_w2": 0.7284,
+        "shift_type": "Core Invariant",
+        "rank_divergence": -304.0
+      },
+      {
+        "word": "yoke",
+        "origin_class": "PIE",
+        "drift_score": 0.796663,
+        "wasserstein_w2": 0.7013,
+        "shift_type": "Sense Narrowing",
+        "rank_divergence": -297.0
+      },
+      {
+        "word": "heroic",
+        "origin_class": "Greek",
+        "drift_score": 0.830845,
+        "wasserstein_w2": 0.731,
+        "shift_type": "Core Invariant",
+        "rank_divergence": -289.0
+      },
+      {
+        "word": "poetic",
+        "origin_class": "Greek",
+        "drift_score": 0.795887,
+        "wasserstein_w2": 0.7286,
+        "shift_type": "Sense Narrowing",
+        "rank_divergence": -282.0
+      },
+      {
+        "word": "philosophical",
+        "origin_class": "Greek",
+        "drift_score": 0.854336,
+        "wasserstein_w2": 0.7621,
+        "shift_type": "Core Invariant",
+        "rank_divergence": -280.0
+      }
+    ]
+  }
+}

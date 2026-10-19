@@ -1,0 +1,70 @@
+{
+  "dl_metrics": {
+    "model": "CharBiLSTMAttention (PyTorch DL)",
+    "accuracy": 0.6383,
+    "macro_f1": 0.5468,
+    "macro_precision": 0.5501,
+    "macro_recall": 0.5483,
+    "weighted_f1": 0.6417,
+    "per_class": {
+      "Germanic": {
+        "precision": 0.6522,
+        "recall": 0.625,
+        "f1-score": 0.6383,
+        "support": 120
+      },
+      "Latin": {
+        "precision": 0.5893,
+        "recall": 0.55,
+        "f1-score": 0.569,
+        "support": 120
+      },
+      "Greek": {
+        "precision": 0.7388,
+        "recall": 0.825,
+        "f1-score": 0.7795,
+        "support": 120
+      },
+      "Sanskrit": {
+        "precision": 0.5763,
+        "recall": 0.5397,
+        "f1-score": 0.5574,
+        "support": 63
+      },
+      "PIE": {
+        "precision": 0.0476,
+        "recall": 0.1,
+        "f1-score": 0.0645,
+        "support": 10
+      },
+      "Other": {
+        "precision": 0.6964,
+        "recall": 0.65,
+        "f1-score": 0.6724,
+        "support": 120
+      }
+    }
+  },
+  "classical_svc": {
+    "model": "LinearSVC (TF-IDF)",
+    "accuracy": 0.6688,
+    "macro_f1": 0.5398,
+    "pie_f1": 0.0,
+    "sanskrit_f1": 0.4319,
+    "greek_f1": 0.7565,
+    "germanic_f1": 0.7061,
+    "latin_f1": 0.6452,
+    "other_f1": 0.6992
+  },
+  "classical_logreg": {
+    "model": "LogisticRegression (TF-IDF)",
+    "accuracy": 0.6787,
+    "macro_f1": 0.6052,
+    "pie_f1": 0.2857,
+    "sanskrit_f1": 0.525,
+    "greek_f1": 0.7556,
+    "germanic_f1": 0.6949,
+    "latin_f1": 0.668,
+    "other_f1": 0.7017
+  }
+}
