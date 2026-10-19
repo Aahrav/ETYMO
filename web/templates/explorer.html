@@ -3,225 +3,470 @@
 {% block title %}Word Explorer{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Word Explorer</h1>
-<p class="page-subtitle">
-    Enter a word to discover its etymological origin, semantic drift score, 
-    and how its meaning has shifted across centuries.
-</p>
+<div class="header-container" style="margin-bottom: 20px;">
+    <h1 class="page-title">Word Explorer</h1>
+    <p class="page-subtitle">
+        Explore semantic drift and sense dynamics across centuries.
+        <strong>All {{ all_dl_words|length }} dual-era words</strong> in the vocabulary are extracted into 768-dim BERT contextual point clouds and analyzed using exact Optimal Transport.
+    </p>
+</div>
 
-<!-- ── Search Form ── -->
-<form class="search-form" action="/explorer" method="GET">
+<!-- ── Paradigm Switcher ── -->
+<div class="paradigm-switch-container animate-in">
+    <div class="paradigm-switch">
+        <button type="button" class="paradigm-btn active" id="btn-dl-explorer" onclick="switchExplorerParadigm('dl')">
+            <span>⚡ Deep Learning (411 Words)</span>
+            <span class="paradigm-tag">BERT + Optimal Transport (W2)</span>
+        </button>
+        <button type="button" class="paradigm-btn" id="btn-classical-explorer" onclick="switchExplorerParadigm('classical')">
+            <span>⚙ Classical ML (321 Words)</span>
+            <span class="paradigm-tag">Word2Vec + Procrustes</span>
+        </button>
+    </div>
+    <div class="paradigm-info-pill">
+        <span id="explorer-status-indicator" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BB86FC;"></span>
+        <span id="explorer-status-desc">Deep Learning: 411 Tracked Words with dual-era BERT embeddings & exact Earth Mover's Distance</span>
+    </div>
+</div>
+
+<!-- ── Search & Dropdown Form ── -->
+<form class="search-form" action="/explorer" method="GET" id="explorer-form" style="display:flex;gap:12px;align-items:center;margin-bottom:18px;">
     <div style="position:relative;flex:1;">
-        <select name="word" class="form-input" style="cursor:pointer;" id="word-search">
-            <option value="" disabled {{ 'selected' if not query }}>Select a word... (e.g. craft, monitor, stream)</option>
-            {% for w in all_words %}
+        <select name="word" class="form-input" style="cursor:pointer;width:100%;font-size:1rem;padding:12px 18px;" id="word-search-select" onchange="this.form.submit()">
+            <option value="" disabled {{ 'selected' if not query }}>▼ Select a Word (All {{ all_dl_words|length }} Tracked Words)...</option>
+            {% for w in all_dl_words %}
             <option value="{{ w }}" {{ 'selected' if query == w }}>{{ w }}</option>
             {% endfor %}
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Analyze</button>
+    <button type="submit" class="btn btn-primary" style="padding:12px 28px;">Analyze Word</button>
 </form>
 
-{% if word_data %}
-{% if word_data.found %}
-<!-- ── Word Analysis Result ── -->
-<div class="grid-7-3 mb-32">
-    <!-- Main Info Card -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <div>
-                <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
-                    <span class="origin-badge {{ word_data.origin|lower }}">{{ word_data.origin }}</span>
-                    <span style="font-size:0.78rem;color:var(--text-muted);">Confidence: {{ "%.1f"|format(word_data.confidence * 100) }}%</span>
+<!-- Quick Benchmark Chips -->
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:28px;">
+    <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-right:4px;">Quick Seeds:</span>
+    {% for seed in ['craft', 'mouse', 'stream', 'atom', 'cell', 'father', 'coffee', 'algorithm', 'yoga', 'nirvana'] %}
+    <a href="/explorer?word={{ seed }}" class="neighbor-tag {{ 'shared' if query == seed }}" style="text-decoration:none;font-size:0.78rem;padding:3px 10px;">
+        {{ seed }}
+    </a>
+    {% endfor %}
+</div>
+
+{% if dl_word_data and dl_word_data.found %}
+<!-- ════════════════════════════════════════════════════════════════════
+     1. DEEP LEARNING VIEW (Default)
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="dl-view-container" class="animate-in">
+    <!-- Main DL Info Grid -->
+    <div class="grid-7-3 mb-32">
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
+                        <span class="origin-badge {{ dl_word_data.origin_class|lower }}">{{ dl_word_data.origin_class }}</span>
+                        <span class="typology-badge {% if dl_word_data.shift_type == 'Sense Broadening' %}broadening{% elif dl_word_data.shift_type == 'Core Invariant' %}invariant{% elif dl_word_data.shift_type == 'Centroid Migration' %}migration{% else %}narrowing{% endif %}">
+                            {{ dl_word_data.shift_type }}
+                        </span>
+                    </div>
+                    <h2 style="font-family:var(--font-heading);font-size:2.6rem;font-style:italic;color:var(--text-heading);">
+                        {{ dl_word_data.word }}
+                    </h2>
                 </div>
-                <h2 style="font-family:var(--font-heading);font-size:2.5rem;font-style:italic;color:var(--text-heading);">
-                    {{ word_data.word }}
-                </h2>
+            </div>
+
+            <!-- Wasserstein Progress Bar -->
+            <div style="margin: 24px 0;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);">
+                        2-Wasserstein Distance (W2)
+                    </span>
+                    <span class="drift-value" style="color:var(--accent);">
+                        {{ "%.4f"|format(dl_word_data.wasserstein_w2) }}
+                    </span>
+                </div>
+                <div class="drift-bar-track" style="height:10px;">
+                    <div class="drift-bar-fill" style="width:{{ [((dl_word_data.wasserstein_w2 - 0.6) / 0.5 * 100)|int, 100]|max(0) }}%;height:100%;background:linear-gradient(90deg, #4FC3F7, #BB86FC);"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem;color:var(--text-muted);">
+                    <span>Highly Invariant (W2 &lt; 0.80)</span>
+                    <span>Median (0.85)</span>
+                    <span>High Semantic Transport (W2 &gt; 0.95)</span>
+                </div>
+            </div>
+
+            <!-- Key DL Metrics -->
+            <div class="dl-metric-grid">
+                <div class="dl-metric-card">
+                    <div class="dl-metric-value">{{ "%.4f"|format(dl_word_data.wasserstein_w2) }}</div>
+                    <div class="dl-metric-label">2-Wasserstein (W2)</div>
+                </div>
+                <div class="dl-metric-card">
+                    <div class="dl-metric-value">{{ dl_word_data.k_hist }} → {{ dl_word_data.k_mod }} (Δ={{ '+' if dl_word_data.delta_k >= 0 else '' }}{{ dl_word_data.delta_k }})</div>
+                    <div class="dl-metric-label">Sense Clusters (k_hist → k_mod)</div>
+                </div>
+                <div class="dl-metric-card">
+                    <div class="dl-metric-value">{{ '+' if dl_word_data.delta_dispersion >= 0 else '' }}{{ "%.4f"|format(dl_word_data.delta_dispersion) }}</div>
+                    <div class="dl-metric-label">Dispersion Shift (Δσ²)</div>
+                </div>
+                <div class="dl-metric-card">
+                    <div class="dl-metric-value">{{ "%.4f"|format(dl_word_data.centroid_cosine_drift) }}</div>
+                    <div class="dl-metric-label">Centroid Cosine Drift</div>
+                </div>
             </div>
         </div>
 
-        <!-- Drift Bar -->
-        <div style="margin: 24px 0;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                <span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);">Semantic Drift</span>
-                <span class="drift-value" style="color: {% if word_data.drift_score > 0.7 %}var(--danger){% elif word_data.drift_score > 0.5 %}var(--warning){% elif word_data.drift_score > 0.3 %}var(--germanic){% else %}var(--success){% endif %};">
-                    {{ "%.4f"|format(word_data.drift_score) }}
-                </span>
+        <!-- DL Stability Gauge / Assessment Card -->
+        <div class="card animate-in" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:12px;">
+                Linguistic Stability Tier
             </div>
-            <div class="drift-bar-track" style="height:10px;">
-                <div class="drift-bar-fill {{ word_data.origin|lower }}" 
-                     style="width: {{ (word_data.drift_score * 100)|int }}%;height:100%;"></div>
+            <div style="font-family:var(--font-heading);font-size:1.5rem;color:var(--text-heading);margin-bottom:8px;">
+                {{ dl_word_data.stability_level }}
             </div>
-            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem;color:var(--text-muted);">
-                <span>Stable</span>
-                <span>High Shift</span>
+            <div style="font-size:0.84rem;color:var(--text-secondary);max-width:240px;line-height:1.5;">
+                Distribution support shifts moderately across centuries.
             </div>
-        </div>
 
-        <!-- Key Metrics -->
-        <div class="grid-3" style="margin-top:20px;">
-            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
-                <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ "%.4f"|format(word_data.similarity) }}</div>
-                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Cosine Similarity</div>
-            </div>
-            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
-                <div style="font-family:var(--font-mono);font-size:1.4rem;color: {% if word_data.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">
-                    {{ word_data.drift_level }}
+            <div style="margin-top:20px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);width:100%;">
+                <div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:6px;">
+                    <span style="color:var(--text-muted);">Historical Contexts:</span>
+                    <strong style="color:var(--text-heading);">{{ dl_word_data.n_hist }} sentences</strong>
                 </div>
-                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Classification</div>
-            </div>
-            <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
-                <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ word_data.shared_neighbors|length }}</div>
-                <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Shared Neighbors</div>
+                <div style="display:flex;justify-content:space-between;font-size:0.76rem;">
+                    <span style="color:var(--text-muted);">Modern Contexts:</span>
+                    <strong style="color:var(--text-heading);">{{ dl_word_data.n_mod }} sentences</strong>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Drift Gauge -->
-    <div class="card animate-in" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <div class="drift-gauge" 
-             style="--gauge-pct: {{ (word_data.drift_score * 100)|int }}; 
-                    --gauge-color: {% if word_data.drift_score > 0.7 %}var(--danger){% elif word_data.drift_score > 0.5 %}var(--warning){% elif word_data.drift_score > 0.3 %}var(--germanic){% else %}var(--success){% endif %};">
-            <div class="gauge-value">{{ "%.2f"|format(word_data.drift_score) }}</div>
-            <div class="gauge-label">Drift Score</div>
+    <!-- Cross-Paradigm Comparison Card -->
+    <div class="card mb-32 animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Cross-Paradigm Comparison: Deep Learning vs. Classical ML</div>
+                <div class="card-meta">Comparing multi-modal point cloud Earth Mover's Distance to single static vector alignment</div>
+            </div>
         </div>
-        <div style="margin-top:24px;text-align:center;">
-            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:6px;">Source</div>
-            <div style="font-size:0.88rem;color:var(--text-secondary);">{{ word_data.source }}</div>
+        <div class="grid-2">
+            <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);border-left:3px solid var(--accent);">
+                <div style="font-weight:600;color:var(--accent);margin-bottom:8px;">Deep Learning Optimal Transport (Phase 3)</div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">2-Wasserstein ($W_2$):</span>
+                    <strong style="font-family:var(--font-mono);color:#fff;">{{ "%.4f"|format(dl_word_data.wasserstein_w2) }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">Sense Induction:</span>
+                    <strong style="color:#fff;">k = {{ dl_word_data.k_hist }} → {{ dl_word_data.k_mod }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">Typology:</span>
+                    <strong style="color:var(--accent);">{{ dl_word_data.shift_type }}</strong>
+                </div>
+            </div>
+
+            <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);border-left:3px solid var(--germanic);">
+                <div style="font-weight:600;color:var(--germanic);margin-bottom:8px;">Classical Word2Vec + Procrustes (Phase 2 Classical)</div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">Cosine Drift Score:</span>
+                    <strong style="font-family:var(--font-mono);color:#fff;">
+                        {{ "%.4f"|format(dl_word_data.classical_drift_score) if dl_word_data.classical_drift_score is not none else 'N/A' }}
+                    </strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">Classical Classification:</span>
+                    <strong style="color:#fff;">{{ dl_word_data.classical_drift_level or 'N/A' }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.86rem;">
+                    <span style="color:var(--text-secondary);">Modeling Scope:</span>
+                    <span style="color:var(--text-muted);">Single centroid vector (averages all senses)</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{% endif %}
 
-<!-- ── Neighbor Comparison ── -->
-<div class="grid-2 mb-32">
-    <!-- 1800s Neighbors -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <div>
-                <div class="card-title">1800s Context</div>
-                <div class="card-meta">Historical nearest neighbors (Gutenberg)</div>
+<!-- ════════════════════════════════════════════════════════════════════
+     2. CLASSICAL VIEW (Fallback / Toggle)
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="classical-view-container" style="display:none;">
+    {% if word_data and word_data.found %}
+    <div class="grid-7-3 mb-32">
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+                        <span class="origin-badge {{ word_data.origin|lower }}">{{ word_data.origin }}</span>
+                        <span style="font-size:0.78rem;color:var(--text-muted);">Confidence: {{ "%.1f"|format(word_data.confidence * 100) }}%</span>
+                    </div>
+                    <h2 style="font-family:var(--font-heading);font-size:2.5rem;font-style:italic;color:var(--text-heading);">
+                        {{ word_data.word }}
+                    </h2>
+                </div>
+            </div>
+
+            <div style="margin: 24px 0;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);">Semantic Drift (1 - Cosine)</span>
+                    <span class="drift-value" style="color: {% if word_data.drift_score > 0.7 %}var(--danger){% elif word_data.drift_score > 0.5 %}var(--warning){% elif word_data.drift_score > 0.3 %}var(--germanic){% else %}var(--success){% endif %};">
+                        {{ "%.4f"|format(word_data.drift_score) }}
+                    </span>
+                </div>
+                <div class="drift-bar-track" style="height:10px;">
+                    <div class="drift-bar-fill {{ word_data.origin|lower }}" 
+                         style="width: {{ (word_data.drift_score * 100)|int }}%;height:100%;"></div>
+                </div>
+            </div>
+
+            <div class="grid-3" style="margin-top:20px;">
+                <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                    <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ "%.4f"|format(word_data.similarity) }}</div>
+                    <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Cosine Similarity</div>
+                </div>
+                <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                    <div style="font-family:var(--font-mono);font-size:1.4rem;color: {% if word_data.drift_score > 0.5 %}var(--danger){% else %}var(--success){% endif %};">
+                        {{ word_data.drift_level }}
+                    </div>
+                    <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Classification</div>
+                </div>
+                <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);">
+                    <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-heading);">{{ word_data.shared_neighbors|length }}</div>
+                    <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:4px;">Shared Neighbors</div>
+                </div>
             </div>
         </div>
-        <div class="neighbor-list">
-            {% for w, s in word_data.old_neighbors %}
-            <a href="/explorer?word={{ w }}" class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">
-                {{ w }} <span style="opacity:0.5;font-size:0.72rem;">{{ "%.3f"|format(s) }}</span>
-            </a>
-            {% endfor %}
-            {% if not word_data.old_neighbors %}
-            <span style="color:var(--text-muted);font-size:0.85rem;">Not in historical vocabulary</span>
-            {% endif %}
+
+        <div class="card animate-in" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div class="drift-gauge" style="--gauge-pct: {{ (word_data.drift_score * 100)|int }}; --gauge-color: var(--germanic);">
+                <div class="gauge-value">{{ "%.2f"|format(word_data.drift_score) }}</div>
+                <div class="gauge-label">Drift Score</div>
+            </div>
         </div>
     </div>
 
-    <!-- 2000s Neighbors -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <div>
-                <div class="card-title">2000s Context</div>
-                <div class="card-meta">Modern nearest neighbors (Wikipedia)</div>
+    <!-- Classical Neighbors -->
+    <div class="grid-2 mb-32">
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">1800s Context Neighbors</div>
+                    <div class="card-meta">Word2Vec Skip-gram (Gutenberg)</div>
+                </div>
+            </div>
+            <div class="neighbor-list">
+                {% for w, s in word_data.old_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">{{ w }} ({{ "%.3f"|format(s) }})</span>
+                {% endfor %}
             </div>
         </div>
-        <div class="neighbor-list">
-            {% for w, s in word_data.new_neighbors %}
-            <a href="/explorer?word={{ w }}" class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">
-                {{ w }} <span style="opacity:0.5;font-size:0.72rem;">{{ "%.3f"|format(s) }}</span>
-            </a>
-            {% endfor %}
-            {% if not word_data.new_neighbors %}
-            <span style="color:var(--text-muted);font-size:0.85rem;">Not in modern vocabulary</span>
-            {% endif %}
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">2000s Context Neighbors</div>
+                    <div class="card-meta">Word2Vec Skip-gram (Wikipedia)</div>
+                </div>
+            </div>
+            <div class="neighbor-list">
+                {% for w, s in word_data.new_neighbors %}
+                <span class="neighbor-tag {{ 'shared' if w in word_data.shared_neighbors }}">{{ w }} ({{ "%.3f"|format(s) }})</span>
+                {% endfor %}
+            </div>
         </div>
     </div>
+    {% else %}
+    <div class="card animate-in" style="text-align:center;padding:36px;margin-bottom:32px;">
+        <div style="font-size:1.6rem;color:var(--text-muted);margin-bottom:8px;">ℹ</div>
+        <div style="font-family:var(--font-heading);font-size:1.2rem;color:var(--text-heading);margin-bottom:4px;">Word Not in Classical Vocabulary</div>
+        <div style="color:var(--text-secondary);font-size:0.85rem;">"{{ query }}" was not aligned in the 321-word Word2Vec space, but is fully modeled in the 411-word Deep Learning pipeline above.</div>
+    </div>
+    {% endif %}
 </div>
 
-<!-- ── Dynamic Visualization ── -->
-<div class="card animate-in mb-32" id="viz-section" style="max-width:720px; margin-top:32px;">
-    {% if word_data.video_path %}
+<!-- ════════════════════════════════════════════════════════════════════
+     DYNAMIC MANIM MATHEMATICAL ANIMATION
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="card animate-in mb-32" id="viz-section" style="max-width:760px; margin-top:28px;">
+    {% if word_data and word_data.video_path %}
     <!-- Pre-rendered video exists -->
     <div class="video-card" style="border:none;box-shadow:none;">
-        <video id="explorer-video" controls preload="metadata">
+        <video id="explorer-video" controls preload="metadata" style="width:100%; border-radius:var(--radius-md);">
             <source src="/videos/{{ word_data.video_path }}" type="video/mp4">
         </video>
         <div class="video-info">
             <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
             <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
-            <div class="video-desc">A parametric visualization of how this specific word's neighbor constellation shifted from 1800 to 2000.</div>
+            <div class="video-desc">A 3Blue1Brown-style geometric animation showing how this word's neighbor constellation shifted from 1800 to 2000.</div>
         </div>
     </div>
     {% else %}
-    <!-- No video — show render button -->
+    <!-- No video yet — show render button -->
     <div id="render-prompt" style="text-align:center;padding:32px;">
         <div style="font-size:2rem;margin-bottom:12px;">🎬</div>
         <div class="card-title" style="margin-bottom:8px;">Visualize Semantic Drift</div>
-        <div style="color:var(--text-secondary);font-size:0.88rem;max-width:400px;margin:0 auto 20px;">
-            Generate an animation showing how <em>"{{ word_data.word }}"</em> moved 
-            through semantic space from 1800 to 2000.
+        <div style="color:var(--text-secondary);font-size:0.88rem;max-width:440px;margin:0 auto 20px;">
+            Generate an animated Manim visualization showing how <em>"{{ query or (dl_word_data.word if dl_word_data else 'word') }}"</em> moved through semantic space from 1800 to 2000.
         </div>
-        <button class="render-btn" id="render-btn" onclick="startRender('{{ word_data.word }}')">
-            <span id="render-btn-text">▶ Visualize Drift</span>
+        <button class="render-btn" id="render-btn" onclick="startRender('{{ query or (dl_word_data.word if dl_word_data else '') }}')">
+            <span id="render-btn-text">▶ Generate Manim Video</span>
         </button>
     </div>
 
     <!-- Rendering state -->
     <div id="render-progress" style="display:none;text-align:center;padding:40px;">
         <div class="render-spinner"></div>
-        <div class="render-status" id="render-status">Rendering animation...</div>
+        <div class="render-status" id="render-status">Rendering Manim animation...</div>
         <div style="color:var(--text-muted);font-size:0.78rem;margin-top:8px;">
-            This takes 30–60 seconds. The Manim engine is building your animation.
+            This takes 30–60 seconds. The Manim mathematical engine is constructing the vector trajectory.
         </div>
     </div>
 
     <!-- Error state -->
     <div id="render-error" style="display:none;text-align:center;padding:32px;">
         <div style="font-size:1.5rem;margin-bottom:8px;">⚠</div>
-        <div style="color:var(--danger);font-weight:600;">Render Failed</div>
+        <div style="color:var(--danger);font-weight:600;">Render Notice</div>
         <div style="color:var(--text-secondary);font-size:0.85rem;margin-top:4px;" id="render-error-msg">
-            This word may not have enough embedding data for the visualization.
+            This word may not have enough classical Word2Vec vectors for the 2D parametric animation.
         </div>
     </div>
 
     <!-- Video player (hidden until ready) -->
     <div id="render-result" style="display:none;">
         <div class="video-card" style="border:none;box-shadow:none;">
-            <video id="rendered-video" controls preload="metadata" autoplay></video>
+            <video id="rendered-video" controls preload="metadata" autoplay style="width:100%; border-radius:var(--radius-md);"></video>
             <div class="video-info">
                 <div class="video-label">Manim Scene — Word Drift Deep Dive</div>
-                <div class="video-title">The Evolution of "{{ word_data.word }}"</div>
-                <div class="video-desc">A parametric visualization of how this word's neighbor constellation shifted from 1800 to 2000.</div>
+                <div class="video-title">The Evolution of "{{ query or (dl_word_data.word if dl_word_data else '') }}"</div>
+                <div class="video-desc">Parametric visualization of how this word's neighbor constellation shifted from 1800 to 2000.</div>
             </div>
         </div>
     </div>
     {% endif %}
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════
+     3. COMPLETE VOCABULARY BROWSER (ALL 411 WORDS)
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="card animate-in mb-32">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Explore All {{ all_dl_words|length }} Deep Learning Tracked Words</div>
+            <div class="card-meta">Click any word below to view its complete 2-Wasserstein point cloud analysis and sense shift</div>
+        </div>
+    </div>
+
+    <!-- Origin Filter Pills -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button class="btn" onclick="filterWordList('all')" style="padding:4px 12px;font-size:0.75rem;background:rgba(255,255,255,0.08);color:#fff;">
+            All ({{ all_dl_words|length }})
+        </button>
+        <button class="btn" onclick="filterWordList('Germanic')" style="padding:4px 12px;font-size:0.75rem;background:rgba(79,195,247,0.15);color:var(--germanic);">
+            Germanic (100)
+        </button>
+        <button class="btn" onclick="filterWordList('Latin')" style="padding:4px 12px;font-size:0.75rem;background:rgba(239,83,80,0.15);color:var(--latin);">
+            Latin (96)
+        </button>
+        <button class="btn" onclick="filterWordList('PIE')" style="padding:4px 12px;font-size:0.75rem;background:rgba(206,147,216,0.15);color:var(--pie);">
+            PIE (89)
+        </button>
+        <button class="btn" onclick="filterWordList('Greek')" style="padding:4px 12px;font-size:0.75rem;background:rgba(102,187,106,0.15);color:var(--greek);">
+            Greek (73)
+        </button>
+        <button class="btn" onclick="filterWordList('Other')" style="padding:4px 12px;font-size:0.75rem;background:rgba(144,164,174,0.15);color:var(--other);">
+            Other (29)
+        </button>
+        <button class="btn" onclick="filterWordList('Sanskrit')" style="padding:4px 12px;font-size:0.75rem;background:rgba(255,213,79,0.15);color:var(--sanskrit);">
+            Sanskrit (24)
+        </button>
+    </div>
+
+    <!-- Scrollable Word Grid -->
+    <div style="max-height:360px; overflow-y:auto; padding-right:6px;">
+        <div class="neighbor-list" id="all-words-grid">
+            {% for r in dl_records %}
+            <a href="/explorer?word={{ r.word }}" 
+               class="neighbor-tag word-pill origin-{{ r.origin_class|lower }} {{ 'shared' if query == r.word }}" 
+               data-origin="{{ r.origin_class }}"
+               style="cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                <span>{{ r.word }}</span>
+                <span style="font-family:var(--font-mono);opacity:0.65;font-size:0.7rem;">W₂ {{ "%.3f"|format(r.wasserstein_w2) }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 <script>
+function switchExplorerParadigm(mode) {
+    const btnDL = document.getElementById('btn-dl-explorer');
+    const btnClass = document.getElementById('btn-classical-explorer');
+    const indicator = document.getElementById('explorer-status-indicator');
+    const desc = document.getElementById('explorer-status-desc');
+    const dlView = document.getElementById('dl-view-container');
+    const classView = document.getElementById('classical-view-container');
+
+    if (mode === 'dl') {
+        btnDL.classList.add('active');
+        btnClass.classList.remove('active');
+        indicator.style.background = '#BB86FC';
+        desc.textContent = "Deep Learning: 411 Tracked Words with dual-era BERT embeddings & exact Earth Mover's Distance";
+        if (dlView) dlView.style.display = 'block';
+        if (classView) classView.style.display = 'none';
+    } else {
+        btnClass.classList.add('active');
+        btnDL.classList.remove('active');
+        indicator.style.background = '#4FC3F7';
+        desc.textContent = 'Classical ML: Static Word2Vec Skip-gram aligned via Orthogonal Procrustes';
+        if (dlView) dlView.style.display = 'none';
+        if (classView) classView.style.display = 'block';
+    }
+}
+
+function onTypeSearchSubmit(val) {
+    val = (val || '').trim().toLowerCase();
+    if (!val) return;
+    window.location.href = '/explorer?word=' + encodeURIComponent(val);
+}
+
+function filterWordList(origin) {
+    const pills = document.querySelectorAll('.word-pill');
+    pills.forEach(p => {
+        if (origin === 'all' || p.getAttribute('data-origin') === origin) {
+            p.style.display = 'inline-flex';
+        } else {
+            p.style.display = 'none';
+        }
+    });
+}
+
 function startRender(word) {
+    if (!word) return;
     const btn = document.getElementById('render-btn');
     const prompt = document.getElementById('render-prompt');
     const progress = document.getElementById('render-progress');
     const result = document.getElementById('render-result');
     const errorDiv = document.getElementById('render-error');
 
-    // Disable button
-    btn.disabled = true;
-    btn.classList.add('rendering');
-    document.getElementById('render-btn-text').textContent = 'Starting...';
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('rendering');
+        document.getElementById('render-btn-text').textContent = 'Starting...';
+    }
 
     fetch(`/api/render/${encodeURIComponent(word)}`, { method: 'POST' })
         .then(r => r.json())
         .then(data => {
-            if (data.status === 'ready') {
+            if (data.status === 'ready' && data.url) {
                 showVideo(data.url);
             } else if (data.status === 'rendering') {
-                prompt.style.display = 'none';
-                progress.style.display = 'block';
+                if (prompt) prompt.style.display = 'none';
+                if (progress) progress.style.display = 'block';
                 pollStatus(word);
             } else if (data.status === 'error') {
-                showError(data.message || 'Render failed');
+                showError(data.message || 'Render failed for this word.');
             }
         })
-        .catch(() => showError('Network error'));
+        .catch(() => showError('Network error connecting to render engine.'));
 }
 
 function pollStatus(word) {
@@ -229,14 +474,13 @@ function pollStatus(word) {
         fetch(`/api/render/${encodeURIComponent(word)}/status`)
             .then(r => r.json())
             .then(data => {
-                if (data.status === 'ready') {
+                if (data.status === 'ready' && data.url) {
                     clearInterval(interval);
                     showVideo(data.url);
                 } else if (data.status === 'error') {
                     clearInterval(interval);
                     showError('Manim render failed for this word.');
                 }
-                // else: still rendering, keep polling
             })
             .catch(() => {
                 clearInterval(interval);
@@ -246,56 +490,33 @@ function pollStatus(word) {
 }
 
 function showVideo(url) {
-    document.getElementById('render-prompt')?.style && (document.getElementById('render-prompt').style.display = 'none');
-    document.getElementById('render-progress').style.display = 'none';
-    document.getElementById('render-error').style.display = 'none';
+    const prompt = document.getElementById('render-prompt');
+    const progress = document.getElementById('render-progress');
+    const errorDiv = document.getElementById('render-error');
     const result = document.getElementById('render-result');
-    result.style.display = 'block';
+    if (prompt) prompt.style.display = 'none';
+    if (progress) progress.style.display = 'none';
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (result) result.style.display = 'block';
+
     const video = document.getElementById('rendered-video');
-    video.innerHTML = `<source src="${url}" type="video/mp4">`;
-    video.load();
+    if (video) {
+        video.innerHTML = `<source src="${url}" type="video/mp4">`;
+        video.load();
+    }
 }
 
 function showError(msg) {
-    document.getElementById('render-prompt')?.style && (document.getElementById('render-prompt').style.display = 'none');
-    document.getElementById('render-progress').style.display = 'none';
+    const prompt = document.getElementById('render-prompt');
+    const progress = document.getElementById('render-progress');
     const errorDiv = document.getElementById('render-error');
-    errorDiv.style.display = 'block';
-    if (msg) document.getElementById('render-error-msg').textContent = msg;
+    if (prompt) prompt.style.display = 'none';
+    if (progress) progress.style.display = 'none';
+    if (errorDiv) {
+        errorDiv.style.display = 'block';
+        const msgEl = document.getElementById('render-error-msg');
+        if (msgEl && msg) msgEl.textContent = msg;
+    }
 }
 </script>
-
-{% else %}
-<!-- Word not found -->
-<div class="card animate-in" style="text-align:center;padding:48px;">
-    <div style="font-size:2.5rem;margin-bottom:16px;">⬡</div>
-    <div style="font-family:var(--font-heading);font-size:1.5rem;color:var(--text-heading);margin-bottom:8px;">
-        "{{ word_data.word }}" not found
-    </div>
-    <div style="color:var(--text-secondary);max-width:400px;margin:0 auto;">
-        This word is not in our tracked vocabulary. It may be absent from either 
-        the historical or modern corpus, or may not meet the minimum frequency threshold.
-    </div>
-</div>
-{% endif %}
-{% else %}
-<!-- ── No word selected — show suggestions ── -->
-<div class="grid-4 mb-32">
-    {% for w in ['craft', 'monitor', 'sketch', 'room'] %}
-    <a href="/explorer?word={{ w }}" class="card stat-card animate-in" style="cursor:pointer;text-decoration:none;">
-        <div class="stat-value" style="font-family:var(--font-heading);font-style:italic;font-size:1.6rem;">{{ w }}</div>
-        <div class="stat-label">Try this word</div>
-    </a>
-    {% endfor %}
-</div>
-
-<div class="card animate-in">
-    <div class="card-title" style="margin-bottom:16px;">All Tracked Words</div>
-    <div class="neighbor-list">
-        {% for w in all_words %}
-        <a href="/explorer?word={{ w }}" class="neighbor-tag">{{ w }}</a>
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
 {% endblock %}

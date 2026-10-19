@@ -35,14 +35,13 @@ corpora/processed/
 *.db
 *.sqlite3
 
-# Manim media, renders, and text caches
+# Manim media, renders, videos, and text caches
+*.mp4
 media/
-results/videos/texts/
+results/videos/
 **/partial_movie_files/
-results/videos/videos/_tmp_*
-results/videos/videos/tmp_scene/
-results/videos/videos/**/_tmp_*
-results/videos/videos/comparisons/
+results/videos/texts/
+results/videos/videos/
 
 # OS
 Thumbs.db

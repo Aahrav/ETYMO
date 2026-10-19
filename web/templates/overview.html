@@ -3,227 +3,244 @@
 {% block title %}Origin Overview{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Origin-Wise Analysis</h1>
-<p class="page-subtitle">
-    Quantifying the morphological and semantic divergence across 
-    linguistic families through a 200-year temporal window.
-</p>
+<div class="header-container" style="margin-bottom: 20px;">
+    <h1 class="page-title">Origin-Wise Analysis</h1>
+    <p class="page-subtitle">
+        Quantifying semantic divergence across ancestral roots and loanword families through a 200-year temporal window.
+        Compare Classical Procrustes alignment with Deep Learning Optimal Transport on BERT contextual token clouds.
+    </p>
+</div>
 
-<!-- ── Main Grid: Chart + Stats ── -->
-<div class="grid-7-3 mb-32">
-    <!-- Origin Bar Chart -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <div>
-                <div class="card-title">Mean Semantic Drift</div>
-                <div class="card-meta">Vector shift magnitude per origin class</div>
+<!-- ── Paradigm Switcher ── -->
+<div class="paradigm-switch-container animate-in">
+    <div class="paradigm-switch">
+        <button type="button" class="paradigm-btn active" id="btn-dl-overview" onclick="switchOverviewParadigm('dl')">
+            <span>⚡ Deep Learning</span>
+            <span class="paradigm-tag">Optimal Transport & Polysemy</span>
+        </button>
+        <button type="button" class="paradigm-btn" id="btn-classical-overview" onclick="switchOverviewParadigm('classical')">
+            <span>⚙ Classical ML</span>
+            <span class="paradigm-tag">Word2Vec Procrustes</span>
+        </button>
+    </div>
+    <div class="paradigm-info-pill">
+        <span id="overview-status-indicator" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#BB86FC;"></span>
+        <span id="overview-status-desc">Deep Learning active: 2-Wasserstein Distance (W2), Kruskal-Wallis H = 18.23 (p = 0.0027)</span>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     1. DEEP LEARNING VIEW (Default)
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="dl-overview-section" class="animate-in">
+    <!-- Main Grid: W2 Chart + Stats Panel -->
+    <div class="grid-7-3 mb-32">
+        <!-- Origin W2 Bar Chart -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Mean 2-Wasserstein Distance ($W_2$)</div>
+                    <div class="card-meta">Optimal Transport cost per origin class on BERT contextual representations</div>
+                </div>
+                <div style="display:flex;gap:10px;">
+                    {% for o in dl_origin_data %}
+                    <span class="origin-badge {{ o.origin_class|lower }}">{{ o.origin_class }}</span>
+                    {% endfor %}
+                </div>
             </div>
-            <div style="display:flex;gap:12px;">
+
+            <div class="origin-bars" style="height:210px; align-items:flex-end;">
+                {% for o in dl_origin_data %}
+                <div class="origin-bar-group" style="flex:1;">
+                    <div class="origin-bar-value" style="font-size:0.76rem; color:var(--text-heading); margin-bottom:6px;">
+                        W₂ {{ "%.3f"|format(o.mean_w2) }}
+                    </div>
+                    <div class="origin-bar {{ o.origin_class|lower }}" 
+                         style="height: {{ ((o.mean_w2 - 0.7) / 0.3 * 160)|int }}px; width:70%; margin:0 auto; border-radius:4px 4px 0 0;"></div>
+                    <div class="origin-bar-label" style="font-size:0.75rem; margin-top:8px;">{{ o.origin_class }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:0.72rem; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:8px;">
+                <span>← More Stable Geometric Support</span>
+                <span>Higher Mass Transport Cost →</span>
+            </div>
+        </div>
+
+        <!-- DL Stats Panel -->
+        <div class="result-card animate-in" style="background: linear-gradient(135deg, rgba(22, 33, 62, 0.9), rgba(28, 37, 65, 0.9));">
+            <div class="result-badge" style="background:rgba(187,134,252,0.2);color:var(--accent);border:1px solid rgba(187,134,252,0.4);">
+                Phase 3 Hypothesis Tests
+            </div>
+            <div class="result-title" style="margin-top:10px;">Statistical Significance</div>
+            <div class="result-desc">
+                Null hypothesis rejected: Etymological origins significantly predict diachronic semantic stability and shift typology.
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">Kruskal-Wallis H ($W_2$)</span>
+                <span class="result-value" style="font-family:var(--font-mono); color:#fff;">18.2315</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">P-Value ($W_2$)</span>
+                <span class="result-value" style="color: var(--success); font-weight:700;">p = 0.00267 **</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Centroid Drift H</span>
+                <span class="result-value" style="color: var(--success);">p = 1.46e-5 ***</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Ancestral vs Borrowed</span>
+                <span class="result-value" style="color: var(--accent);">p = 0.0448 *</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Typology Independence</span>
+                <span class="result-value">χ²=28.08 (p=0.021)</span>
+            </div>
+            <div class="result-valid" style="margin-top:14px; color:var(--success);">
+                ✓ &nbsp;Statistically Significant Predictor
+            </div>
+        </div>
+    </div>
+
+    <!-- Per-Origin Breakdown Cards (DL) -->
+    <div class="section-header mb-20">
+        <h2>Per-Origin Optimal Transport & Polysemy Profiles</h2>
+        <div class="section-meta">Detailed metrics across 411 tracked words in dual-era contextual point clouds</div>
+    </div>
+
+    <div class="grid-3 mb-32">
+        {% for o in dl_origin_data %}
+        <div class="card animate-in">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <div style="width:12px;height:12px;border-radius:50%;background:var(--{{ o.origin_class|lower }})"></div>
+                <span style="font-family:var(--font-heading);font-size:1.2rem;font-weight:600;color:var(--text-heading);">
+                    {{ o.origin_class }}
+                </span>
+                <span class="origin-badge {{ o.origin_class|lower }}" style="margin-left:auto;">
+                    n={{ o.n_words }}
+                </span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div style="padding:10px;background:rgba(255,255,255,0.025);border-radius:var(--radius-sm);text-align:center;">
+                    <div style="font-family:var(--font-mono);font-size:1.15rem;color:var(--text-heading);">{{ "%.4f"|format(o.mean_w2) }}</div>
+                    <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:2px;">Mean W2</div>
+                </div>
+                <div style="padding:10px;background:rgba(255,255,255,0.025);border-radius:var(--radius-sm);text-align:center;">
+                    <div style="font-family:var(--font-mono);font-size:1.15rem;color:var(--text-heading);">{{ "%.4f"|format(o.median_w2) }}</div>
+                    <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:2px;">Median W2</div>
+                </div>
+                <div style="padding:10px;background:rgba(255,255,255,0.025);border-radius:var(--radius-sm);text-align:center;">
+                    <div style="font-family:var(--font-mono);font-size:1.15rem;color:#42A5F5;">{{ "%.1f"|format(o.pct_polysemy_expansion) }}%</div>
+                    <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:2px;">Polysemy Exp.</div>
+                </div>
+                <div style="padding:10px;background:rgba(255,255,255,0.025);border-radius:var(--radius-sm);text-align:center;">
+                    <div style="font-family:var(--font-mono);font-size:1.15rem;color:#66BB6A;">{{ "%.1f"|format(o.pct_core_invariant) }}%</div>
+                    <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:2px;">Core Invariant</div>
+                </div>
+            </div>
+
+            <div style="font-size:0.78rem;color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:10px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                    <span style="color:var(--text-muted);">Most Stable:</span>
+                    <strong style="color:var(--success);">{{ o.min_drift_word }}</strong> ({{ "%.3f"|format(o.min_w2) }})
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:var(--text-muted);">Most Drifted:</span>
+                    <strong style="color:var(--danger);">{{ o.max_drift_word }}</strong> ({{ "%.3f"|format(o.max_w2) }})
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ── Publication Figure Gallery ── -->
+    <div class="section-header mb-20">
+        <h2>Publication-Quality Research Figures</h2>
+        <div class="section-meta">Generated 300 DPI figures for research dissemination and IEEE/ACL submission</div>
+    </div>
+
+    <div class="figure-gallery-grid mb-32">
+        {% for fig in dl_figures %}
+        <div class="figure-card animate-in" onclick="openFigureModal('{{ fig.url }}', '{{ fig.title }}', '{{ fig.desc }}')">
+            <img src="{{ fig.url }}" alt="{{ fig.title }}" loading="lazy">
+            <div class="figure-card-body">
+                <div class="figure-card-title">{{ fig.title }}</div>
+                <div class="figure-card-desc">{{ fig.desc }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     2. CLASSICAL VIEW (Fallback / Comparison)
+     ════════════════════════════════════════════════════════════════════ -->
+<div id="classical-overview-section" style="display:none;">
+    <!-- Main Grid: Chart + Stats -->
+    <div class="grid-7-3 mb-32">
+        <div class="card animate-in">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">Classical Mean Semantic Drift (1 - Cosine)</div>
+                    <div class="card-meta">Vector shift magnitude per origin class via Word2Vec Skip-gram</div>
+                </div>
+            </div>
+            <div class="origin-bars">
                 {% for o in origin_data %}
-                <span class="origin-badge {{ o.origin_class|lower }}">{{ o.origin_class }}</span>
+                <div class="origin-bar-group">
+                    <div class="origin-bar-value">Δ {{ "%.2f"|format(o.mean_drift) }}</div>
+                    <div class="origin-bar {{ o.origin_class|lower }}" 
+                         style="height: {{ (o.mean_drift / 0.9 * 140)|int }}px;"></div>
+                    <div class="origin-bar-label">{{ o.origin_class }}</div>
+                </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="origin-bars">
-            {% for o in origin_data %}
-            <div class="origin-bar-group">
-                <div class="origin-bar-value">Δ {{ "%.2f"|format(o.mean_drift) }}</div>
-                <div class="origin-bar {{ o.origin_class|lower }}" 
-                     style="height: {{ (o.mean_drift / 0.9 * 140)|int }}px;"></div>
-                <div class="origin-bar-label">{{ o.origin_class }}</div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
 
-    <!-- Stats Panel -->
-    <div class="result-card animate-in">
-        <div class="result-badge">Significance Test</div>
-        <div class="result-title">Kruskal-Wallis Results</div>
-        <div class="result-desc">
-            Null hypothesis rejected: Origin classes show statistically distinct drift profiles.
-        </div>
-        <div class="result-row">
-            <span class="result-label">H-Statistic</span>
-            <span class="result-value">43.698</span>
-        </div>
-        <div class="result-row">
-            <span class="result-label">P-Value</span>
-            <span class="result-value" style="color: var(--success);">p < 0.001</span>
-        </div>
-        <div class="result-row">
-            <span class="result-label">Effect Size</span>
-            <span class="result-value">η² = 0.466</span>
-        </div>
-        <div class="result-row">
-            <span class="result-label">Degrees of Freedom</span>
-            <span class="result-value">5, 144</span>
-        </div>
-        <div class="result-valid">
-            ✓ &nbsp;Valid Statistical Model
-        </div>
-    </div>
-</div>
-
-<!-- ── Per-Origin Breakdown ── -->
-<div class="section-header mb-20">
-    <h2>Per-Origin Summary</h2>
-    <div class="section-meta">Detailed statistics for each etymological class</div>
-</div>
-
-<div class="grid-4 mb-32">
-    {% for o in origin_data %}
-    <div class="card animate-in">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-            <div style="width:10px;height:10px;border-radius:50%;background:var(--{{ o.origin_class|lower }})"></div>
-            <span style="font-family:var(--font-heading);font-size:1.1rem;font-weight:600;color:var(--text-heading);">{{ o.origin_class }}</span>
-            <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto;">n={{ o.n_words }}</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.mean_drift) }}</div>
-                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Mean</div>
+        <div class="result-card animate-in">
+            <div class="result-badge">Classical Baseline</div>
+            <div class="result-title">Procrustes Analysis</div>
+            <div class="result-row">
+                <span class="result-label">H-Statistic</span>
+                <span class="result-value">25.3465</span>
             </div>
-            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.median_drift) }}</div>
-                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Median</div>
+            <div class="result-row">
+                <span class="result-label">P-Value</span>
+                <span class="result-value" style="color: var(--success);">p = 0.000119</span>
             </div>
-            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.std_drift) }}</div>
-                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Std Dev</div>
-            </div>
-            <div style="padding:10px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);text-align:center;">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:var(--text-heading);">{{ "%.3f"|format(o.max_drift - o.min_drift) }}</div>
-                <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);">Range</div>
+            <div class="result-row">
+                <span class="result-label">One-Way ANOVA</span>
+                <span class="result-value">F = 5.70, p = 4.7e-5</span>
             </div>
         </div>
-        <div style="margin-top:12px;font-size:0.78rem;color:var(--text-secondary);">
-            Most stable: <strong>{{ o.min_word }}</strong> ({{ "%.3f"|format(o.min_drift) }})<br>
-            Most drifted: <strong>{{ o.max_word }}</strong> ({{ "%.3f"|format(o.max_drift) }})
+    </div>
+
+    <!-- Classical Static Figures -->
+    <div class="grid-2 mb-32">
+        <div class="card animate-in">
+            <div class="card-meta" style="margin-bottom:12px;">UMAP Scatter — Drift Landscape</div>
+            <img src="/figures/umap_scatter.png" class="figure-img" alt="UMAP scatter plot" style="width:100%; border-radius:var(--radius-sm);">
+        </div>
+        <div class="card animate-in">
+            <div class="card-meta" style="margin-bottom:12px;">Per-Word Drift Heatmap</div>
+            <img src="/figures/drift_heatmap.png" class="figure-img" alt="Drift heatmap" style="width:100%; border-radius:var(--radius-sm);">
         </div>
     </div>
-    {% endfor %}
 </div>
 
-<!-- ── Pairwise Results ── -->
-<div class="card mb-32 animate-in">
-    <div class="card-header">
-        <div>
-            <div class="card-title">Pairwise Significance Tests</div>
-            <div class="card-meta">Mann-Whitney U tests between origin pairs</div>
-        </div>
-    </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Pair</th>
-                <th>U-Statistic</th>
-                <th>P-Value</th>
-                <th>Significant</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="font-weight:600;">PIE vs Germanic</td>
-                <td style="font-family:var(--font-mono);">499.0</td>
-                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
-                <td style="color:var(--success);">✓ p < 0.001</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">PIE vs Latin</td>
-                <td style="font-family:var(--font-mono);">487.0</td>
-                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
-                <td style="color:var(--success);">✓ p < 0.001</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">PIE vs Greek</td>
-                <td style="font-family:var(--font-mono);">316.0</td>
-                <td style="font-family:var(--font-mono);color:var(--success);">0.0000</td>
-                <td style="color:var(--success);">✓ p < 0.001</td>
-            </tr>
-            <tr>
-                <td style="font-weight:600;">Germanic vs Latin</td>
-                <td style="font-family:var(--font-mono);">182.0</td>
-                <td style="font-family:var(--font-mono);">0.1656</td>
-                <td style="color:var(--text-muted);">—</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<!-- ── Top Words Per Origin ── -->
-<div class="section-header mb-20">
-    <h2>Top 5 Most Shifted Words Per Origin</h2>
-    <div class="section-meta">Filtered by linguistic category</div>
-</div>
-
-<div class="grid-2 mb-32">
-    {% for origin in ['PIE', 'Germanic', 'Latin', 'Greek', 'Sanskrit', 'Other'] %}
-    <div class="card animate-in">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-            <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
-        </div>
-        <table class="data-table">
-            <thead>
-                <tr><th>Word</th><th>Drift</th><th>Bar</th></tr>
-            </thead>
-            <tbody>
-                {% for w in per_origin[origin] %}
-                <tr>
-                    <td class="word-cell">
-                        <a href="/explorer?word={{ w.word }}" style="color:var(--text-heading);">{{ w.word }}</a>
-                    </td>
-                    <td class="drift-value" style="color:var(--{{ origin|lower }});">+{{ "%.2f"|format(w.drift_score) }}</td>
-                    <td>
-                        <div class="drift-bar-track" style="width:100px;">
-                            <div class="drift-bar-fill {{ origin|lower }}" style="width:{{ (w.drift_score * 100)|int }}%"></div>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endfor %}
-</div>
-
-<!-- ── Visualization Gallery ── -->
-<div class="section-header mb-20">
-    <h2>Static Visualizations</h2>
-    <div class="section-meta">Publication-quality figures from the analysis</div>
-</div>
-
-<div class="grid-2 mb-32">
-    <div class="card animate-in">
-        <div class="card-meta" style="margin-bottom:12px;">Drift Bar Chart</div>
-        <img src="/figures/drift_bar_chart.png" class="figure-img" alt="Drift bar chart">
-    </div>
-    <div class="card animate-in">
-        <div class="card-meta" style="margin-bottom:12px;">Drift Box Plot</div>
-        <img src="/figures/drift_box_plot.png" class="figure-img" alt="Drift box plot">
-    </div>
-</div>
-
-<div class="grid-2 mb-32">
-    <div class="card animate-in">
-        <div class="card-meta" style="margin-bottom:12px;">UMAP Scatter — Drift Landscape</div>
-        <img src="/figures/umap_scatter.png" class="figure-img" alt="UMAP scatter plot">
-    </div>
-    <div class="card animate-in">
-        <div class="card-meta" style="margin-bottom:12px;">Per-Word Drift Heatmap</div>
-        <img src="/figures/drift_heatmap.png" class="figure-img" alt="Drift heatmap">
-    </div>
-</div>
-
-<!-- ── Manim Videos ── -->
-<div class="section-header mb-20">
-    <h2>Animated Visualizations</h2>
-    <div class="section-meta">3Blue1Brown-style Manim animations</div>
+<!-- ════════════════════════════════════════════════════════════════════
+     3. MANIM ANIMATED VISUALIZATIONS (Universal)
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="section-header mb-20" style="margin-top: 32px;">
+    <h2>Animated Mathematical Visualizations (Manim)</h2>
+    <div class="section-meta">3Blue1Brown-style geometric animations of semantic vector space transitions</div>
 </div>
 
 <div class="grid-2 mb-32">
     <div class="video-card animate-in">
-        <video controls preload="metadata">
+        <video controls preload="metadata" style="width:100%; border-radius:var(--radius-md);">
             <source src="/videos/{{ videos.drift }}" type="video/mp4">
         </video>
         <div class="video-info">
@@ -233,7 +250,7 @@
         </div>
     </div>
     <div class="video-card animate-in">
-        <video controls preload="metadata">
+        <video controls preload="metadata" style="width:100%; border-radius:var(--radius-md);">
             <source src="/videos/{{ videos.alignment }}" type="video/mp4">
         </video>
         <div class="video-info">
@@ -244,14 +261,61 @@
     </div>
 </div>
 
-<!-- ── Key Finding ── -->
-<div class="card animate-in" style="text-align:center;padding:40px;border-color:var(--border-accent);">
-    <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--germanic);margin-bottom:12px;">Key Finding</div>
-    <div style="font-family:var(--font-heading);font-size:1.8rem;font-style:italic;color:var(--text-heading);max-width:600px;margin:0 auto;line-height:1.35;">
-        Ancient Proto-Indo-European roots (PIE) are significantly more stable than all later origin groups.
-    </div>
-    <div style="color:var(--text-secondary);margin-top:16px;font-size:0.9rem;">
-        Kruskal-Wallis p < 0.001 | PIE vs Germanic p < 0.0001
+<!-- Lightbox Modal for Figures -->
+<div id="figure-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;" onclick="closeFigureModal()">
+    <div style="max-width:90vw;max-height:90vh;background:var(--bg-card);border:1px solid var(--border-medium);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border-subtle);background:rgba(0,0,0,0.4);">
+            <h3 id="modal-figure-title" style="font-family:var(--font-heading);color:#fff;font-size:1.15rem;">Figure</h3>
+            <button onclick="closeFigureModal()" style="background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;">✕</button>
+        </div>
+        <div style="padding:16px;text-align:center;">
+            <img id="modal-figure-img" src="" style="max-width:100%;max-height:75vh;border-radius:var(--radius-sm);display:block;margin:0 auto;" alt="Enlarged figure">
+            <p id="modal-figure-desc" style="font-size:0.85rem;color:var(--text-secondary);margin-top:10px;max-width:800px;margin-left:auto;margin-right:auto;"></p>
+        </div>
     </div>
 </div>
+
+<script>
+function switchOverviewParadigm(mode) {
+    const btnDL = document.getElementById('btn-dl-overview');
+    const btnClass = document.getElementById('btn-classical-overview');
+    const dlSection = document.getElementById('dl-overview-section');
+    const classSection = document.getElementById('classical-overview-section');
+    const indicator = document.getElementById('overview-status-indicator');
+    const desc = document.getElementById('overview-status-desc');
+
+    if (mode === 'dl') {
+        btnDL.classList.add('active');
+        btnClass.classList.remove('active');
+        indicator.style.background = '#BB86FC';
+        desc.textContent = "Deep Learning active: 2-Wasserstein Distance (W2), Kruskal-Wallis H = 18.23 (p = 0.0027)";
+        dlSection.style.display = 'block';
+        classSection.style.display = 'none';
+    } else {
+        btnClass.classList.add('active');
+        btnDL.classList.remove('active');
+        indicator.style.background = '#4FC3F7';
+        desc.textContent = "Classical ML active: Word2Vec Skip-gram aligned via Orthogonal Procrustes";
+        dlSection.style.display = 'none';
+        classSection.style.display = 'block';
+    }
+}
+
+function openFigureModal(url, title, desc) {
+    document.getElementById('modal-figure-img').src = url;
+    document.getElementById('modal-figure-title').textContent = title;
+    document.getElementById('modal-figure-desc').textContent = desc;
+    const modal = document.getElementById('figure-modal');
+    modal.style.display = 'flex';
+}
+
+function closeFigureModal() {
+    document.getElementById('figure-modal').style.display = 'none';
+}
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeFigureModal();
+});
+</script>
 {% endblock %}
