@@ -763,16 +763,25 @@ select.form-input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  background-color: #1c2541;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa0a6' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   padding-right: 36px;
+  color: #f1f5f9;
 }
 
 select.form-input option {
-  background: #1c2541;
-  color: var(--text-primary);
-  padding: 8px;
+  background-color: #1c2541;
+  color: #f1f5f9;
+  padding: 8px 12px;
+}
+
+select.form-input optgroup {
+  background-color: #16213e;
+  color: var(--accent);
+  font-weight: 700;
+  padding: 6px;
 }
 
 .btn {
@@ -1235,6 +1244,272 @@ select.form-input option {
 @keyframes pulse-text {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.5; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   Deep Learning Paradigm Controls & Visualizations (Phase 4)
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Segmented Paradigm Switch ── */
+.paradigm-switch-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(22, 33, 62, 0.4);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 6px 10px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.paradigm-switch {
+  display: inline-flex;
+  gap: 6px;
+  background: rgba(13, 13, 26, 0.6);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.paradigm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.paradigm-btn:hover {
+  color: var(--text-heading);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.paradigm-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(187, 134, 252, 0.3), rgba(79, 195, 247, 0.25));
+  border: 1px solid rgba(187, 134, 252, 0.45);
+  box-shadow: 0 2px 10px rgba(187, 134, 252, 0.25);
+}
+
+.paradigm-btn .paradigm-tag {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.5px;
+}
+
+.paradigm-info-pill {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Character Attention Heatmap ── */
+.attn-stream-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-top: 18px;
+}
+
+.attn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.attn-header-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.attn-chars-wrapper {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.attn-char-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(187, 134, 252, 0.3);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.attn-char-chip:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 4px 14px rgba(187, 134, 252, 0.4);
+  z-index: 10;
+}
+
+.attn-letter {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.attn-weight {
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4px;
+}
+
+.attn-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.attn-legend-bar {
+  width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(187, 134, 252, 0.1), rgba(187, 134, 252, 0.95));
+}
+
+/* ── Shift Typology Badges ── */
+.typology-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.typology-badge.broadening {
+  background: rgba(66, 165, 245, 0.18);
+  color: #42A5F5;
+  border: 1px solid rgba(66, 165, 245, 0.35);
+}
+
+.typology-badge.invariant {
+  background: rgba(102, 187, 106, 0.18);
+  color: #66BB6A;
+  border: 1px solid rgba(102, 187, 106, 0.35);
+}
+
+.typology-badge.migration {
+  background: rgba(255, 167, 38, 0.18);
+  color: #FFA726;
+  border: 1px solid rgba(255, 167, 38, 0.35);
+}
+
+.typology-badge.narrowing {
+  background: rgba(171, 71, 188, 0.18);
+  color: #AB47BC;
+  border: 1px solid rgba(171, 71, 188, 0.35);
+}
+
+/* ── Deep Learning Metrics Grid ── */
+.dl-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.dl-metric-card {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.dl-metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  color: var(--text-heading);
+  font-weight: 600;
+}
+
+.dl-metric-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── Figure Gallery Grid ── */
+.figure-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.figure-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.figure-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+}
+
+.figure-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.figure-card-body {
+  padding: 14px 16px;
+}
+
+.figure-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+}
+
+.figure-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
 }
 
 

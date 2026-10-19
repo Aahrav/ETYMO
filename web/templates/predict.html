@@ -3,248 +3,411 @@
 {% block title %}Predict Origin{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Etymology Predictor</h1>
-<p class="page-subtitle">
-    Type any English word — even one not in our dataset — and the classifier will 
-    predict its etymological origin using character-level morphological patterns.
-</p>
+<div class="header-container" style="margin-bottom: 20px;">
+    <h1 class="page-title">Etymology Predictor</h1>
+    <p class="page-subtitle">
+        Type any English word — even neologisms or borrowings — to predict its etymological origin.
+        Compare Classical Character N-gram inference against Deep Learning with Bi-Directional LSTM Attention.
+    </p>
+</div>
+
+<!-- ── Paradigm Switcher ── -->
+<div class="paradigm-switch-container animate-in">
+    <div class="paradigm-switch">
+        <button type="button" class="paradigm-btn active" id="btn-dl-mode" onclick="switchPredictorParadigm('dl')">
+            <span>⚡ Deep Learning</span>
+            <span class="paradigm-tag">CharBiLSTM + Attention</span>
+        </button>
+        <button type="button" class="paradigm-btn" id="btn-classical-mode" onclick="switchPredictorParadigm('classical')">
+            <span>⚙ Classical ML</span>
+            <span class="paradigm-tag">TF-IDF + LinearSVC</span>
+        </button>
+    </div>
+    <div class="paradigm-info-pill">
+        <span id="paradigm-status-indicator" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4FC3F7;"></span>
+        <span id="paradigm-status-desc">Deep Learning active: 647k param BiLSTM with Self-Attention Context Pooling</span>
+    </div>
+</div>
 
 <!-- ── Input Form ── -->
-<form class="search-form" action="/predict" method="GET" id="predict-form">
+<form class="search-form" action="/predict" method="GET" id="predict-form" onsubmit="handlePredictSubmit(event)">
     <div style="position:relative;flex:1;">
         <input type="text" name="word" class="form-input" id="predict-input"
-               placeholder="Type any word... (e.g. algorithm, shampoo, father)"
+               placeholder="Type any word... (e.g. father, telephone, algorithm, shampoo, virus)"
                value="{{ query or '' }}" autocomplete="off">
     </div>
-    <button type="submit" class="btn btn-primary">Predict</button>
+    <button type="submit" class="btn btn-primary" id="predict-submit-btn">Predict Origin</button>
 </form>
 
-<!-- ── Result ── -->
-{% if result %}
-<div class="predict-result animate-in" id="predict-result">
+<!-- Loading Spinner for API -->
+<div id="predict-loading" style="display:none; text-align:center; padding:30px;">
+    <div class="render-spinner"></div>
+    <div style="color:var(--accent); font-family:var(--font-mono); font-size:0.9rem;">Inferring neural attention & morphological stems...</div>
+</div>
+
+<!-- ── Result Section (Container for both DL and Classical views) ── -->
+<div class="predict-result animate-in" id="predict-result-container" style="{{ 'display:block;' if result else 'display:none;' }}">
 
     <!-- Hero Card -->
     <div class="predict-hero card mb-32">
         <div class="predict-hero-inner">
-            <div class="predict-word">{{ result.word }}</div>
+            <div class="predict-word" id="hero-word">{{ result.word if result else '' }}</div>
             <div class="predict-arrow">→</div>
             <div class="predict-origin-wrap">
-                <span class="origin-badge {{ result.predicted|lower }} predict-badge-glow">
-                    {{ result.predicted }}
+                <span class="origin-badge {{ result.predicted|lower if result else 'pie' }} predict-badge-glow" id="hero-badge">
+                    {{ result.predicted if result else '' }}
                 </span>
-                <div class="predict-confidence">
-                    {% if result.is_known %}
-                    Exact match (100% known)
-                    {% else %}
-                    {{ "%.1f"|format(result.probabilities[result.predicted] * 100) }}% confidence
+                <div class="predict-confidence" id="hero-confidence">
+                    {% if result %}
+                        {% if result.is_known %}
+                        Exact match (100% known)
+                        {% else %}
+                        {{ "%.1f"|format(result.probabilities[result.predicted] * 100) }}% confidence
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Probability Breakdown -->
+    <!-- ── DEEP LEARNING VIEW: Attention Heatmap Card ── -->
+    <div class="card mb-32 animate-in" id="dl-attention-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Morphological Self-Attention Heatmap</div>
+                <div class="card-meta">Self-Attention weights $\alpha_t$ extracted from CharBiLSTM hidden states identifying stem and affix importance</div>
+            </div>
+            <span class="origin-badge" style="background:rgba(187,134,252,0.15);color:var(--accent);border-color:rgba(187,134,252,0.3);">
+                Neural Attention
+            </span>
+        </div>
+
+        <div class="attn-stream-card">
+            <div class="attn-header">
+                <span class="attn-header-title">Character Attention Heatmap</span>
+                <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">Hover letters for weights</span>
+            </div>
+            <div class="attn-chars-wrapper" id="attn-chips-container">
+                <!-- Dynamically populated via JS -->
+            </div>
+            <div class="attn-legend">
+                <span>Low Attention</span>
+                <div class="attn-legend-bar"></div>
+                <span>Peak Attention (Stem / Root)</span>
+            </div>
+        </div>
+
+        <!-- DL Architecture Callout Grid -->
+        <div class="dl-metric-grid" style="margin-top:20px;">
+            <div class="dl-metric-card">
+                <div class="dl-metric-value">64-dim</div>
+                <div class="dl-metric-label">Char Embeddings</div>
+            </div>
+            <div class="dl-metric-card">
+                <div class="dl-metric-value">256-dim</div>
+                <div class="dl-metric-label">BiLSTM Hidden State</div>
+            </div>
+            <div class="dl-metric-card">
+                <div class="dl-metric-value">647,558</div>
+                <div class="dl-metric-label">Model Parameters</div>
+            </div>
+            <div class="dl-metric-card">
+                <div class="dl-metric-value" style="color:var(--success);">0.5801</div>
+                <div class="dl-metric-label">Val Macro-F1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Probability Breakdown Card -->
     <div class="card mb-32 animate-in">
         <div class="card-header">
             <div>
-                <div class="card-title">Probability Breakdown</div>
-                <div class="card-meta">Character n-gram classifier output across all 6 origin classes</div>
+                <div class="card-title">Origin Probability Distribution</div>
+                <div class="card-meta" id="prob-chart-meta">Softmax probabilities across all 6 etymological classes</div>
             </div>
         </div>
-        <div class="proba-chart">
-            {% for origin, prob in result.sorted_probs %}
-            <div class="proba-row">
-                <div class="proba-label">
-                    <span class="origin-badge {{ origin|lower }}" style="min-width:80px;text-align:center;">{{ origin }}</span>
+        <div class="proba-chart" id="proba-chart-container">
+            {% if result %}
+                {% for origin, prob in result.sorted_probs %}
+                <div class="proba-row">
+                    <div class="proba-label">
+                        <span class="origin-badge {{ origin|lower }}" style="min-width:80px;text-align:center;">{{ origin }}</span>
+                    </div>
+                    <div class="proba-bar-track">
+                        <div class="proba-bar-fill {{ origin|lower }}" 
+                             style="width: {{ (prob * 100)|round(1) }}%;"
+                             data-width="{{ (prob * 100)|round(1) }}"></div>
+                    </div>
+                    <div class="proba-pct">{{ "%.1f"|format(prob * 100) }}%</div>
                 </div>
-                <div class="proba-bar-track">
-                    <div class="proba-bar-fill {{ origin|lower }}" 
-                         style="width: {{ (prob * 100)|round(1) }}%;"
-                         data-width="{{ (prob * 100)|round(1) }}"></div>
-                </div>
-                <div class="proba-pct">{{ "%.1f"|format(prob * 100) }}%</div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 
-    <!-- Grid: How it works + Morphological hint -->
-    <div class="grid-2 mb-32">
-        <!-- How It Works -->
-        <div class="card animate-in">
-            <div class="card-header">
-                <div>
-                    <div class="card-title">How It Works</div>
-                    <div class="card-meta">Character n-gram classification pipeline</div>
-                </div>
-            </div>
-            <div class="predict-pipeline">
-                <div class="pipeline-step">
-                    <div class="pipeline-num">1</div>
-                    <div>
-                        <div class="pipeline-title">Anchor</div>
-                        <div class="pipeline-desc">Wrap the word with boundary markers: <code>^{{ result.word }}$</code></div>
-                    </div>
-                </div>
-                <div class="pipeline-step">
-                    <div class="pipeline-num">2</div>
-                    <div>
-                        <div class="pipeline-title">Extract Features</div>
-                        <div class="pipeline-desc">Generate character n-grams (2–5) via TF-IDF vectorizer trained on {{ stats.vocab_size }} words</div>
-                    </div>
-                </div>
-                <div class="pipeline-step">
-                    <div class="pipeline-num">3</div>
-                    <div>
-                        <div class="pipeline-title">Classify</div>
-                        <div class="pipeline-desc">Logistic Regression outputs probability across 6 origin classes</div>
-                    </div>
-                </div>
+    <!-- Classical Explanation Card (Visible in Classical Mode) -->
+    <div class="card mb-32 animate-in" id="classical-explanation-card" style="display:none;">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Classical Feature Extraction (TF-IDF N-grams)</div>
+                <div class="card-meta">Bag of sub-word character fragments ($n \in [2, 5]$)</div>
             </div>
         </div>
-
-        <!-- Linguistic Insight -->
-        <div class="card animate-in">
-            <div class="card-header">
-                <div>
-                    <div class="card-title">Why {{ result.predicted }}?</div>
-                    <div class="card-meta">Linguistic pattern insight</div>
-                </div>
+        <div style="padding:16px; background:rgba(255,255,255,0.02); border-radius:var(--radius-md);">
+            <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:10px;">
+                Extracted Character N-Grams
             </div>
-            <div style="padding-top:8px;">
-                <p style="color:var(--text-secondary);line-height:1.7;font-size:0.9rem;">
-                    {% if result.is_known %}
-                    <strong style="color:var(--text-heading);font-style:italic;">"{{ result.word }}"</strong> is a known tracked word in our Etymological database, directly mapped to <strong style="color:var(--{{ result.predicted|lower }});">{{ result.predicted }}</strong>. The machine learning model was safely bypassed.
-                    {% else %}
-                    The ML model detected character patterns in 
-                    <strong style="color:var(--text-heading);font-style:italic;">"{{ result.word }}"</strong> 
-                    that are characteristic of <strong style="color:var(--{{ result.predicted|lower }});">{{ result.predicted }}</strong> origins.
-                    {% endif %}
-                </p>
-                <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
-                    <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:8px;">Character N-grams (sample)</div>
-                    <div class="neighbor-list" id="ngram-display">
-                        {% for ng in result.sample_ngrams %}
-                        <span class="neighbor-tag">{{ ng }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div style="margin-top:16px;">
-                    <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.6;">
-                        {% if result.predicted == 'Germanic' %}
-                        Germanic words often feature short, consonant-heavy roots with patterns like <em>th</em>, <em>ght</em>, <em>wr</em>, and hard stops.
-                        {% elif result.predicted == 'Latin' %}
-                        Latin-derived words frequently contain suffixes like <em>-tion</em>, <em>-ment</em>, <em>-ance</em>, and vowel-rich syllable structures.
-                        {% elif result.predicted == 'Greek' %}
-                        Greek origins show patterns like <em>ph</em>, <em>-ology</em>, <em>-ism</em>, and complex consonant clusters.
-                        {% elif result.predicted == 'Sanskrit' %}
-                        Sanskrit/Hindi borrowings often carry patterns like <em>-ya</em>, <em>-va</em>, aspirated consonants, and retroflex sounds.
-                        {% elif result.predicted == 'PIE' %}
-                        Proto-Indo-European roots tend to be short, monosyllabic, and fundamental — basic concepts preserved across millennia.
-                        {% else %}
-                        Words from other language families carry distinctive orthographic signatures from Arabic, Japanese, and other non-Indo-European sources.
-                        {% endif %}
-                    </p>
-                </div>
+            <div class="neighbor-list" id="classical-ngrams-display">
+                {% if result and result.sample_ngrams %}
+                    {% for ng in result.sample_ngrams %}
+                    <span class="neighbor-tag">{{ ng }}</span>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Quick Try -->
+    <!-- Quick Suggestions -->
     <div class="card animate-in">
-        <div class="card-title" style="margin-bottom:16px;">Try These</div>
+        <div class="card-title" style="margin-bottom:16px;">Try These Benchmark Words</div>
         <div class="neighbor-list">
-            {% for w in suggestions %}
-            <a href="/predict?word={{ w }}" class="neighbor-tag" style="cursor:pointer;text-decoration:none;">{{ w }}</a>
+            {% for w in ["father", "telephone", "algorithm", "shampoo", "stream", "virus", "atom", "mouse", "yoga", "culture", "tsunami"] %}
+            <a href="javascript:void(0)" onclick="triggerPredict('{{ w }}')" class="neighbor-tag" style="cursor:pointer;text-decoration:none;">{{ w }}</a>
             {% endfor %}
         </div>
     </div>
 </div>
 
-{% else %}
-<!-- ── No word — show suggestion cards ── -->
-<div class="grid-3 mb-32">
-    {% for w, origin, desc in examples %}
-    <a href="/predict?word={{ w }}" class="card stat-card animate-in" style="cursor:pointer;text-decoration:none;">
-        <div class="stat-value" style="font-family:var(--font-heading);font-style:italic;font-size:1.5rem;">{{ w }}</div>
-        <div style="margin:8px 0;">
-            <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
-        </div>
-        <div class="stat-label" style="font-size:0.78rem;color:var(--text-secondary);">{{ desc }}</div>
-    </a>
-    {% endfor %}
-</div>
+<!-- ── Landing State when no query ── -->
+<div id="landing-state" style="{{ 'display:none;' if result else 'display:block;' }}">
+    <div class="grid-3 mb-32">
+        {% for w, origin, desc in [
+            ("father", "PIE", "*pater → ancestor (ancient Indo-European root)"),
+            ("telephone", "Greek", "tele + phone → far-reaching voice"),
+            ("algorithm", "Other", "Arabic al-Khwārizmī → mathematical sequence"),
+            ("shampoo", "Sanskrit", "Hindi chāmpo → head massage / cleanse"),
+            ("stream", "Germanic", "water flow → digital media stream"),
+            ("virus", "Latin", "poison/slime → biological microbe → computer malware")
+        ] %}
+        <a href="javascript:void(0)" onclick="triggerPredict('{{ w }}')" class="card stat-card animate-in" style="cursor:pointer;text-decoration:none;">
+            <div class="stat-value" style="font-family:var(--font-heading);font-style:italic;font-size:1.5rem;">{{ w }}</div>
+            <div style="margin:8px 0;">
+                <span class="origin-badge {{ origin|lower }}">{{ origin }}</span>
+            </div>
+            <div class="stat-label" style="font-size:0.78rem;color:var(--text-secondary);">{{ desc }}</div>
+        </a>
+        {% endfor %}
+    </div>
 
-<!-- How It Works (intro) -->
-<div class="card animate-in">
-    <div class="card-header">
-        <div>
-            <div class="card-title">How the Predictor Works</div>
-            <div class="card-meta">Character-level morphological analysis</div>
+    <!-- Architecture Overview Comparison Card -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Etymology Classification Paradigm Comparison</div>
+                <div class="card-meta">Classical Bag-of-Ngrams vs. Deep Bidirectional Sequential Modeling</div>
+            </div>
+        </div>
+        <div class="grid-2">
+            <div style="padding:16px; background:rgba(255,255,255,0.02); border-radius:var(--radius-md); border-left:3px solid var(--germanic);">
+                <div style="font-weight:600; color:var(--text-heading); margin-bottom:6px;">Classical Pipeline (TF-IDF + LinearSVC)</div>
+                <p style="font-size:0.84rem; color:var(--text-secondary); line-height:1.5;">
+                    Anchors words with <code>^word$</code> and extracts 30,000 character n-grams ($1 \le n \le 6$). High speed, but completely ignores character ordering and suffered severe collapse on rare PIE roots ($F_1 = 0.000$).
+                </p>
+            </div>
+            <div style="padding:16px; background:rgba(255,255,255,0.02); border-radius:var(--radius-md); border-left:3px solid var(--accent);">
+                <div style="font-weight:600; color:var(--text-heading); margin-bottom:6px;">Deep Learning (CharBiLSTM + Attention)</div>
+                <p style="font-size:0.84rem; color:var(--text-secondary); line-height:1.5;">
+                    Learns continuous character embeddings followed by a 2-layer BiLSTM and attention pooling. Learns true morphological prefixes, roots, and suffixes with class-weighted loss to accurately recover ancient PIE roots ($F_1 = 0.54$).
+                </p>
+            </div>
         </div>
     </div>
-    <div class="predict-pipeline">
-        <div class="pipeline-step">
-            <div class="pipeline-num">1</div>
-            <div>
-                <div class="pipeline-title">You type a word</div>
-                <div class="pipeline-desc">Any English word — even slang, proper nouns, or neologisms</div>
-            </div>
-        </div>
-        <div class="pipeline-step">
-            <div class="pipeline-num">2</div>
-            <div>
-                <div class="pipeline-title">Character n-gram extraction</div>
-                <div class="pipeline-desc">The word is split into overlapping 2–5 character fragments (e.g., "al", "alg", "algo")</div>
-            </div>
-        </div>
-        <div class="pipeline-step">
-            <div class="pipeline-num">3</div>
-            <div>
-                <div class="pipeline-title">Origin prediction</div>
-                <div class="pipeline-desc">A Logistic Regression classifier trained on 18,000+ etymologically labelled words guesses the origin</div>
-            </div>
-        </div>
-    </div>
 </div>
-{% endif %}
 
+<!-- ── Client-Side Interactivity ── -->
 <script>
-// Live prediction with debounce
-(function() {
-    const input = document.getElementById('predict-input');
-    let timer;
-    
-    if (!input) return;
-    
-    input.addEventListener('input', function() {
-        clearTimeout(timer);
-        const word = this.value.trim();
-        if (word.length < 2) return;
-        
-        timer = setTimeout(() => {
-            // Update URL without reload for bookmarkability
+let currentPredictorParadigm = 'dl'; // 'dl' or 'classical'
+let cachedDLData = null;
+let cachedClassicalData = null;
+
+function switchPredictorParadigm(mode) {
+    currentPredictorParadigm = mode;
+    const btnDL = document.getElementById('btn-dl-mode');
+    const btnClassical = document.getElementById('btn-classical-mode');
+    const statusDesc = document.getElementById('paradigm-status-desc');
+    const statusDot = document.getElementById('paradigm-status-indicator');
+    const attnCard = document.getElementById('dl-attention-card');
+    const classCard = document.getElementById('classical-explanation-card');
+
+    if (mode === 'dl') {
+        btnDL.classList.add('active');
+        btnClassical.classList.remove('active');
+        statusDot.style.background = '#BB86FC';
+        statusDesc.textContent = 'Deep Learning active: 647k param CharBiLSTM with Self-Attention Context Pooling';
+        if (attnCard) attnCard.style.display = 'block';
+        if (classCard) classCard.style.display = 'none';
+
+        const currentWord = document.getElementById('predict-input').value.trim();
+        if (currentWord) {
+            executePrediction(currentWord, 'dl');
+        }
+    } else {
+        btnClassical.classList.add('active');
+        btnDL.classList.remove('active');
+        statusDot.style.background = '#4FC3F7';
+        statusDesc.textContent = 'Classical ML active: TF-IDF Char N-Grams (1-6) with Logistic Regression / LinearSVC';
+        if (attnCard) attnCard.style.display = 'none';
+        if (classCard) classCard.style.display = 'block';
+
+        const currentWord = document.getElementById('predict-input').value.trim();
+        if (currentWord) {
+            executePrediction(currentWord, 'classical');
+        }
+    }
+}
+
+function triggerPredict(word) {
+    document.getElementById('predict-input').value = word;
+    executePrediction(word, currentPredictorParadigm);
+}
+
+function handlePredictSubmit(e) {
+    e.preventDefault();
+    const word = document.getElementById('predict-input').value.trim();
+    if (word) {
+        executePrediction(word, currentPredictorParadigm);
+    }
+}
+
+function executePrediction(word, mode) {
+    const loading = document.getElementById('predict-loading');
+    const resultContainer = document.getElementById('predict-result-container');
+    const landing = document.getElementById('landing-state');
+
+    loading.style.display = 'block';
+
+    const endpoint = mode === 'dl' 
+        ? `/api/dl/classify/${encodeURIComponent(word)}` 
+        : `/api/classify/${encodeURIComponent(word)}`;
+
+    fetch(endpoint)
+        .then(r => r.json())
+        .then(data => {
+            loading.style.display = 'none';
+            if (data.error) {
+                alert("Prediction Error: " + data.error);
+                return;
+            }
+
+            if (landing) landing.style.display = 'none';
+            resultContainer.style.display = 'block';
+
+            // Update Hero
+            document.getElementById('hero-word').textContent = data.word;
+            const heroBadge = document.getElementById('hero-badge');
+            heroBadge.textContent = data.predicted;
+            heroBadge.className = `origin-badge ${data.predicted.toLowerCase()} predict-badge-glow`;
+
+            const confVal = data.confidence !== undefined ? (data.confidence * 100).toFixed(1) : (data.probabilities[data.predicted] * 100).toFixed(1);
+            document.getElementById('hero-confidence').textContent = data.is_known ? 'Exact match (100% known)' : `${confVal}% confidence`;
+
+            // Update Probability Bars
+            renderProbabilityBars(data.probabilities);
+
+            // If Deep Learning, render attention heatmap
+            if (mode === 'dl' && data.char_attentions) {
+                renderAttentionHeatmap(data.char_attentions);
+            } else if (mode === 'classical') {
+                renderClassicalNGrams(data.word);
+            }
+
+            // Update URL without reload
             const url = new URL(window.location);
             url.searchParams.set('word', word);
             window.history.replaceState({}, '', url);
-            
-            // Fetch prediction
-            fetch(`/api/classify/${encodeURIComponent(word)}`)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.error) return;
-                    // Submit the form for full render
-                    document.getElementById('predict-form').submit();
-                });
-        }, 600);
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            console.error(err);
+        });
+}
+
+function renderProbabilityBars(probs) {
+    const container = document.getElementById('proba-chart-container');
+    container.innerHTML = '';
+
+    const sorted = Object.entries(probs).sort((a, b) => b[1] - a[1]);
+    sorted.forEach(([origin, prob]) => {
+        const pct = (prob * 100).toFixed(1);
+        const row = document.createElement('div');
+        row.className = 'proba-row';
+        row.innerHTML = `
+            <div class="proba-label">
+                <span class="origin-badge ${origin.toLowerCase()}" style="min-width:80px;text-align:center;">${origin}</span>
+            </div>
+            <div class="proba-bar-track">
+                <div class="proba-bar-fill ${origin.toLowerCase()}" style="width: ${pct}%;"></div>
+            </div>
+            <div class="proba-pct">${pct}%</div>
+        `;
+        container.appendChild(row);
     });
-    
-    // Animate probability bars on load
-    document.querySelectorAll('.proba-bar-fill').forEach(bar => {
-        const w = bar.getAttribute('data-width');
-        bar.style.width = '0%';
-        setTimeout(() => { bar.style.width = w + '%'; }, 100);
+}
+
+function renderAttentionHeatmap(charAttns) {
+    const container = document.getElementById('attn-chips-container');
+    container.innerHTML = '';
+
+    // Find max attention for relative scaling
+    const maxAttn = Math.max(...charAttns.map(c => c.attention), 0.001);
+
+    charAttns.forEach(item => {
+        const relWeight = item.attention / maxAttn;
+        // Background alpha from 0.15 to 0.85
+        const bgAlpha = (0.15 + relWeight * 0.7).toFixed(2);
+        // Border glow
+        const chip = document.createElement('div');
+        chip.className = 'attn-char-chip';
+        chip.style.backgroundColor = `rgba(187, 134, 252, ${bgAlpha})`;
+        chip.style.borderColor = relWeight > 0.6 ? '#BB86FC' : 'rgba(187, 134, 252, 0.3)';
+        chip.title = `Character: '${item.char}' | Attention Weight: ${item.attention.toFixed(4)}`;
+
+        chip.innerHTML = `
+            <span class="attn-letter">${item.char}</span>
+            <span class="attn-weight">${(item.attention * 100).toFixed(0)}%</span>
+        `;
+        container.appendChild(chip);
     });
-})();
+}
+
+function renderClassicalNGrams(word) {
+    const container = document.getElementById('classical-ngrams-display');
+    if (!container) return;
+    container.innerHTML = '';
+    const anch = `^${word}$`;
+    const ngrams = [];
+    for (let n = 2; n <= 5; n++) {
+        for (let i = 0; i <= anch.length - n; i++) {
+            ngrams.push(anch.substring(i, i + n));
+            if (ngrams.length >= 14) break;
+        }
+        if (ngrams.length >= 14) break;
+    }
+    ngrams.forEach(ng => {
+        const span = document.createElement('span');
+        span.className = 'neighbor-tag';
+        span.textContent = ng;
+        container.appendChild(span);
+    });
+}
+
+// Auto-run if query was passed on initial page load
+document.addEventListener('DOMContentLoaded', function() {
+    const query = "{{ query or '' }}";
+    if (query) {
+        // Run deep learning prediction by default
+        switchPredictorParadigm('dl');
+    }
+});
 </script>
 {% endblock %}

@@ -334,12 +334,19 @@ def dashboard():
     origin_data = DATA["origin_summary"].to_dict("records")
     all_drifts = valid[["word", "origin_class", "drift_score"]].to_dict("records")
 
+    dl_origin_data = DATA["dl_origin_summary"].to_dict("records") if not DATA["dl_origin_summary"].empty else []
+    dl_stats = DATA.get("dl_statistical_tests", {})
+    total_dl_words = len(DATA.get("dl_drift_df", []))
+
     return render_template("dashboard.html",
         stats=DATA["stats"],
         top_drifted=top_drifted,
         most_stable=most_stable,
         origin_data=origin_data,
         all_drifts=all_drifts,
+        dl_origin_data=dl_origin_data,
+        dl_stats=dl_stats,
+        total_dl_words=total_dl_words,
         videos=VIDEO_MAP,
     )
 
@@ -347,15 +354,32 @@ def dashboard():
 @app.route("/explorer")
 def explorer():
     """Word Explorer page."""
-    word = request.args.get("word", "")
+    word = request.args.get("word", "").strip().lower()
+    if not word:
+        word = "craft"
     word_data = get_word_data(word) if word else None
+    dl_word_data = get_dl_word_data(word) if word else None
 
     all_words = sorted(DATA["valid_drift"]["word"].tolist())
+    all_dl_words = sorted(list(DATA.get("dl_drift_map", {}).keys()))
+    if not all_dl_words and DL_DRIFT_SCORES_CSV.exists():
+        _df = pd.read_csv(DL_DRIFT_SCORES_CSV)
+        all_dl_words = sorted(_df["word"].dropna().unique().tolist())
+    if not all_dl_words:
+        all_dl_words = all_words
+
+    dl_records = DATA.get("dl_drift_df", pd.DataFrame()).to_dict("records") if not DATA.get("dl_drift_df", pd.DataFrame()).empty else []
+    if not dl_records and DL_DRIFT_SCORES_CSV.exists():
+        dl_records = pd.read_csv(DL_DRIFT_SCORES_CSV).to_dict("records")
 
     return render_template("explorer.html",
         word_data=word_data,
+        dl_word_data=dl_word_data,
         all_words=all_words,
+        all_dl_words=all_dl_words,
+        dl_records=dl_records,
         query=word,
+        videos=VIDEO_MAP,
     )
 
 
@@ -390,12 +414,36 @@ def compare():
         }
 
     all_words = sorted(DATA["valid_drift"]["word"].tolist())
+    all_dl_words = sorted(list(DATA.get("dl_drift_map", {}).keys()))
+    if not all_dl_words and DL_DRIFT_SCORES_CSV.exists():
+        _df = pd.read_csv(DL_DRIFT_SCORES_CSV)
+        all_dl_words = sorted(_df["word"].dropna().unique().tolist())
+    if not all_dl_words:
+        all_dl_words = all_words
+
+    dl_records = DATA.get("dl_drift_df", pd.DataFrame()).to_dict("records") if not DATA.get("dl_drift_df", pd.DataFrame()).empty else []
+    if not dl_records and DL_DRIFT_SCORES_CSV.exists():
+        dl_records = pd.read_csv(DL_DRIFT_SCORES_CSV).to_dict("records")
+    dl_data_a = get_dl_word_data(word_a) if word_a else None
+    dl_data_b = get_dl_word_data(word_b) if word_b else None
+
+    dl_comparison = None
+    if dl_data_a and dl_data_a["found"] and dl_data_b and dl_data_b["found"]:
+        dl_comparison = {
+            "delta_w2": round(abs(dl_data_a["wasserstein_w2"] - dl_data_b["wasserstein_w2"]), 4),
+            "more_stable": word_a if dl_data_a["wasserstein_w2"] < dl_data_b["wasserstein_w2"] else word_b,
+        }
 
     return render_template("compare.html",
         data_a=data_a,
         data_b=data_b,
+        dl_data_a=dl_data_a,
+        dl_data_b=dl_data_b,
+        dl_comparison=dl_comparison,
         cross_sim=cross_sim,
         all_words=all_words,
+        all_dl_words=all_dl_words,
+        dl_records=dl_records,
         query_a=word_a,
         query_b=word_b,
         videos=VIDEO_MAP,
@@ -406,8 +454,10 @@ def compare():
 def overview():
     """Origin Overview page."""
     origin_data = DATA["origin_summary"].to_dict("records")
+    dl_origin_data = DATA["dl_origin_summary"].to_dict("records") if not DATA["dl_origin_summary"].empty else []
+    dl_stats = DATA.get("dl_statistical_tests", {})
 
-    # Per-origin top words
+    # Per-origin top words (Classical)
     per_origin = {}
     valid = DATA["valid_drift"]
     for origin in ORIGIN_CLASSES:
@@ -416,12 +466,59 @@ def overview():
         )
         per_origin[origin] = og.head(5).to_dict("records")
 
+    # Per-origin top words (Deep Learning W2)
+    dl_per_origin = {}
+    if not DATA["dl_drift_df"].empty:
+        for origin in ORIGIN_CLASSES:
+            og_dl = DATA["dl_drift_df"][DATA["dl_drift_df"]["origin_class"] == origin].sort_values(
+                "wasserstein_w2", ascending=False
+            )
+            dl_per_origin[origin] = og_dl.head(5).to_dict("records")
+
     # UMAP data for scatter
     umap_data = DATA["umap_df"].to_dict("records")
 
+    # Publication Figures
+    dl_figures = [
+        {
+            "id": "w2_distribution",
+            "title": "2-Wasserstein Drift Distribution by Origin",
+            "url": "/figures/dl_w2_distribution_boxplot.png",
+            "desc": "Boxplot showing W2 distribution, medians, and Kruskal-Wallis significance (H=18.23, p=0.0027).",
+        },
+        {
+            "id": "shift_typology",
+            "title": "Semantic Shift Typology Distribution",
+            "url": "/figures/dl_shift_typology_breakdown.png",
+            "desc": "Proportion of Sense Broadening, Invariance, Migration, and Narrowing across linguistic roots.",
+        },
+        {
+            "id": "classical_vs_dl",
+            "title": "Classical vs. Deep Learning Cross-Paradigm Scatter",
+            "url": "/figures/dl_classical_vs_dl_scatter.png",
+            "desc": "Scatter plot with regression trendline and benchmark seed callouts (Spearman ρ = 0.1621).",
+        },
+        {
+            "id": "dispersion_space",
+            "title": "Diachronic Dispersion Space (σ²_hist vs σ²_mod)",
+            "url": "/figures/dl_dispersion_shift_scatter.png",
+            "desc": "Intra-cloud variance showing semantic domain broadening vs specialization.",
+        },
+        {
+            "id": "correlation_heatmap",
+            "title": "Inter-Metric Diachronic Shift Correlation Matrix",
+            "url": "/figures/dl_correlation_heatmap.png",
+            "desc": "Spearman rank correlations across all classical and deep learning metrics.",
+        },
+    ]
+
     return render_template("overview.html",
         origin_data=origin_data,
+        dl_origin_data=dl_origin_data,
+        dl_stats=dl_stats,
+        dl_figures=dl_figures,
         per_origin=per_origin,
+        dl_per_origin=dl_per_origin,
         umap_data=json.dumps(umap_data),
         stats=DATA["stats"],
         videos=VIDEO_MAP,
