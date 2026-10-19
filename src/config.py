@@ -322,6 +322,10 @@ TRANSFORMER_MODEL_NAME = "bert-base-uncased"
 DL_DRIFT_SCORES_CSV = RESULTS_DIR / "dl_drift_scores.csv"
 DL_ORIGIN_DRIFT_SUMMARY = RESULTS_DIR / "dl_origin_drift_summary.csv"
 DL_DRIFT_REPORT = RESULTS_DIR / "dl_drift_report.txt"
+DL_STATISTICAL_TESTS_JSON = RESULTS_DIR / "dl_statistical_tests.json"
+DL_HYPOTHESIS_REPORT = RESULTS_DIR / "dl_hypothesis_testing_report.txt"
+DL_FIGURES_DIR = RESULTS_DIR / "figures"
+
 
 
 # ──────────────────────────────────────────────
