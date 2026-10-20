@@ -1,295 +1,301 @@
 """
-Scene 3: "Two Words, Two Stories" (Comparison Animation)
-==========================================================
-Deep-dive comparison of two words — shows their neighbor constellations
-in both time periods side by side.
+Scene 3: Two Words, Two Stories (Diachronic Semantic Comparison)
+================================================================
+Side-by-side comparative analysis of two words' semantic drift trajectories
+using dual 2D PCA subspaces, Gaussian density contours, and synchronized
+optimal transport streamlines.
 
-This scene is PARAMETRIC — accepts word_a and word_b as config variables
-so the web app can render any pair on demand.
-
-Default comparison: "craft" vs "room"
+Parametric scene:
+    word_a: Primary word (e.g. "craft")
+    word_b: Comparison word (e.g. "room" or "mouse")
 """
 
 import sys
 from pathlib import Path
 import numpy as np
-import pandas as pd
-from manim import *
+import manimgx as m
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.config import (
-    W2V_MODEL_OLD, W2V_MODEL_NEW, W2V_ALIGNED_OLD,
-    RESULTS_DIR,
+from manim_scenes.geometry import get_geometry_for_word, WordGeometry
+from manim_scenes.components import (
+    GaussianDensityContour,
+    TransportStreamline,
+    NeighborNodeMobject,
+    CosSimSpoke,
+    EraBadge,
 )
 
-DEEP_BG = "#1a1a2e"
-GERMANIC_BLUE = "#4FC3F7"
-LATIN_RED = "#EF5350"
-GREEK_GREEN = "#66BB6A"
-SANSKRIT_GOLD = "#FFD54F"
-PIE_LAVENDER = "#CE93D8"
-OTHER_GRAY = "#90A4AE"
-SOFT_WHITE = "#e0e0e0"
-ACCENT_PURPLE = "#BB86FC"
-GRID_DIM = "#202040"
-
-ORIGIN_COLORS = {
-    "Germanic": GERMANIC_BLUE,
-    "Latin": LATIN_RED,
-    "Greek": GREEK_GREEN,
-    "Sanskrit": SANSKRIT_GOLD,
-    "PIE": PIE_LAVENDER,
-    "Other": OTHER_GRAY,
-}
+DEEP_BG = "#0B0E14"
 
 
-def load_data():
-    """Load models, aligned vectors, and drift data."""
-    from gensim.models import Word2Vec
+class ComparisonCardHUD(m.VGroup):
+    """Compact telemetry card for one half of the comparison screen."""
+    def __init__(self, geo: WordGeometry, center_x: float, **kwargs):
+        super().__init__(**kwargs)
+        self.bg = m.RoundedRectangle(
+            corner_radius=0.16,
+            width=6.3,
+            height=1.25,
+            fill_color="#0D1117",
+            fill_opacity=0.94,
+            stroke_color="#30363D",
+            stroke_width=1.4,
+        )
+        self.add(self.bg)
 
-    model_old = Word2Vec.load(str(W2V_MODEL_OLD))
-    model_new = Word2Vec.load(str(W2V_MODEL_NEW))
-    aligned_old = np.load(str(W2V_ALIGNED_OLD))
+        # Row 1: Word Title + Origin pill
+        title = m.Text(geo.word.upper(), font_size=26, color="#FFFFFF")
+        
+        origin_pill_bg = m.RoundedRectangle(
+            corner_radius=0.08,
+            width=max(1.8, len(geo.origin) * 0.18 + 0.6),
+            height=0.42,
+            fill_color=geo.origin_color,
+            fill_opacity=0.22,
+            stroke_color=geo.origin_color,
+            stroke_width=1.2,
+        )
+        origin_pill_txt = m.Text(geo.origin, font_size=15, color=geo.origin_color)
+        origin_pill_txt.move_to(origin_pill_bg.get_center())
+        origin_pill = m.VGroup(origin_pill_bg, origin_pill_txt)
 
-    old_words = list(model_old.wv.key_to_index.keys())
-    old_w2i = {w: i for i, w in enumerate(old_words)}
+        row1 = m.VGroup(title, origin_pill).arrange(m.RIGHT, buff=0.25)
+        row1.align_to(self.bg, m.LEFT).shift(m.RIGHT * 0.35 + m.UP * 0.22)
 
-    drift_df = pd.read_csv(RESULTS_DIR / "drift_scores.csv")
+        # Row 2: Shift Archetype Pill + W2 Metric
+        shift_pill_bg = m.RoundedRectangle(
+            corner_radius=0.08,
+            width=max(2.4, len(geo.shift_type) * 0.16 + 0.6),
+            height=0.42,
+            fill_color=geo.shift_color,
+            fill_opacity=0.22,
+            stroke_color=geo.shift_color,
+            stroke_width=1.2,
+        )
+        shift_pill_txt = m.Text(geo.shift_type, font_size=15, color=geo.shift_color)
+        shift_pill_txt.move_to(shift_pill_bg.get_center())
+        shift_pill = m.VGroup(shift_pill_bg, shift_pill_txt)
 
-    return model_old, model_new, aligned_old, old_words, old_w2i, drift_df
+        w2_badge = m.Text(f"W2 = {geo.w2_score:.4f}", font_size=16, color="#58A6FF")
+        
+        row2 = m.VGroup(shift_pill, w2_badge).arrange(m.RIGHT, buff=0.30)
+        row2.align_to(self.bg, m.LEFT).shift(m.RIGHT * 0.35 + m.DOWN * 0.25)
+
+        self.add(row1, row2)
+        self.move_to(np.array([center_x, 3.15, 0.0]))
 
 
-def cosine_sim(v1, v2):
-    n1, n2 = np.linalg.norm(v1), np.linalg.norm(v2)
-    if n1 == 0 or n2 == 0:
-        return 0.0
-    return float(np.dot(v1, v2) / (n1 * n2))
-
-
-class ComparisonScene(Scene):
-    # Override these for different word pairs
+class ComparisonScene(m.Scene):
     word_a = "craft"
     word_b = "room"
 
-    def construct(self):
+    def construct(self) -> None:
         self.camera.background_color = DEEP_BG
 
-        model_old, model_new, aligned_old, old_words, old_w2i, drift_df = load_data()
-
-        # Get word info
-        def get_word_info(word):
-            row = drift_df[drift_df["word"] == word]
-            if len(row) == 0:
-                return {"origin": "Unknown", "drift": 0, "status": "MISSING"}
-            row = row.iloc[0]
-            return {
-                "origin": row["origin_class"],
-                "drift": row["drift_score"] if row["status"] == "OK" else 0,
-                "status": row["status"],
-            }
-
-        def get_old_neighbors(word, topn=5):
-            if word not in old_w2i:
-                return []
-            target = aligned_old[old_w2i[word]]
-            norms = np.linalg.norm(aligned_old, axis=1)
-            norms[norms == 0] = 1
-            sims = aligned_old @ target / (norms * np.linalg.norm(target))
-            top_idxs = np.argsort(sims)[::-1][1:topn + 1]
-            return [(old_words[i], float(sims[i])) for i in top_idxs]
-
-        info_a = get_word_info(self.word_a)
-        info_b = get_word_info(self.word_b)
-
-        color_a = ORIGIN_COLORS.get(info_a["origin"], SOFT_WHITE)
-        color_b = ORIGIN_COLORS.get(info_b["origin"], SOFT_WHITE)
-
-        # ── Shot 1: Title ──
-        title = Text(
-            f'Comparing: "{self.word_a}" vs "{self.word_b}"',
-            font_size=38, color=SOFT_WHITE,
+        # Fetch dual viewport geometries
+        geo_a: WordGeometry = get_geometry_for_word(
+            self.word_a, x_bounds=(-5.4, -1.1), y_bounds=(-2.2, 1.8), min_dist=1.20
         )
-        origin_badges = VGroup(
-            Text(f"Origin: {info_a['origin']}", font_size=18, color=color_a),
-            Text("  vs  ", font_size=18, color=SOFT_WHITE),
-            Text(f"Origin: {info_b['origin']}", font_size=18, color=color_b),
-        ).arrange(RIGHT).next_to(title, DOWN, buff=0.4)
-
-        self.play(Write(title, run_time=1.5))
-        self.play(FadeIn(origin_badges))
-        self.wait(2)
-        self.play(FadeOut(title), FadeOut(origin_badges))
-
-        # ── Shot 2: Split screen ──
-        divider = Line(
-            [0, -3.5, 0], [0, 3.5, 0],
-            color=GRID_DIM, stroke_width=1,
+        geo_b: WordGeometry = get_geometry_for_word(
+            self.word_b, x_bounds=(1.1, 5.4), y_bounds=(-2.2, 1.8), min_dist=1.20
         )
-        self.play(Create(divider))
 
-        label_a = Text(f'"{self.word_a}"', font_size=28, color=color_a).move_to([-3.5, 3.2, 0])
-        label_b = Text(f'"{self.word_b}"', font_size=28, color=color_b).move_to([3.5, 3.2, 0])
-        self.play(FadeIn(label_a), FadeIn(label_b))
+        # ══════════════════════════════════════════════════════
+        # ACT 0 — Dual HUDs, Divider & Atmosphere
+        # ══════════════════════════════════════════════════════
+        hud_a = ComparisonCardHUD(geo_a, center_x=-3.55)
+        hud_b = ComparisonCardHUD(geo_b, center_x=3.55)
 
-        # ── Shot 3: 1800s neighbor constellations ──
-        era_old = Text("1800s", font_size=22, color=SANSKRIT_GOLD).to_edge(UP, buff=0.2)
-        self.play(FadeIn(era_old))
+        divider = m.DashedLine(
+            start=np.array([0.0, 2.4, 0.0]),
+            end=np.array([0.0, -2.8, 0.0]),
+            dash_length=0.18,
+            dashed_ratio=0.55,
+            stroke_color="#30363D",
+            stroke_width=1.8,
+        )
 
-        # Left panel: word_a neighbors
-        center_a = np.array([-3.5, 0.5, 0])
-        dot_a = Dot(center_a, radius=0.12, color=color_a)
-        dot_a.set_glow_factor(0.4)
-        dot_a_label = Text(self.word_a, font_size=14, color=color_a).next_to(dot_a, DOWN, buff=0.12)
+        vs_badge_bg = m.Circle(
+            radius=0.30,
+            fill_color="#0D1117",
+            fill_opacity=1.0,
+            stroke_color="#58A6FF",
+            stroke_width=1.5,
+        ).move_to(np.array([0.0, 3.15, 0.0]))
+        vs_badge_txt = m.Text("VS", font_size=15, color="#58A6FF").move_to(vs_badge_bg.get_center())
+        vs_badge = m.VGroup(vs_badge_bg, vs_badge_txt)
 
-        old_nbrs_a = get_old_neighbors(self.word_a)
-        nbr_dots_a = VGroup()
-        nbr_lines_a = VGroup()
-        num_a = len(old_nbrs_a)
-        angles_a = np.linspace(0, 2 * np.pi, max(num_a, 5), endpoint=False)
-
-        for i, (w, s) in enumerate(old_nbrs_a):
-            offset = np.array([np.cos(angles_a[i]) * 1.3, np.sin(angles_a[i]) * 1.3, 0])
-            pos = center_a + offset
-            ndot = Dot(pos, radius=0.05, color=GRID_DIM).set_opacity(0.6)
-            direction = offset / max(np.linalg.norm(offset), 1)
-            nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, direction, buff=0.05).set_opacity(0.8)
-            nline = Line(center_a, pos, color=color_a, stroke_width=0.8).set_opacity(0.3)
-            nbr_dots_a.add(ndot, nlabel)
-            nbr_lines_a.add(nline)
-
-        # Right panel: word_b neighbors
-        center_b = np.array([3.5, 0.5, 0])
-        dot_b = Dot(center_b, radius=0.12, color=color_b)
-        dot_b.set_glow_factor(0.4)
-        dot_b_label = Text(self.word_b, font_size=14, color=color_b).next_to(dot_b, DOWN, buff=0.12)
-
-        old_nbrs_b = get_old_neighbors(self.word_b)
-        nbr_dots_b = VGroup()
-        nbr_lines_b = VGroup()
-        num_b = len(old_nbrs_b)
-        angles_b = np.linspace(0, 2 * np.pi, max(num_b, 5), endpoint=False)
-
-        for i, (w, s) in enumerate(old_nbrs_b):
-            offset = np.array([np.cos(angles_b[i]) * 1.3, np.sin(angles_b[i]) * 1.3, 0])
-            pos = center_b + offset
-            ndot = Dot(pos, radius=0.05, color=GRID_DIM).set_opacity(0.6)
-            direction = offset / max(np.linalg.norm(offset), 1)
-            nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, direction, buff=0.05).set_opacity(0.8)
-            nline = Line(center_b, pos, color=color_b, stroke_width=0.8).set_opacity(0.3)
-            nbr_dots_b.add(ndot, nlabel)
-            nbr_lines_b.add(nline)
+        era_badge = EraBadge(
+            era_text="ERA: 1800 - 1900 (HISTORICAL CORPUS COMPARISON)",
+            color="#58A6FF",
+        )
 
         self.play(
-            FadeIn(dot_a, scale=0.5), FadeIn(dot_a_label),
-            FadeIn(dot_b, scale=0.5), FadeIn(dot_b_label),
-        )
-        self.play(
-            FadeIn(nbr_dots_a), Create(nbr_lines_a),
-            FadeIn(nbr_dots_b), Create(nbr_lines_b),
-        )
-
-        old_nbr_text_a = ", ".join(w for w, _ in old_nbrs_a[:5])
-        old_nbr_text_b = ", ".join(w for w, _ in old_nbrs_b[:5])
-        narration_old = Text(
-            f'In the 1800s: "{self.word_a}" → {old_nbr_text_a}',
-            font_size=14, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.8)
-
-        self.play(FadeIn(narration_old))
-        self.wait(2.5)
-
-        # ── Shot 4: Transition to 2000s ──
-        era_new = Text("2000s", font_size=22, color=LATIN_RED).to_edge(UP, buff=0.2)
-
-        # Get new neighbors
-        new_nbrs_a = model_new.wv.most_similar(self.word_a, topn=5) if self.word_a in model_new.wv else []
-        new_nbrs_b = model_new.wv.most_similar(self.word_b, topn=5) if self.word_b in model_new.wv else []
-
-        # Ghost old neighbors
-        self.play(
-            ReplacementTransform(era_old, era_new),
-            FadeOut(narration_old),
-            nbr_dots_a.animate.set_opacity(0.15),
-            nbr_lines_a.animate.set_opacity(0.1),
-            nbr_dots_b.animate.set_opacity(0.15),
-            nbr_lines_b.animate.set_opacity(0.1),
+            m.FadeIn(hud_a, shift=m.DOWN * 0.2),
+            m.FadeIn(hud_b, shift=m.DOWN * 0.2),
+            m.Create(divider),
+            m.FadeIn(vs_badge),
+            m.FadeIn(era_badge, shift=m.UP * 0.2),
+            run_time=0.8,
         )
 
-        # New neighbor constellations (offset slightly to show movement)
-        new_nbr_dots_a = VGroup()
-        new_nbr_lines_a = VGroup()
-        new_center_a = center_a + np.array([0.3, -0.5, 0])
+        # ══════════════════════════════════════════════════════
+        # ACT I — Historical Constellations (Side by Side)
+        # ══════════════════════════════════════════════════════
+        def build_side(geo: WordGeometry):
+            target_dot = m.Dot(point=geo.old_target_pos, radius=0.16, color=geo.origin_color)
+            target_ring = m.Circle(
+                radius=0.28, stroke_color=geo.origin_color, stroke_width=2.0, stroke_opacity=0.85, fill_opacity=0.0
+            ).move_to(geo.old_target_pos)
+            target_node = m.VGroup(target_ring, target_dot)
 
-        for i, (w, s) in enumerate(new_nbrs_a):
-            idx = i % len(angles_a)
-            offset = np.array([np.cos(angles_a[idx] + 0.3) * 1.3, np.sin(angles_a[idx] + 0.3) * 1.3, 0])
-            pos = new_center_a + offset
-            ndot = Dot(pos, radius=0.05, color=color_a).set_opacity(0.8)
-            nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, UR, buff=0.05).set_opacity(0.9)
-            nline = Line(new_center_a, pos, color=color_a, stroke_width=0.8).set_opacity(0.4)
-            new_nbr_dots_a.add(ndot, nlabel)
-            new_nbr_lines_a.add(nline)
+            contour = GaussianDensityContour(
+                center=geo.hist_contour.center,
+                radius_x=min(1.2, geo.hist_contour.radius_x * 0.70),
+                radius_y=min(0.95, geo.hist_contour.radius_y * 0.70),
+                angle=geo.hist_contour.angle,
+                color=geo.origin_color,
+            )
 
-        new_nbr_dots_b = VGroup()
-        new_nbr_lines_b = VGroup()
-        new_center_b = center_b + np.array([-0.1, -0.1, 0])
+            nodes, spokes = [], []
+            for nbr in geo.old_neighbors:
+                node = NeighborNodeMobject(
+                    word=nbr.word,
+                    pos=nbr.pos,
+                    center_pos=geo.old_target_pos,
+                    color=geo.origin_color,
+                    similarity=nbr.similarity,
+                    is_shared=nbr.is_shared,
+                )
+                spoke = CosSimSpoke(
+                    start_pt=geo.old_target_pos,
+                    end_pt=nbr.pos,
+                    similarity=nbr.similarity,
+                    color=geo.origin_color,
+                )
+                nodes.append(node)
+                spokes.append(spoke)
 
-        for i, (w, s) in enumerate(new_nbrs_b):
-            idx = i % len(angles_b)
-            offset = np.array([np.cos(angles_b[idx] + 0.1) * 1.3, np.sin(angles_b[idx] + 0.1) * 1.3, 0])
-            pos = new_center_b + offset
-            ndot = Dot(pos, radius=0.05, color=color_b).set_opacity(0.8)
-            nlabel = Text(w, font_size=11, color=SOFT_WHITE).next_to(ndot, UR, buff=0.05).set_opacity(0.9)
-            nline = Line(new_center_b, pos, color=color_b, stroke_width=0.8).set_opacity(0.4)
-            new_nbr_dots_b.add(ndot, nlabel)
-            new_nbr_lines_b.add(nline)
+            return target_dot, target_ring, target_node, contour, m.VGroup(*nodes), m.VGroup(*spokes)
+
+        dot_a, ring_a, target_a, contour_a, nodes_a, spokes_a = build_side(geo_a)
+        dot_b, ring_b, target_b, contour_b, nodes_b, spokes_b = build_side(geo_b)
 
         self.play(
-            dot_a.animate.move_to(new_center_a),
-            dot_a_label.animate.next_to(Dot(new_center_a), DOWN, buff=0.12),
-            dot_b.animate.move_to(new_center_b),
-            dot_b_label.animate.next_to(Dot(new_center_b), DOWN, buff=0.12),
-            FadeIn(new_nbr_dots_a), Create(new_nbr_lines_a),
-            FadeIn(new_nbr_dots_b), Create(new_nbr_lines_b),
-            run_time=2,
+            m.FadeIn(contour_a, scale=0.88),
+            m.FadeIn(contour_b, scale=0.88),
+            m.Create(target_a),
+            m.Create(target_b),
+            run_time=1.0,
         )
-
-        self.wait(1)
-
-        # ── Shot 5: Drift score counters ──
-        drift_a = info_a["drift"]
-        drift_b = info_b["drift"]
-
-        drift_color_a = LATIN_RED if drift_a > 0.5 else GREEK_GREEN
-        drift_color_b = LATIN_RED if drift_b > 0.5 else GREEK_GREEN
-
-        drift_text_a = Text(
-            f"Drift: {drift_a:.3f}", font_size=22, color=drift_color_a,
-        ).move_to([-3.5, -2.5, 0])
-
-        drift_text_b = Text(
-            f"Drift: {drift_b:.3f}", font_size=22, color=drift_color_b,
-        ).move_to([3.5, -2.5, 0])
+        self.bring_to_front(target_a, target_b)
 
         self.play(
-            FadeIn(drift_text_a),
-            FadeIn(drift_text_b),
+            m.Create(spokes_a),
+            m.Create(spokes_b),
+            m.FadeIn(nodes_a, scale=0.9),
+            m.FadeIn(nodes_b, scale=0.9),
+            run_time=1.2,
+        )
+        self.wait(1.0)
+
+        # ══════════════════════════════════════════════════════
+        # ACT II — Synchronized Diachronic Flight
+        # ══════════════════════════════════════════════════════
+        trans_badge = EraBadge(
+            era_text="OPTIMAL TRANSPORT: SYNCHRONIZED VECTOR DRIFT",
+            color="#BA68C8",
         )
 
-        # Verdict
-        if drift_a > drift_b:
-            verdict = f'"{self.word_a}" transformed. "{self.word_b}" endured.'
-        else:
-            verdict = f'"{self.word_b}" transformed. "{self.word_a}" endured.'
-
-        verdict_text = Text(
-            verdict, font_size=20, color=ACCENT_PURPLE,
-        ).to_edge(DOWN, buff=0.3)
-
-        self.play(FadeIn(verdict_text, shift=UP * 0.2))
-        self.wait(3)
+        streamline_a = TransportStreamline(
+            start_pt=geo_a.old_target_pos, end_pt=geo_a.new_target_pos, color="#BA68C8", arc_angle=-0.25
+        )
+        streamline_b = TransportStreamline(
+            start_pt=geo_b.old_target_pos, end_pt=geo_b.new_target_pos, color="#BA68C8", arc_angle=-0.25
+        )
 
         self.play(
-            *[FadeOut(mob) for mob in self.mobjects],
-            run_time=1.5,
+            m.Transform(era_badge, trans_badge),
+            m.Create(streamline_a),
+            m.Create(streamline_b),
+            m.FadeOut(spokes_a),
+            m.FadeOut(spokes_b),
+            m.FadeOut(contour_a),
+            m.FadeOut(contour_b),
+            m.FadeOut(nodes_a),
+            m.FadeOut(nodes_b),
+            run_time=1.0,
         )
+
+        # Dual simultaneous target flight
+        self.play(
+            dot_a.animate.move_to(geo_a.new_target_pos),
+            ring_a.animate.move_to(geo_a.new_target_pos),
+            dot_b.animate.move_to(geo_b.new_target_pos),
+            ring_b.animate.move_to(geo_b.new_target_pos),
+            run_time=1.6,
+        )
+
+        # ══════════════════════════════════════════════════════
+        # ACT III — Modern Constellations & Comparative Verdict
+        # ══════════════════════════════════════════════════════
+        def build_modern_side(geo: WordGeometry):
+            contour = GaussianDensityContour(
+                center=geo.mod_contour.center,
+                radius_x=min(1.2, geo.mod_contour.radius_x * 0.70),
+                radius_y=min(0.95, geo.mod_contour.radius_y * 0.70),
+                angle=geo.mod_contour.angle,
+                color="#66BB6A",
+            )
+            nodes, spokes = [], []
+            for nbr in geo.new_neighbors:
+                node = NeighborNodeMobject(
+                    word=nbr.word,
+                    pos=nbr.pos,
+                    center_pos=geo.new_target_pos,
+                    color="#66BB6A",
+                    similarity=nbr.similarity,
+                    is_shared=nbr.is_shared,
+                    is_novel=nbr.is_novel,
+                    is_historical=False,
+                )
+                spoke = CosSimSpoke(
+                    start_pt=geo.new_target_pos,
+                    end_pt=nbr.pos,
+                    similarity=nbr.similarity,
+                    color="#66BB6A",
+                )
+                nodes.append(node)
+                spokes.append(spoke)
+            return contour, m.VGroup(*nodes), m.VGroup(*spokes)
+
+        mod_contour_a, mod_nodes_a, mod_spokes_a = build_modern_side(geo_a)
+        mod_contour_b, mod_nodes_b, mod_spokes_b = build_modern_side(geo_b)
+
+        delta_w2 = abs(geo_a.w2_score - geo_b.w2_score)
+        more_stable = geo_a.word.upper() if geo_a.w2_score <= geo_b.w2_score else geo_b.word.upper()
+        more_drifted = geo_b.word.upper() if geo_a.w2_score <= geo_b.w2_score else geo_a.word.upper()
+
+        verdict_badge = EraBadge(
+            era_text=f"VERDICT: {more_stable} MORE STABLE  |  {more_drifted} DRIFTED (ΔW2 = {delta_w2:.4f})",
+            color="#FFB74D",
+        )
+
+        self.play(
+            m.Transform(era_badge, verdict_badge),
+            m.FadeIn(mod_contour_a, scale=0.88),
+            m.FadeIn(mod_contour_b, scale=0.88),
+            m.Create(mod_spokes_a),
+            m.Create(mod_spokes_b),
+            m.FadeIn(mod_nodes_a, scale=0.9),
+            m.FadeIn(mod_nodes_b, scale=0.9),
+            m.FadeOut(streamline_a),
+            m.FadeOut(streamline_b),
+            run_time=1.4,
+        )
+        self.bring_to_front(mod_nodes_a, mod_nodes_b, ring_a, dot_a, ring_b, dot_b)
+        self.wait(1.5)
+
+
+if __name__ == "__main__":
+    print(f"ComparisonScene configured for: '{ComparisonScene.word_a}' vs '{ComparisonScene.word_b}'")

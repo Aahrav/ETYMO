@@ -1,293 +1,240 @@
 """
-Scene 1: "What Are Word Embeddings?" (Educational Intro)
-=========================================================
-3Blue1Brown-style animation introducing the concept of word embeddings
-and semantic drift. Builds incrementally, reveals one concept at a time.
+Scene 1: What Are Word Embeddings? (Educational Introduction)
+==============================================================
+3Blue1Brown-quality pedagogical animation explaining word vectors,
+vector arithmetic (king - man + woman = queen), high-dimensional geometry,
+and setting up the core concept of diachronic semantic drift.
 """
 
 import sys
 from pathlib import Path
-from manim import *
+import numpy as np
+import manimgx as m
 
-# Add project root
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from manim_scenes.components import EraBadge
 
-# ── 3B1B Color palette ──
-DEEP_BG = "#1a1a2e"
-GERMANIC_BLUE = "#4FC3F7"
-LATIN_RED = "#EF5350"
-GREEK_GREEN = "#66BB6A"
-OTHER_AMBER = "#FFA726"
-SOFT_WHITE = "#e0e0e0"
-ACCENT_PURPLE = "#BB86FC"
-GRID_DIM = "#2a2a4e"
+DEEP_BG = "#0B0E14"
 
 
-class EmbeddingsIntroScene(Scene):
-    def construct(self):
+class EmbeddingsIntroHUD(m.VGroup):
+    """Top telemetry bar for the intro explainer."""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bg = m.RoundedRectangle(
+            corner_radius=0.16,
+            width=13.4,
+            height=1.15,
+            fill_color="#0D1117",
+            fill_opacity=0.92,
+            stroke_color="#30363D",
+            stroke_width=1.4,
+        )
+        self.add(self.bg)
+
+        title = m.Text("WHAT ARE WORD EMBEDDINGS?", font_size=24, color="#FFFFFF")
+        title.align_to(self.bg, m.LEFT).shift(m.RIGHT * 0.40)
+
+        subtitle = m.Text("DISTRIBUTIONAL SEMANTICS: d = 100", font_size=15, color="#58A6FF")
+        subtitle.align_to(self.bg, m.RIGHT).shift(m.LEFT * 0.40)
+
+        self.add(title, subtitle)
+        self.move_to(m.UP * 3.20)
+
+
+class EmbeddingsIntroScene(m.Scene):
+    def construct(self) -> None:
         self.camera.background_color = DEEP_BG
 
-        # ── Shot 1: Title ──
-        title = Text(
-            "How do words live in\nmathematical space?",
-            font_size=48, color=SOFT_WHITE,
-        ).move_to(ORIGIN)
-        subtitle = Text(
-            "An introduction to word embeddings",
-            font_size=24, color=ACCENT_PURPLE,
-        ).next_to(title, DOWN, buff=0.5)
-
-        self.play(Write(title, run_time=2))
-        self.play(FadeIn(subtitle, shift=UP * 0.3))
-        self.wait(2)
-        self.play(FadeOut(title), FadeOut(subtitle))
-
-        # ── Shot 2: Word → Vector ──
-        word_text = Text('"king"', font_size=52, color=GERMANIC_BLUE)
-        word_text.move_to(ORIGIN)
-        self.play(Write(word_text))
-        self.wait(0.5)
-
-        vec_text = Text(
-            "v_king = [0.21, -0.53, 0.81, ...]",
-            font_size=32, color=SOFT_WHITE,
-        ).move_to(ORIGIN)
-
-        narration1 = Text(
-            "Every word becomes a vector — a list of numbers.",
-            font_size=22, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.7)
+        # ══════════════════════════════════════════════════════
+        # ACT 0 — Atmospheric Setup & HUD
+        # ══════════════════════════════════════════════════════
+        hud = EmbeddingsIntroHUD()
+        era_badge = EraBadge(
+            era_text="CORE CONCEPT: WORDS AS POINTS IN HIGH-DIMENSIONAL CONTINUOUS SPACE",
+            color="#58A6FF",
+        )
 
         self.play(
-            ReplacementTransform(word_text, vec_text),
-            FadeIn(narration1, shift=UP * 0.2),
+            m.FadeIn(hud, shift=m.DOWN * 0.2),
+            m.FadeIn(era_badge, shift=m.UP * 0.2),
+            run_time=0.8,
         )
-        self.wait(2)
-        self.play(FadeOut(vec_text), FadeOut(narration1))
 
-        # ── Shot 3: 2D Axes with word dots ──
-        axes = Axes(
-            x_range=[-3, 3, 1],
-            y_range=[-3, 3, 1],
-            x_length=6, y_length=5,
-            tips=False,
-            axis_config={"color": GRID_DIM, "stroke_width": 1},
-        ).shift(UP * 0.2)
+        # ══════════════════════════════════════════════════════
+        # ACT I — Word to Vector Transformation
+        # ══════════════════════════════════════════════════════
+        word_card_bg = m.RoundedRectangle(
+            corner_radius=0.14,
+            width=3.2,
+            height=1.0,
+            fill_color="#1F242C",
+            fill_opacity=0.9,
+            stroke_color="#4FC3F7",
+            stroke_width=1.5,
+        ).move_to(np.array([0.0, 0.5, 0.0]))
+        word_card_txt = m.Text('"king"', font_size=28, color="#4FC3F7").move_to(word_card_bg.get_center())
+        word_card = m.VGroup(word_card_bg, word_card_txt)
 
-        # Word positions (illustrative 2D)
-        word_positions = {
-            "king":  (1.5, 2.0, GERMANIC_BLUE),
-            "queen": (1.8, 1.2, LATIN_RED),
-            "man":   (-0.5, 1.8, GERMANIC_BLUE),
-            "woman": (-0.2, 1.0, LATIN_RED),
-            "dog":   (-1.5, -1.5, GREEK_GREEN),
-            "cat":   (-1.0, -1.2, GREEK_GREEN),
+        self.play(m.FadeIn(word_card, scale=0.85), run_time=0.8)
+        self.wait(0.6)
+
+        vec_card_bg = m.RoundedRectangle(
+            corner_radius=0.14,
+            width=8.4,
+            height=1.0,
+            fill_color="#1F242C",
+            fill_opacity=0.9,
+            stroke_color="#BA68C8",
+            stroke_width=1.5,
+        ).move_to(np.array([0.0, 0.5, 0.0]))
+        vec_card_txt = m.Text("v_king = [ +0.28, -0.42, +0.91, ... ]  ∈ ℝ¹⁰⁰", font_size=22, color="#E6EDF3").move_to(vec_card_bg.get_center())
+        vec_card = m.VGroup(vec_card_bg, vec_card_txt)
+
+        self.play(
+            m.Transform(word_card, vec_card),
+            run_time=1.0,
+        )
+        self.wait(1.0)
+        self.play(m.FadeOut(word_card), run_time=0.6)
+
+        # ══════════════════════════════════════════════════════
+        # ACT II — 2D Projection: Semantic Clustering & Arithmetic
+        # ══════════════════════════════════════════════════════
+        arith_badge = EraBadge(
+            era_text="VECTOR ARITHMETIC: v_king - v_man + v_woman ≈ v_queen",
+            color="#BA68C8",
+        )
+
+        # Coordinate axes frame
+        axes_box = m.RoundedRectangle(
+            corner_radius=0.16,
+            width=10.0,
+            height=4.6,
+            fill_color="#0D1117",
+            fill_opacity=0.70,
+            stroke_color="#30363D",
+            stroke_width=1.4,
+        ).move_to(np.array([0.0, -0.25, 0.0]))
+
+        # Illustrative coordinates
+        pts = {
+            "king":  np.array([2.0, 1.1, 0.0]),
+            "queen": np.array([2.4, -0.1, 0.0]),
+            "man":   np.array([-1.2, 0.8, 0.0]),
+            "woman": np.array([-0.8, -0.4, 0.0]),
+            "dog":   np.array([-3.4, -1.2, 0.0]),
+            "cat":   np.array([-2.4, -1.6, 0.0]),
         }
 
         dots = {}
-        labels = {}
-        for word, (x, y, color) in word_positions.items():
-            pos = axes.c2p(x, y)
-            dot = Dot(pos, radius=0.1, color=color)
-            dot.set_glow_factor(0.3)
-            label = Text(word, font_size=18, color=color).next_to(dot, UR, buff=0.1)
-            dots[word] = dot
-            labels[word] = label
+        for w, p in pts.items():
+            col = "#4FC3F7" if w in ["king", "queen", "man", "woman"] else "#66BB6A"
+            dot = m.Dot(point=p, radius=0.13, color=col)
+            lbl = m.Text(w, font_size=16, color=col)
+            lbl.next_to(dot, m.UP, buff=0.20)
+            lbl.add_background_rectangle(color="#0B0E14", opacity=0.92, buff=0.08)
+            dots[w] = m.VGroup(dot, lbl)
 
-        narration2 = Text(
-            "Words with similar meanings cluster together.",
-            font_size=22, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.7)
-
-        self.play(Create(axes, run_time=1))
-        # Staggered FadeIn for each word
-        for word in ["king", "queen", "man", "woman", "dog", "cat"]:
-            self.play(
-                FadeIn(dots[word], scale=0.5),
-                FadeIn(labels[word]),
-                run_time=0.4,
-            )
-        self.play(FadeIn(narration2, shift=UP * 0.2))
-        self.wait(2)
-
-        # ── Shot 4: The famous analogy ──
-        self.play(FadeOut(narration2))
-
-        # king - man + woman ≈ queen
-        arrow_km = Arrow(
-            dots["king"].get_center(), dots["man"].get_center(),
-            color=ACCENT_PURPLE, stroke_width=2, buff=0.15,
+        # Arrows demonstrating vector arithmetic
+        # Vector from man to king
+        arrow_man_king = m.Arrow(
+            start=pts["man"], end=pts["king"],
+            stroke_color="#BA68C8", stroke_width=2.5, buff=0.20,
         )
-        arrow_wq = Arrow(
-            dots["woman"].get_center(), dots["queen"].get_center(),
-            color=ACCENT_PURPLE, stroke_width=2, buff=0.15,
+        # Vector from woman to queen
+        arrow_woman_queen = m.Arrow(
+            start=pts["woman"], end=pts["queen"],
+            stroke_color="#BA68C8", stroke_width=2.5, buff=0.20,
         )
-        # Dashed parallel lines
-        dash_kw = DashedLine(
-            dots["king"].get_center(), dots["woman"].get_center(),
-            color=SOFT_WHITE, stroke_width=1,
-        ).set_opacity(0.4)
-        dash_mq = DashedLine(
-            dots["man"].get_center(), dots["queen"].get_center(),
-            color=SOFT_WHITE, stroke_width=1,
-        ).set_opacity(0.4)
-
-        formula = Text(
-            "king − man + woman ≈ queen",
-            font_size=26, color=ACCENT_PURPLE,
-        ).to_edge(DOWN, buff=0.7)
 
         self.play(
-            Create(arrow_km), Create(arrow_wq),
-            Create(dash_kw), Create(dash_mq),
-            run_time=1.5,
+            m.Transform(era_badge, arith_badge),
+            m.Create(axes_box),
+            *[m.FadeIn(dots[w]) for w in pts],
+            run_time=1.2,
         )
-        self.play(Write(formula))
-        self.wait(2.5)
-
-        # ── Shot 5: Dimensionality note ──
-        self.play(FadeOut(formula))
-        dim_note = Text(
-            "This is a 100-dimensional space, projected to 2D for you.",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.7).set_opacity(0.7)
-        self.play(FadeIn(dim_note))
+        self.play(
+            m.Create(arrow_man_king),
+            m.Create(arrow_woman_queen),
+            run_time=1.2,
+        )
         self.wait(1.5)
 
-        # ── Shot 6: Transition to time periods ──
-        self.play(
-            FadeOut(dim_note),
-            FadeOut(arrow_km), FadeOut(arrow_wq),
-            FadeOut(dash_kw), FadeOut(dash_mq),
-            *[FadeOut(labels[w]) for w in ["dog", "cat", "king", "queen", "man", "woman"]],
-            *[FadeOut(dots[w]) for w in ["dog", "cat", "king", "queen", "man", "woman"]],
-        )
-
-        transition_text = Text(
-            "But what if we train on text\nfrom different centuries?",
-            font_size=36, color=SOFT_WHITE,
-        ).move_to(ORIGIN)
-        self.play(Write(transition_text, run_time=1.5))
-        self.wait(1.5)
-        self.play(FadeOut(transition_text))
-
-        # ── Shot 7: Mouse drift demo ──
-        # 1800s: mouse near "rat", "trap", "vermin"
-        pos_mouse_old = axes.c2p(-1.5, 1.5)
-        pos_rat = axes.c2p(-1.8, 1.8)
-        pos_trap = axes.c2p(-1.2, 2.0)
-        pos_vermin = axes.c2p(-2.0, 1.2)
-
-        # 2000s: mouse near "click", "computer", "cursor"
-        pos_mouse_new = axes.c2p(1.5, -1.0)
-        pos_click = axes.c2p(1.8, -0.7)
-        pos_computer = axes.c2p(1.2, -1.5)
-        pos_cursor = axes.c2p(2.0, -1.2)
-
-        era_label_old = Text("1800s", font_size=28, color=OTHER_AMBER).to_edge(UP, buff=0.5)
-
-        mouse_dot = Dot(pos_mouse_old, radius=0.12, color=GERMANIC_BLUE)
-        mouse_dot.set_glow_factor(0.5)
-        mouse_label = Text("mouse", font_size=22, color=GERMANIC_BLUE).next_to(mouse_dot, DOWN, buff=0.15)
-
-        old_neighbors = VGroup(
-            *[Dot(p, radius=0.07, color=GRID_DIM).set_opacity(0.6) for p in [pos_rat, pos_trap, pos_vermin]],
-        )
-        old_nbr_labels = VGroup(
-            Text("rat", font_size=14, color=SOFT_WHITE).move_to(pos_rat + UP * 0.2),
-            Text("trap", font_size=14, color=SOFT_WHITE).move_to(pos_trap + UP * 0.2),
-            Text("vermin", font_size=14, color=SOFT_WHITE).move_to(pos_vermin + LEFT * 0.4),
-        ).set_opacity(0.7)
-
-        # Connecting lines
-        old_lines = VGroup(
-            *[Line(pos_mouse_old, p, color=GERMANIC_BLUE, stroke_width=1).set_opacity(0.3)
-              for p in [pos_rat, pos_trap, pos_vermin]]
+        # ══════════════════════════════════════════════════════
+        # ACT III — Diachronic Question: What If Words Shift?
+        # ══════════════════════════════════════════════════════
+        drift_intro_badge = EraBadge(
+            era_text="DIACHRONIC QUESTION: HOW DO EMBEDDINGS EVOLVE ACROSS CENTURIES?",
+            color="#FFD54F",
         )
 
         self.play(
-            FadeIn(era_label_old),
-            FadeIn(mouse_dot, scale=0.5),
-            FadeIn(mouse_label),
-        )
-        self.play(
-            FadeIn(old_neighbors), FadeIn(old_nbr_labels),
-            Create(old_lines),
+            m.Transform(era_badge, drift_intro_badge),
+            m.FadeOut(arrow_man_king),
+            m.FadeOut(arrow_woman_queen),
+            *[m.FadeOut(dots[w]) for w in ["dog", "cat", "king", "queen", "man", "woman"]],
+            run_time=1.0,
         )
 
-        narration_old = Text(
-            "In the 1800s, 'mouse' lived among rodents.",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.7)
-        self.play(FadeIn(narration_old))
-        self.wait(2)
+        # Mouse: 1800s vs 2000s
+        pos_old = np.array([-2.6, 0.4, 0.0])
+        pos_new = np.array([2.6, -0.4, 0.0])
 
-        # Transition to 2000s
-        era_label_new = Text("2000s", font_size=28, color=LATIN_RED).to_edge(UP, buff=0.5)
+        mouse_dot = m.Dot(point=pos_old, radius=0.16, color="#4FC3F7")
+        mouse_ring = m.Circle(radius=0.28, stroke_color="#4FC3F7", stroke_width=2.0, fill_opacity=0.0).move_to(pos_old)
+        mouse_lbl = m.Text("mouse (1800s)", font_size=16, color="#FFFFFF")
+        mouse_lbl.next_to(mouse_ring, m.UP, buff=0.22)
+        mouse_lbl.add_background_rectangle(color="#0B0E14", opacity=0.92, buff=0.08)
+        mouse_group = m.VGroup(mouse_ring, mouse_dot, mouse_lbl)
 
-        new_neighbors = VGroup(
-            *[Dot(p, radius=0.07, color=GRID_DIM).set_opacity(0.6) for p in [pos_click, pos_computer, pos_cursor]],
-        )
-        new_nbr_labels = VGroup(
-            Text("click", font_size=14, color=SOFT_WHITE).move_to(pos_click + UP * 0.2),
-            Text("computer", font_size=14, color=SOFT_WHITE).move_to(pos_computer + DOWN * 0.25),
-            Text("cursor", font_size=14, color=SOFT_WHITE).move_to(pos_cursor + RIGHT * 0.4),
-        ).set_opacity(0.7)
-
-        new_lines = VGroup(
-            *[Line(pos_mouse_new, p, color=LATIN_RED, stroke_width=1).set_opacity(0.3)
-              for p in [pos_click, pos_computer, pos_cursor]]
-        )
-
-        # Trail line from old to new position
-        trail = DashedLine(
-            pos_mouse_old, pos_mouse_new,
-            color=ACCENT_PURPLE, stroke_width=2,
-        ).set_opacity(0.4)
-
-        narration_new = Text(
-            "In the 2000s, 'mouse' moved to the world of computing.",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.7)
+        # 1800s rodent neighbors
+        old_nbr1 = m.Text("Rodent", font_size=18, color="#8B949E").move_to(pos_old + np.array([-1.2, -0.7, 0.0]))
+        old_nbr2 = m.Text("Trap", font_size=18, color="#8B949E").move_to(pos_old + np.array([1.1, 0.7, 0.0]))
+        old_nbrs = m.VGroup(old_nbr1, old_nbr2)
 
         self.play(
-            ReplacementTransform(era_label_old, era_label_new),
-            FadeOut(narration_old),
-            # Fade out old context
-            FadeOut(old_neighbors), FadeOut(old_nbr_labels), FadeOut(old_lines),
+            m.Create(mouse_group),
+            m.FadeIn(old_nbrs),
+            run_time=1.0,
+        )
+        self.wait(1.0)
+
+        # Glide to modern technology cluster
+        streamline = m.ArcBetweenPoints(
+            start=pos_old, end=pos_new, angle=-0.25,
+            stroke_color="#BA68C8", stroke_width=3.0,
+        )
+
+        mouse_lbl_new = m.Text("mouse (2000s)", font_size=16, color="#FFFFFF")
+        mouse_lbl_new.next_to(m.Circle(radius=0.28).move_to(pos_new), m.UP, buff=0.22)
+        mouse_lbl_new.add_background_rectangle(color="#0B0E14", opacity=0.92, buff=0.08)
+
+        new_nbr1 = m.Text("Cursor", font_size=18, color="#4DD0E1").move_to(pos_new + np.array([-1.1, -0.7, 0.0]))
+        new_nbr2 = m.Text("Laptop", font_size=18, color="#4DD0E1").move_to(pos_new + np.array([1.1, -0.7, 0.0]))
+        new_nbrs = m.VGroup(new_nbr1, new_nbr2)
+
+        drift_verdict_badge = EraBadge(
+            era_text="DIACHRONIC SEMANTIC SHIFT: MEANINGS MIGRATE ACROSS GEODESIC CURVES",
+            color="#66BB6A",
+        )
+
+        self.play(
+            m.Transform(era_badge, drift_verdict_badge),
+            m.Create(streamline),
+            m.FadeOut(old_nbrs),
+            m.FadeOut(mouse_lbl),
+            mouse_dot.animate.move_to(pos_new),
+            mouse_ring.animate.move_to(pos_new),
+            run_time=1.8,
         )
         self.play(
-            mouse_dot.animate.move_to(pos_mouse_new),
-            mouse_label.animate.next_to(Dot(pos_mouse_new), DOWN, buff=0.15),
-            Create(trail),
-            run_time=2,
+            m.FadeIn(mouse_lbl_new),
+            m.FadeIn(new_nbrs),
+            run_time=1.0,
         )
-        self.play(
-            FadeIn(new_neighbors), FadeIn(new_nbr_labels),
-            Create(new_lines),
-            FadeIn(narration_new),
-        )
-        self.wait(2.5)
+        self.wait(1.8)
 
-        # ── Shot 8: "This is Semantic Drift" ──
-        self.play(
-            FadeOut(narration_new),
-            FadeOut(new_neighbors), FadeOut(new_nbr_labels),
-            FadeOut(new_lines), FadeOut(mouse_dot), FadeOut(mouse_label),
-            FadeOut(trail), FadeOut(axes), FadeOut(era_label_new),
-        )
 
-        final_title = Text(
-            "This is Semantic Drift.",
-            font_size=52, color=ACCENT_PURPLE,
-        ).move_to(ORIGIN)
-
-        final_subtitle = Text(
-            "The same word. A different era. A different meaning.",
-            font_size=22, color=SOFT_WHITE,
-        ).next_to(final_title, DOWN, buff=0.5)
-
-        self.play(Write(final_title, run_time=1.5))
-        self.play(FadeIn(final_subtitle, shift=UP * 0.2))
-        self.wait(3)
-        self.play(FadeOut(final_title), FadeOut(final_subtitle))
+if __name__ == "__main__":
+    print("EmbeddingsIntroScene configured for educational intro.")

@@ -809,18 +809,37 @@ def _find_manim_mp4(media_dir: Path, filename: str) -> Path | None:
 
 
 def _background_render(word):
-    """Run Manim render in a background thread."""
+    """Run Manim/ManimGX render in a background thread."""
     try:
         scene_file = ROOT / "manim_scenes" / "single_word_scene.py"
         scratch_file = ROOT / f"_tmp_render_{word}.py"
         video_dir = ROOT / "results" / "videos" / "videos" / "words"
         video_dir.mkdir(parents=True, exist_ok=True)
-        media_dir = ROOT / "results" / "videos"
+        dest = video_dir / f"{word}.mp4"
 
         content = scene_file.read_text(encoding="utf-8")
         content = content.replace('target_word = "craft"', f'target_word = "{word}"')
         scratch_file.write_text(content, encoding="utf-8")
 
+        manimgx_bin = shutil.which("manimgx") or "/home/aahrav/.local/bin/manimgx"
+        if Path(manimgx_bin).exists():
+            cmd = [
+                str(manimgx_bin), "render",
+                "-r", "1280x720",
+                "--fps", "30",
+                "-o", str(dest),
+                str(scratch_file),
+                "SingleWordDriftScene",
+            ]
+            proc = subprocess.run(cmd, capture_output=True, timeout=120, text=True)
+            if proc.returncode == 0 and dest.exists():
+                RENDER_JOBS[word] = "ready"
+                return
+            else:
+                print(f"ManimGX failed ({proc.returncode}), trying fallback: {proc.stderr}")
+
+        # Fallback to standard manim
+        media_dir = ROOT / "results" / "videos"
         cmd = [
             sys.executable, "-m", "manim", str(scratch_file), "SingleWordDriftScene",
             "-ql",
@@ -833,7 +852,6 @@ def _background_render(word):
             RENDER_JOBS[word] = "error"
             return
 
-        dest = video_dir / f"{word}.mp4"
         source = _find_manim_mp4(media_dir, f"{word}.mp4")
         if source and source.exists():
             shutil.copy2(source, dest)
@@ -897,13 +915,32 @@ def _background_render_comparison(word_a, word_b, job_key):
         scratch_file = ROOT / f"_tmp_cmp_{job_key}.py"
         video_dir = ROOT / "results" / "videos" / "videos" / "comparisons"
         video_dir.mkdir(parents=True, exist_ok=True)
-        media_dir = ROOT / "results" / "videos"
+        dest = video_dir / f"{job_key}.mp4"
 
         content = scene_file.read_text(encoding="utf-8")
         content = content.replace('word_a = "craft"', f'word_a = "{word_a}"')
         content = content.replace('word_b = "room"', f'word_b = "{word_b}"')
         scratch_file.write_text(content, encoding="utf-8")
 
+        manimgx_bin = shutil.which("manimgx") or "/home/aahrav/.local/bin/manimgx"
+        if Path(manimgx_bin).exists():
+            cmd = [
+                str(manimgx_bin), "render",
+                "-r", "1280x720",
+                "--fps", "30",
+                "-o", str(dest),
+                str(scratch_file),
+                "ComparisonScene",
+            ]
+            proc = subprocess.run(cmd, capture_output=True, timeout=120, text=True)
+            if proc.returncode == 0 and dest.exists():
+                RENDER_JOBS[job_key] = "ready"
+                return
+            else:
+                print(f"ManimGX comparison failed ({proc.returncode}), trying fallback: {proc.stderr}")
+
+        # Fallback to standard manim
+        media_dir = ROOT / "results" / "videos"
         cmd = [
             sys.executable, "-m", "manim", str(scratch_file), "ComparisonScene",
             "-ql",
@@ -916,7 +953,6 @@ def _background_render_comparison(word_a, word_b, job_key):
             RENDER_JOBS[job_key] = "error"
             return
 
-        dest = video_dir / f"{job_key}.mp4"
         source = _find_manim_mp4(media_dir, f"{job_key}.mp4")
         if source and source.exists():
             shutil.copy2(source, dest)

@@ -37,15 +37,19 @@ corpora/processed/
 
 # Manim media, renders, videos, and text caches
 *.mp4
+*.storyboard*.png
 media/
 results/videos/
 **/partial_movie_files/
 results/videos/texts/
 results/videos/videos/
+scratch/
 
 # OS
 Thumbs.db
 .DS_Store
 
 data/mined_contexts.json.gz
+models/embeddings/w2v_new_vectors.npy
+models/embeddings/w2v_new_vocab.txt
 models/embeddings/contextual_embeddings.h5

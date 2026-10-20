@@ -1,265 +1,249 @@
 """
-Scene 2: "Semantic Drift in Action" (Main Drift Visualization)
-================================================================
-The centerpiece: shows tracked words moving through UMAP embedding
-space from 1800s to 2000s positions. Data-driven from umap_coords.csv.
+Scene 2: Semantic Drift in Action (Global Manifold Visualization)
+==================================================================
+Cinematic 3Blue1Brown-quality overview of the entire 321-word embedding
+manifold moving from 1800s to 2000s positions in UMAP subspace,
+featuring origin density clustering, streamline flows, and landmark callouts.
 """
 
 import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from manim import *
+import manimgx as m
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from manim_scenes.components import EraBadge
 
-# ── Colors ──
-DEEP_BG = "#1a1a2e"
-GERMANIC_BLUE = "#4FC3F7"
-LATIN_RED = "#EF5350"
-GREEK_GREEN = "#66BB6A"
-OTHER_AMBER = "#FFA726"
-SOFT_WHITE = "#e0e0e0"
-ACCENT_PURPLE = "#BB86FC"
-GRID_DIM = "#2a2a4e"
+DEEP_BG = "#0B0E14"
 
 ORIGIN_COLORS = {
-    "Germanic": GERMANIC_BLUE,
-    "Latin":    LATIN_RED,
-    "Greek":    GREEK_GREEN,
-    "Other":    OTHER_AMBER,
+    "Germanic": "#4FC3F7",   # Ice blue
+    "Latin": "#EF5350",      # Crimson
+    "Greek": "#66BB6A",      # Emerald
+    "Sanskrit": "#FFD54F",   # Solar gold
+    "PIE": "#CE93D8",        # Royal lavender
+    "Other": "#90A4AE",      # Slate gray
 }
 
 
-class DriftScene(Scene):
-    def construct(self):
+class GlobalManifoldHUD(m.VGroup):
+    """Top telemetry banner for the macro embedding manifold."""
+    def __init__(self, n_words: int, **kwargs):
+        super().__init__(**kwargs)
+        self.bg = m.RoundedRectangle(
+            corner_radius=0.16,
+            width=13.4,
+            height=1.15,
+            fill_color="#0D1117",
+            fill_opacity=0.92,
+            stroke_color="#30363D",
+            stroke_width=1.4,
+        )
+        self.add(self.bg)
+
+        # Title
+        title = m.Text("GLOBAL DIACHRONIC MANIFOLD", font_size=24, color="#FFFFFF")
+        title.align_to(self.bg, m.LEFT).shift(m.RIGHT * 0.40)
+
+        # Subtitle badge
+        count_badge = m.Text("321 WORDS", font_size=15, color="#58A6FF")
+        count_badge.next_to(title, m.RIGHT, buff=0.25)
+
+        # Origin pill legends
+        pills = []
+        for origin, color in [("Germanic", "#4FC3F7"), ("Latin", "#EF5350"), ("Greek", "#66BB6A"), ("Other", "#90A4AE")]:
+            dot = m.Dot(radius=0.08, color=color)
+            txt = m.Text(origin, font_size=17, color=color)
+            pill = m.VGroup(dot, txt).arrange(m.RIGHT, buff=0.08)
+            pills.append(pill)
+
+        pills_group = m.VGroup(*pills).arrange(m.RIGHT, buff=0.20)
+        pills_group.align_to(self.bg, m.RIGHT).shift(m.LEFT * 0.35)
+
+        self.add(title, count_badge, pills_group)
+        self.move_to(m.UP * 3.20)
+
+
+class LandmarkCallout(m.VGroup):
+    """Clean glowing callout badge for notable drifters or anchors."""
+    def __init__(self, word: str, pos: np.ndarray, score: float, category: str, color: str, offset: np.ndarray = m.UP * 0.45, **kwargs):
+        super().__init__(**kwargs)
+        self.ring = m.Circle(
+            radius=0.26,
+            stroke_color=color,
+            stroke_width=2.2,
+            fill_opacity=0.0,
+        ).move_to(pos)
+        self.dot = m.Dot(point=pos, radius=0.12, color=color)
+
+        self.label = m.Text(
+            f"{word.upper()}  ·  {category} (W2 = {score:.2f})",
+            font_size=15,
+            color=color,
+        )
+        self.label.move_to(pos + offset)
+        self.label.add_background_rectangle(color="#0B0E14", opacity=0.95, buff=0.10)
+
+        self.add(self.ring, self.dot, self.label)
+
+
+class DriftScene(m.Scene):
+    def construct(self) -> None:
         self.camera.background_color = DEEP_BG
 
-        # ── Load data ──
+        # ── 1. Load UMAP coordinates ──
         data_path = Path(__file__).resolve().parent.parent / "results" / "umap_coords.csv"
         df = pd.read_csv(data_path)
 
-        # Normalize UMAP coords to fit Manim's coordinate system
         x_vals = np.concatenate([df["x_old"].values, df["x_new"].values])
         y_vals = np.concatenate([df["y_old"].values, df["y_new"].values])
 
         x_min, x_max = x_vals.min(), x_vals.max()
         y_min, y_max = y_vals.min(), y_vals.max()
-        x_range = x_max - x_min
-        y_range = y_max - y_min
-        scale = min(10 / x_range, 6.5 / y_range) * 0.85
-        x_center = (x_min + x_max) / 2
-        y_center = (y_min + y_max) / 2
+        x_span = max(x_max - x_min, 1e-4)
+        y_span = max(y_max - y_min, 1e-4)
 
-        def to_manim(x, y):
+        # Map to viewport: x in [-5.5, 5.5], y in [-2.2, 1.8]
+        target_w = 11.0
+        target_h = 4.0
+        scale = min(target_w / x_span, target_h / y_span) * 0.90
+        x_center = (x_min + x_max) / 2.0
+        y_center = (y_min + y_max) / 2.0
+        y_offset = -0.20
+
+        def to_screen(x, y):
             return np.array([
                 (x - x_center) * scale,
-                (y - y_center) * scale,
-                0,
+                (y - y_center) * scale + y_offset,
+                0.0,
             ])
 
-        # ── Shot 1: Title ──
-        title = Text(
-            "Semantic Drift: 1800s → 2000s",
-            font_size=42, color=SOFT_WHITE,
+        # ══════════════════════════════════════════════════════
+        # ACT 0 — Global Telemetry HUD & Atmosphere
+        # ══════════════════════════════════════════════════════
+        hud = GlobalManifoldHUD(n_words=len(df))
+        era_badge = EraBadge(
+            era_text="ERA: 1800 - 1900 (HISTORICAL EMBEDDING TOPOLOGY)",
+            color="#58A6FF",
         )
-        subtitle = Text(
-            f"{len(df)} words across 4 etymological origins",
-            font_size=22, color=ACCENT_PURPLE,
-        ).next_to(title, DOWN, buff=0.4)
-
-        self.play(Write(title, run_time=1.5))
-        self.play(FadeIn(subtitle, shift=UP * 0.2))
-        self.wait(2)
-        self.play(FadeOut(title), FadeOut(subtitle))
-
-        # ── Shot 2: Axes area + UMAP label ──
-        umap_label = Text(
-            "UMAP projection of 100-dimensional word embeddings",
-            font_size=16, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.3).set_opacity(0.5)
-        self.play(FadeIn(umap_label))
-
-        # ── Shot 3: Legend ──
-        legend_items = VGroup()
-        for i, (origin, color) in enumerate(ORIGIN_COLORS.items()):
-            dot = Dot(radius=0.08, color=color)
-            label = Text(origin, font_size=16, color=color)
-            item = VGroup(dot, label).arrange(RIGHT, buff=0.15)
-            legend_items.add(item)
-
-        legend_items.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        legend_box = SurroundingRectangle(
-            legend_items, buff=0.2, color=GRID_DIM, fill_color=DEEP_BG,
-            fill_opacity=0.8, corner_radius=0.1,
-        )
-        legend = VGroup(legend_box, legend_items).to_corner(UL, buff=0.3)
-        self.play(FadeIn(legend))
-
-        # ── Shot 4: Words appear at 1800s positions ──
-        narration1 = Text(
-            "Each dot is a word, positioned by its meaning in the 1800s",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(UP, buff=0.3)
-
-        self.play(FadeIn(narration1, shift=DOWN * 0.2))
-
-        dots = {}
-        labels_group = {}
-        # Sort by origin for grouped appearance
-        for origin in ["Germanic", "Latin", "Greek", "Other"]:
-            origin_df = df[df["origin_class"] == origin]
-            origin_group = VGroup()
-            for _, row in origin_df.iterrows():
-                pos = to_manim(row["x_old"], row["y_old"])
-                color = ORIGIN_COLORS[origin]
-
-                dot = Dot(pos, radius=0.06, color=color)
-                dot.set_glow_factor(0.2)
-                label = Text(
-                    row["word"], font_size=9, color=color,
-                ).next_to(dot, UR, buff=0.05).set_opacity(0.7)
-
-                dots[row["word"]] = dot
-                labels_group[row["word"]] = label
-                origin_group.add(dot, label)
-
-            # Staggered fade in per origin group
-            self.play(
-                LaggedStart(
-                    *[FadeIn(mob, scale=0.5) for mob in origin_group],
-                    lag_ratio=0.05,
-                ),
-                run_time=1.2,
-            )
-
-        self.wait(1.5)
-
-        # ── Shot 5: Epoch label ──
-        self.play(FadeOut(narration1))
-        epoch_label = Text(
-            "1800–1900", font_size=36, color=OTHER_AMBER,
-        ).to_edge(UP, buff=0.3)
-        self.play(Write(epoch_label))
-        self.wait(1.5)
-
-        # ── Shot 6 & 7: Animate transition to 2000s ──
-        epoch_new = Text(
-            "2000–2020", font_size=36, color=LATIN_RED,
-        ).to_edge(UP, buff=0.3)
-
-        narration2 = Text(
-            "Watch them move to where they live in modern language...",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.6)
 
         self.play(
-            ReplacementTransform(epoch_label, epoch_new),
-            FadeIn(narration2),
+            m.FadeIn(hud, shift=m.DOWN * 0.2),
+            m.FadeIn(era_badge, shift=m.UP * 0.2),
+            run_time=0.8,
         )
 
-        # Create trail lines and animate movement
-        trails = VGroup()
-        animations = []
+        # ══════════════════════════════════════════════════════
+        # ACT I — Historical Constellation Manifestation
+        # ══════════════════════════════════════════════════════
+        dots_dict = {}
+        old_dots_list = []
 
+        origin_groups = []
+        for origin in sorted(df["origin_class"].unique()):
+            color = ORIGIN_COLORS.get(origin, "#90A4AE")
+            subset = df[df["origin_class"] == origin]
+            group_dots = []
+            for _, row in subset.iterrows():
+                pos = to_screen(row["x_old"], row["y_old"])
+                dot = m.Dot(point=pos, radius=0.07, color=color)
+                dots_dict[row["word"]] = dot
+                old_dots_list.append(dot)
+                group_dots.append(dot)
+            origin_groups.append(m.VGroup(*group_dots))
+
+        self.play(
+            *[m.FadeIn(grp, scale=0.85) for grp in origin_groups],
+            run_time=1.4,
+        )
+        self.wait(1.0)
+
+        # ══════════════════════════════════════════════════════
+        # ACT II — Global Vector Drift Flight (1800s -> 2000s)
+        # ══════════════════════════════════════════════════════
+        trans_era_badge = EraBadge(
+            era_text="GLOBAL OPTIMAL TRANSPORT: 1800s -> 2000s MANIFOLD FLOW",
+            color="#BA68C8",
+        )
+
+        flow_lines = []
+        move_anims = []
         for _, row in df.iterrows():
             word = row["word"]
-            old_pos = to_manim(row["x_old"], row["y_old"])
-            new_pos = to_manim(row["x_new"], row["y_new"])
-            color = ORIGIN_COLORS[row["origin_class"]]
+            p_old = to_screen(row["x_old"], row["y_old"])
+            p_new = to_screen(row["x_new"], row["y_new"])
+            color = ORIGIN_COLORS.get(row["origin_class"], "#90A4AE")
 
-            # Trail line
-            trail = Line(old_pos, new_pos, color=color, stroke_width=1).set_opacity(0.25)
-            trails.add(trail)
+            flow = m.Line(
+                start=p_old,
+                end=p_new,
+                stroke_color=color,
+                stroke_opacity=0.25,
+                stroke_width=1.0,
+            )
+            flow_lines.append(flow)
+            move_anims.append(dots_dict[word].animate.move_to(p_new))
 
-            # Animate dot movement
-            animations.append(dots[word].animate.move_to(new_pos))
-            # Animate label movement
-            target_label_pos = new_pos + np.array([0.1, 0.1, 0])
-            animations.append(labels_group[word].animate.move_to(target_label_pos))
+        flow_grp = m.VGroup(*flow_lines)
 
         self.play(
-            Create(trails, run_time=0.5),
-            *animations,
-            run_time=4,
+            m.Transform(era_badge, trans_era_badge),
+            m.Create(flow_grp),
+            *move_anims,
+            run_time=2.2,
+        )
+        self.wait(1.0)
+
+        # ══════════════════════════════════════════════════════
+        # ACT III — Landmark Spotlights (Sequential Extremes)
+        # ══════════════════════════════════════════════════════
+        mod_era_badge = EraBadge(
+            era_text="ERA: 2000 - 2020 (MODERN EMBEDDING TOPOLOGY)",
+            color="#66BB6A",
         )
 
-        self.wait(1)
-        self.play(FadeOut(narration2))
-
-        # ── Shot 8: Highlight top drifters ──
-        top_drift = df.nlargest(3, "drift_score")
-        highlights = VGroup()
-
-        narration3 = Text(
-            "Some words barely moved. Others traveled enormously.",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.6)
-        self.play(FadeIn(narration3))
-
-        for _, row in top_drift.iterrows():
-            word = row["word"]
-            dot = dots[word]
-
-            # Pulsing glow
-            glow = Circle(radius=0.3, color=ACCENT_PURPLE).move_to(dot.get_center())
-            glow.set_fill(ACCENT_PURPLE, opacity=0.1)
-            glow.set_stroke(ACCENT_PURPLE, width=2, opacity=0.6)
-
-            score_text = Text(
-                f"{word}: {row['drift_score']:.2f}",
-                font_size=18, color=ACCENT_PURPLE,
-            ).next_to(glow, DOWN, buff=0.15)
-
-            highlights.add(glow, score_text)
-            self.play(
-                Create(glow),
-                FadeIn(score_text),
-                run_time=0.7,
-            )
-            self.play(
-                glow.animate.scale(1.2).set_opacity(0.3),
-                rate_func=there_and_back,
-                run_time=0.5,
-            )
-
-        self.wait(2)
-
-        # ── Shot 9: Most stable words ──
-        self.play(FadeOut(highlights), FadeOut(narration3))
-
-        bottom_drift = df.nsmallest(3, "drift_score")
-        stable_group = VGroup()
-
-        narration4 = Text(
-            "These words barely changed — their meaning endured.",
-            font_size=20, color=SOFT_WHITE,
-        ).to_edge(DOWN, buff=0.6)
-        self.play(FadeIn(narration4))
-
-        for _, row in bottom_drift.iterrows():
-            word = row["word"]
-            dot = dots[word]
-
-            glow = Circle(radius=0.25, color=GREEK_GREEN).move_to(dot.get_center())
-            glow.set_fill(GREEK_GREEN, opacity=0.1)
-            glow.set_stroke(GREEK_GREEN, width=2, opacity=0.6)
-
-            score_text = Text(
-                f"{word}: {row['drift_score']:.2f}",
-                font_size=18, color=GREEK_GREEN,
-            ).next_to(glow, DOWN, buff=0.15)
-
-            stable_group.add(glow, score_text)
-            self.play(
-                Create(glow), FadeIn(score_text),
-                run_time=0.5,
-            )
-
-        self.wait(2.5)
-
-        # ── Outro ──
         self.play(
-            *[FadeOut(mob) for mob in self.mobjects],
-            run_time=1.5,
+            m.Transform(era_badge, mod_era_badge),
+            m.FadeOut(flow_grp),
+            run_time=0.8,
         )
+
+        # Spotlight 1: Top Drifter
+        top_row = df.nlargest(1, "drift_score").iloc[0]
+        top_pos = to_screen(top_row["x_new"], top_row["y_new"])
+        top_callout = LandmarkCallout(
+            word=top_row["word"],
+            pos=top_pos,
+            score=float(top_row["drift_score"]),
+            category="MAXIMUM DRIFT",
+            color="#4DD0E1",
+            offset=m.UP * 0.45,
+        )
+
+        self.play(m.FadeIn(top_callout), run_time=0.8)
+        self.bring_to_front(top_callout)
+        self.play(m.Indicate(top_callout.ring, color="#4DD0E1", scale_factor=1.4), run_time=1.0)
+        self.wait(1.0)
+        self.play(m.FadeOut(top_callout), run_time=0.6)
+
+        # Spotlight 2: Maximum Anchor / Core Invariant
+        anchor_row = df.nsmallest(1, "drift_score").iloc[0]
+        anchor_pos = to_screen(anchor_row["x_new"], anchor_row["y_new"])
+        anchor_callout = LandmarkCallout(
+            word=anchor_row["word"],
+            pos=anchor_pos,
+            score=float(anchor_row["drift_score"]),
+            category="CORE INVARIANT",
+            color="#FFD54F",
+            offset=m.UP * 0.45,
+        )
+
+        self.play(m.FadeIn(anchor_callout), run_time=0.8)
+        self.bring_to_front(anchor_callout)
+        self.play(m.Indicate(anchor_callout.ring, color="#FFD54F", scale_factor=1.4), run_time=1.0)
+        self.wait(1.2)
+
+
+if __name__ == "__main__":
+    print("DriftScene configured for global manifold visualization.")
